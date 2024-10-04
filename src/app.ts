@@ -5,6 +5,7 @@ import rolesRoutes from './routes/rolesRoutes';
 import gruposRoutes from './routes/gruposRoutes';
 import credencialesRoutes from './routes/credencialesRoutes';
 import perfilesRoutes from './routes/perfilesRoutes';
+import aplicaciones from './routes/perfilesRoutes';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use('/api', rolesRoutes);
 app.use('/api', gruposRoutes);
 app.use('/api', credencialesRoutes);
 app.use('/api', perfilesRoutes);
+app.use('/api', aplicaciones);
 
 app.get('/', (req, res) => {
     res.send('API is running...');

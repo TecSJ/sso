@@ -21,20 +21,20 @@ export const getModuloById = async (idModulo: number) => {
     }
 }
 
-export const insertModulo = async (clave: string, nombre: string) => {
+export const insertModulo = async (idAplicacion:number, clave: string, nombre: string) => {
     try {
         const db = await ssoDB();
-        const [modulos] = await db.execute(queries.insertModulo, [clave, nombre]);
+        const [modulos] = await db.execute(queries.insertModulo, [idAplicacion, clave, nombre]);
         return modulos;
     } catch (error) {
         console.log(error);
     }
 }
 
-export const uptateModulo = async (idModulo: number, clave: string, nombre: string) => {
+export const uptateModulo = async (idModulo: number, idAplicacion:number, clave: string, nombre: string) => {
     try {
         const db = await ssoDB();
-        const [modulos] = await db.execute(queries.updateModulo, [idModulo, clave, nombre]);
+        const [modulos] = await db.execute(queries.updateModulo, [idModulo, idAplicacion, clave, nombre]);
         return modulos;
     } catch (error) {
         console.log(error);
