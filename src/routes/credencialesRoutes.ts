@@ -6,7 +6,9 @@ router.get('/credenciales', credencialesController.getAllCredenciales);
 router.get('/credenciales/:idCredencial', credencialesController.getCredencialesById);
 
 router.post('/credenciales', credencialesController.insertCredencial);
-router.put('/credenciales/:idCredencial', credencialesController.updateCredencialesById);
+router.put('/credenciales/:idCredencial', credencialesController.updateCredencialesById);//usuario correo celular tipo
+router.put('/credenciales/cambiarContrasena/:idCredencial', credencialesController.updateContrasena);//cambiar contraseña
+
 router.delete('/credenciales/:idCredencial', credencialesController.deleteCredencialesById);
 
 export default router;
