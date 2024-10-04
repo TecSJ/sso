@@ -1,10 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import { ssoDB } from './database/connection';
-import accesosRoutes from './routes/accesosRoutes';
 import modulosRoutes from './routes/modulosRoutes';
 import rolesRoutes from './routes/rolesRoutes';
 import gruposRoutes from './routes/gruposRoutes';
+import credencialesRoutes from './routes/credencialesRoutes';
+import perfilesRoutes from './routes/perfilesRoutes';
 
 dotenv.config();
 
@@ -14,6 +14,8 @@ app.use(express.json());
 app.use('/api', modulosRoutes);
 app.use('/api', rolesRoutes);
 app.use('/api', gruposRoutes);
+app.use('/api', credencialesRoutes);
+app.use('/api', perfilesRoutes);
 
 app.get('/', (req, res) => {
     res.send('API is running...');
