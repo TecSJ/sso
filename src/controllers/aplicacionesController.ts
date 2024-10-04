@@ -57,8 +57,8 @@ export const updateAplicacionById = async (req: Request, res: Response): Promise
             res.status(400).json({ error: 'idAplicacion inválido:' });
             return;
         }
-        const { clave, nombre } = req.body;
-        const result = await aplicacionesService.updateAplicacionById(idAplicacion, clave, nombre);
+        const { clave, nombre, redireccion } = req.body;
+        const result = await aplicacionesService.updateAplicacionById(idAplicacion, clave, nombre, redireccion);
         res.json({ message: 'Aplicación actualizada con éxito', result });
     } catch (error) {
         res.status(500).json({ error: (error as Error).message });

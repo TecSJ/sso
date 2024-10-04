@@ -44,10 +44,10 @@ export const insertAplicacion = async (clave: string, nombre: string, redireccio
     }
 }
 
-export const updateAplicacionById = async (idAplicacion: number, clave: string, nombre: string, redireccion: string, estado: string) => {
+export const updateAplicacionById = async (idAplicacion: number, clave: string, nombre: string, redireccion: string) => {
     try {
         const db = await ssoDB();
-        const [result] = await db.execute(queries.updateAplicacionById, [idAplicacion, clave, nombre, redireccion, estado]);
+        const [result] = await db.execute(queries.updateAplicacionById, [idAplicacion, clave, nombre, redireccion]);
         return result;
     } catch (error) {
         console.error(error);
