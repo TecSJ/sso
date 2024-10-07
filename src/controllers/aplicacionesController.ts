@@ -36,6 +36,7 @@ export const deleteAplicacionById = async (req: Request, res: Response): Promise
     }
 };
 
+/*
 export const insertAplicacion = async (req: Request, res: Response): Promise<any> => {
     try {
         const { clave, nombre, redireccion, estado } = req.body;
@@ -43,6 +44,17 @@ export const insertAplicacion = async (req: Request, res: Response): Promise<any
             return res.status(400).json({ error: 'Estado inválido. Debe ser "Activo" ó "Inactivo"' });
         }
         const result = await aplicacionesService.insertAplicacion(clave, nombre, redireccion, estado);
+        res.json({ message: 'Aplicación insertada con éxito', result });
+    } catch (error) {
+        res.status(500).json({ error: (error as Error).message });
+    }
+};
+*/
+
+export const insertAplicacion = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { clave, nombre, redireccion } = req.body;
+        const result = await aplicacionesService.insertAplicacion(clave, nombre, redireccion );
         res.json({ message: 'Aplicación insertada con éxito', result });
     } catch (error) {
         res.status(500).json({ error: (error as Error).message });

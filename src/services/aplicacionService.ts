@@ -34,13 +34,15 @@ export const deleteAplicacionById = async (idAplicacion: number) => {
     }
 }
 
-export const insertAplicacion = async (clave: string, nombre: string, redireccion: string, estado: string) => {
+
+export const insertAplicacion = async (clave: string, nombre: string, redireccion: string ) => {
     try {
         const db = await ssoDB();
-        const [result] = await db.execute(queries.insertAplicacion, [clave, nombre, redireccion, estado]);
+        const [result] = await db.execute(queries.insertAplicacion, [clave, nombre, redireccion ]);
         return result;
     } catch (error) {
-        console.error(error);
+        console.log("este esel error "+error)
+        //console.error(error);
     }
 }
 
