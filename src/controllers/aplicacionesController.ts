@@ -13,8 +13,8 @@ export const getAplicaciones = async (req: Request, res: Response) => {
 
 export const getAplicacion = async (req: Request, res: Response): Promise<any> => {
     try {
-        const idAplicacion = parseInt( req.params.idAplicacion );
-        const response = await aplicacionesService.getAplicacion( idAplicacion );
+        const idAplicacion = parseInt(req.params.idAplicacion );
+        const response = await aplicacionesService.getAplicacion(idAplicacion);
         res.status(200).json({ response: 'Consulta generada correctamente!', data: response });
     } catch (error : any) {
         res.status(500).json({ message: error.message.message });
@@ -24,7 +24,7 @@ export const getAplicacion = async (req: Request, res: Response): Promise<any> =
 export const deleteAplicacion = async (req: Request, res: Response): Promise<any> => {
     try {
         const idAplicacion = parseInt(req.params.idAplicacion);
-        await aplicacionesService.deleteAplicacion( idAplicacion );
+        await aplicacionesService.deleteAplicacion(idAplicacion);
         res.status(204).json({});
     } catch (error : any ) {
         res.status(500).json({ message: error.message.message });
@@ -34,7 +34,7 @@ export const deleteAplicacion = async (req: Request, res: Response): Promise<any
 export const insertAplicacion = async (req: Request, res: Response): Promise<any> => {
     try {
         const { clave, nombre, redireccion } = req.body;
-        const response = await aplicacionesService.insertAplicacion( clave, nombre, redireccion );
+        const response = await aplicacionesService.insertAplicacion(clave, nombre, redireccion);
         res.status(201).json({ response: 'La nueva aplicación ha sido agregado exitosamente!', data: response });
     } catch ( error : any ) {
         res.status(500).json({ message: error.message.message });
@@ -46,8 +46,7 @@ export const updateAplicacion = async (req: Request, res: Response): Promise<any
     try {
         const idAplicacion = parseInt(req.params.idAplicacion);
         const { clave, nombre, redireccion } = req.body;
-        console.log({ clave: clave, nombre: nombre, redireccion: redireccion});
-        await aplicacionesService.updateAplicacion( idAplicacion, clave, nombre, redireccion);
+        await aplicacionesService.updateAplicacion(idAplicacion, clave, nombre, redireccion);
         res.status(204).json({});
     } catch ( error : any) {
         res.status(500).json({ message: error.message.message });
