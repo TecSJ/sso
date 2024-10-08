@@ -1,7 +1,7 @@
 export const queries = {
-    getAllPerfiles: `SELECT *
+    getPerfiles: `SELECT *
                     FROM Perfiles;`,
-    getPerfilById: `SELECT *
+    getPerfil: `SELECT *
                     FROM Perfiles
                     WHERE idPerfil = ?;`,
     insertPerfil: `CALL proc_insert_perfiles(?, ?);`,

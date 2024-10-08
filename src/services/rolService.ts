@@ -1,55 +1,51 @@
 import { ssoDB } from '../database/connection';
 import { queries } from '../database/rolesQueries';
+import { Exception } from '../util/Exception';
 
-export const getAllRoles = async () => {
+export const getRoles = async () => {
     try {
-        const db = await ssoDB();
-        const [roles]=await db.execute(queries.getAllRoles);
+        const [roles] = await ssoDB.query(queries.getRoles);
         console.log(roles);
         return roles;
-    } catch (error) {
-
+    } catch (error: any) {
+        throw new Exception(error.message, error);
     }
 }
 
-export const getRolById = async (idRol: number) => {
+export const getRol = async (idRol: number) => {
     try {
-        const db = await ssoDB();
-        const [roles]=await db.execute(queries.getRolById, [idRol]);
+        const [roles] = await ssoDB.query(queries.getRol, [idRol]);
         console.log(roles);
         return roles;
-    } catch (error) {
-
+    } catch (error: any) {
+        throw new Exception(error.message, error);
     }
 }
 
-export const deleteRolById = async (idRol: number) => {
+export const deleteRol = async (idRol: number) => {
     try {
-        const db = await ssoDB();
-        const [rol]=await db.execute(queries.deleteRolById, [idRol]);
+        const [rol] = await ssoDB.query(queries.deleteRol, [idRol]);
         console.log(rol);
         return rol;
-    } catch (error) {
-
+    } catch (error: any) {
+        throw new Exception(error.message, error);
     }
 }
 
-export const insertRol = async (clave: string, nombre: string, estado: string) => {
+export const insertRol = async (clave: string, nombre: string) => {
     try {
-        const db = await ssoDB();
-        const [result] = await db.execute(queries.insertRol, [clave, nombre, estado]);
+        const [result] = await ssoDB.query(queries.insertRol, [clave, nombre]);
         return result;
-    } catch (error) {
-        console.error(error);
+    } catch (error: any) {
+        throw new Exception(error.message, error);
     }
 }
 
-export const updateRolById = async (idRol: number, clave: string, nombre: string) => {
+export const updateRol = async (idRol: number, clave: string, nombre: string) => {
     try {
-        const db = await ssoDB();
-        const [result] = await db.execute(queries.updateRolById, [idRol, clave, nombre]);
+        const [result] = await ssoDB.query(queries.updateRol, [idRol, clave, nombre]);
         return result;
-    } catch (error) {
-        console.error(error);
+    } catch (error: any) {
+        throw new Exception(error.message, error);
     }
 }

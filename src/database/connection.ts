@@ -15,7 +15,7 @@ export const ssoDB: Pool = createPool({
 
 // export const ssoDB = async () => {
 //     try {
-//         const connection = await pool.getConnection();
+//         const connection = await ssoDB.getConnection();
 //         console.log('Connected to the MySQL database via pool:', process.env.DB_HOST);
 //         return connection;
 //     } catch (error) {

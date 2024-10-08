@@ -1,7 +1,7 @@
 export const queries = {
-    getAllModulos: `SELECT idModulo, idAplicacion, clave, nombre, estado
+    getModulos: `SELECT idModulo, idAplicacion, clave, nombre, estado
                     FROM Modulos;`,
-    getModuloById: `SELECT idAplicacion, clave, nombre, estado
+    getModulo: `SELECT idAplicacion, clave, nombre, estado
                     FROM Modulos
                     WHERE idModulo = ?;`,
     insertModulo: `CALL proc_insert_modulos(?, ?, ?);`,

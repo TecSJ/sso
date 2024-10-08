@@ -1,55 +1,48 @@
 import { ssoDB } from '../database/connection';
 import { queries } from '../database/gruposQueries';
+import { Exception } from '../util/Exception';
 
-export const getAllGrupos = async () => {
+export const getGrupos = async () => {
     try {
-        const db = await ssoDB();
-        const [grupos]=await db.execute(queries.getAllGrupos);
-        console.log(grupos);
+        const [grupos] = await ssoDB.query(queries.getGrupos);
         return grupos;
-    } catch (error) {
-
+    } catch (error: any) {
+        throw new Exception(error.message, error);
     }
 }
 
-export const getGrupoById = async (idGrupo: number) => {
+export const getGrupo = async (idGrupo: number) => {
     try {
-        const db = await ssoDB();
-        const [grupo]=await db.execute(queries.getGrupoById, [idGrupo]);
-        console.log(grupo);
+        const [grupo] = await ssoDB.query(queries.getGrupo, [idGrupo]);
         return grupo;
-    } catch (error) {
-
+    } catch (error: any) {
+        throw new Exception(error.message, error);
     }
 }
 
-export const deleteOneGrupo = async (idGrupo: number) => {
+export const deleteGrupo = async (idGrupo: number) => {
     try {
-        const db = await ssoDB();
-        const [grupo]=await db.execute(queries.deleteGrupoById, [idGrupo]);
-        console.log(grupo);
+        const [grupo] = await ssoDB.query(queries.deleteGrupo, [idGrupo]);
         return grupo;
-    } catch (error) {
-
+    } catch (error: any) {
+        throw new Exception(error.message, error);
     }
 }
 
-export const insertGrupo = async (clave: string, nombre: string, estado: string) => {
+export const insertGrupo = async (clave: string, nombre: string) => {
     try {
-        const db = await ssoDB();
-        const [result] = await db.execute(queries.insertGrupo, [clave, nombre, estado]);
+        const [result] = await ssoDB.query(queries.insertGrupo, [clave, nombre]);
         return result;
-    } catch (error) {
-        console.error(error);
+    } catch (error: any) {
+        throw new Exception(error.message, error);
     }
 }
 
 export const updateGrupo = async (idGrupo: number, clave: string, nombre: string) => {
     try {
-        const db = await ssoDB();
-        const [result] = await db.execute(queries.updateGrupoById, [idGrupo, clave, nombre]);
+        const [result] = await ssoDB.query(queries.updateGrupo, [idGrupo, clave, nombre]);
         return result;
-    } catch (error) {
-        console.error(error);
+    } catch (error: any) {
+        throw new Exception(error.message, error);
     }
 }
