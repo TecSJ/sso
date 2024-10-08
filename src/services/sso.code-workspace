@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../../../gopixel/apis/sso"
+		},
+		{
+			"path": "../../../../../gopixel/librerias/kuxi"
+		}
+	],
+	"settings": {}
+}

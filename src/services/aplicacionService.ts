@@ -1,58 +1,90 @@
 import { ssoDB } from '../database/connection';
 import { queries } from '../database/aplicacionesQueries';
+import { Exception } from '../util/Exception';
 
-export const getAllAplicaciones = async () => {
+export const getAplicaciones = async () => {
+
+    let db: any;
     try {
-        const db = await ssoDB();
-        const [aplicaciones]=await db.execute(queries.getAllAplicaciones);
-        console.log(aplicaciones);
-        return aplicaciones;
-    } catch (error) {
-
-    }
-}
-
-export const getAplicacionById = async (idAplicacion: number) => {
-    try {
-        const db = await ssoDB();
-        const [aplicaciones]=await db.execute(queries.getAplicacionById, [idAplicacion]);
-        console.log(aplicaciones);
-        return aplicaciones;
-    } catch (error) {
-
-    }
-}
-
-export const deleteAplicacionById = async (idAplicacion: number) => {
-    try {
-        const db = await ssoDB();
-        const [aplicacion]=await db.execute(queries.deleteAplicacionById, [idAplicacion]);
-        console.log(aplicacion);
-        return aplicacion;
-    } catch (error) {
-
-    }
-}
-
-
-export const insertAplicacion = async (clave: string, nombre: string, redireccion: string ) => {
-    try {
-        const db = await ssoDB();
-        const [result] = await db.execute(queries.insertAplicacion, [clave, nombre, redireccion ]);
+        db = await ssoDB();
+        const [ result ] = await db.execute( queries.getAllAplicaciones );
         return result;
-    } catch (error) {
-        console.log("este esel error "+error)
-        //console.error(error);
+    } catch (error : any ) {
+        if ( error.message.includes('ERROR[003]')) { throw new Exception( '400', error.message, error ); }
+        throw new Exception('500','Error desconocido!', error );
+    } finally {
+        if (db) {
+            await db.close();
+        }
     }
 }
 
-export const updateAplicacionById = async (idAplicacion: number, clave: string, nombre: string, redireccion: string) => {
+export const getAplicacion = async ( idAplicacion: number ) => {
+
+    let db: any;
     try {
-        const db = await ssoDB();
-        const [result] = await db.execute(queries.updateAplicacionById, [idAplicacion, clave, nombre, redireccion]);
+        db = await ssoDB();
+        const [ result ] = await db.execute( queries.getAplicacionById, [idAplicacion] );
         return result;
-    } catch (error) {
-        console.error(error);
+    } catch (error : any ) {
+        if ( error.message.includes('ERROR[003]')) { throw new Exception( '400', error.message, error ); }
+        throw new Exception('500','Error desconocido!', error );
+    } finally {
+        if (db) {
+            await db.close();
+        }
+    }
+}
+
+export const deleteAplicacion = async (idAplicacion: number) => {
+
+    let db: any;
+    try {
+        db = await ssoDB();
+        const [ result ] = await db.execute( 'CALL proc_delete_aplicaciones(?);', [ idAplicacion ]);
+        return result;
+    } catch (error : any ) {
+        if ( error.message.includes('ERROR[003]')) { throw new Exception( '401', error.message, error ); }
+        throw new Exception('500','Error desconocido!', error );
+    } finally {
+        if (db) {
+            await db.close();
+        }
+    }
+}
+
+
+export const insertAplicacion = async ( clave: string, nombre: string, redireccion: string ) => {
+    let db: any;
+    try {
+        db = await ssoDB();
+        const [ result ] = await db.execute( 'CALL proc_insert_aplicaciones(?, ?, ? );', [ clave, nombre, redireccion ]);
+        return result;
+    } catch (error : any ) {
+        if ( error.message.includes('ERROR[001]')) { throw new Exception( '400', error.message, error ); }
+        if ( error.message.includes('ERROR[002]')) { throw new Exception( '401', error.message, error ); }
+        throw new Exception('500','Error desconocido!', error );
+    } finally {
+        if (db) {
+            await db.close();
+        }
+    }
+}
+
+export const updateAplicacion = async ( idAplicacion: number, clave: string, nombre: string, redireccion: string ) => {
+    let db: any;
+    try {
+        db = await ssoDB();
+        const [ result ] = await db.execute( 'CALL proc_update_aplicaciones(?, ?, ?, ?);', [ idAplicacion, clave, nombre, redireccion ]);
+        return result;
+    } catch (error : any ) {
+        if ( error.message.includes('ERROR[001]')) { throw new Exception( '400', error.message, error ); }
+        if ( error.message.includes('ERROR[002]')) { throw new Exception( '401', error.message, error ); }
+        throw new Exception('500','Error desconocido!', error );
+    } finally {
+        if (db) {
+            await db.close();
+        }
     }
 }
 
