@@ -10,7 +10,6 @@ export const getAplicaciones = async () => {
         const [ result ] = await db.execute( queries.getAllAplicaciones );
         return result;
     } catch (error : any ) {
-        if ( error.message.includes('ERROR[003]')) { throw new Exception( '400', error.message, error ); }
         throw new Exception('500','Error desconocido!', error );
     } finally {
         if (db) {
@@ -27,7 +26,6 @@ export const getAplicacion = async ( idAplicacion: number ) => {
         const [ result ] = await db.execute( queries.getAplicacionById, [idAplicacion] );
         return result;
     } catch (error : any ) {
-        if ( error.message.includes('ERROR[003]')) { throw new Exception( '400', error.message, error ); }
         throw new Exception('500','Error desconocido!', error );
     } finally {
         if (db) {
@@ -41,7 +39,7 @@ export const deleteAplicacion = async (idAplicacion: number) => {
     let db: any;
     try {
         db = await ssoDB();
-        const [ result ] = await db.execute( 'CALL proc_delete_aplicaciones(?);', [ idAplicacion ]);
+        const [ result ] = await db.execute( queries.deleteAplicacionById, [ idAplicacion ]);
         return result;
     } catch (error : any ) {
         if ( error.message.includes('ERROR[003]')) { throw new Exception( '401', error.message, error ); }
@@ -58,7 +56,7 @@ export const insertAplicacion = async ( clave: string, nombre: string, redirecci
     let db: any;
     try {
         db = await ssoDB();
-        const [ result ] = await db.execute( 'CALL proc_insert_aplicaciones(?, ?, ? );', [ clave, nombre, redireccion ]);
+        const [ result ] = await db.execute( queries.insertAplicacion , [ clave, nombre, redireccion ]);
         return result;
     } catch (error : any ) {
         if ( error.message.includes('ERROR[001]')) { throw new Exception( '400', error.message, error ); }
@@ -75,7 +73,7 @@ export const updateAplicacion = async ( idAplicacion: number, clave: string, nom
     let db: any;
     try {
         db = await ssoDB();
-        const [ result ] = await db.execute( 'CALL proc_update_aplicaciones(?, ?, ?, ?);', [ idAplicacion, clave, nombre, redireccion ]);
+        const [ result ] = await db.execute( queries.updateAplicacionById, [ idAplicacion, clave, nombre, redireccion ]);
         return result;
     } catch (error : any ) {
         if ( error.message.includes('ERROR[001]')) { throw new Exception( '400', error.message, error ); }
