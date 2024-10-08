@@ -7,7 +7,7 @@ export const getAplicaciones = async (req: Request, res: Response) => {
         res.status(200).json({ response: 'Consulta generada correctamente!', data: response });
     } catch ( error : any ) {
         console.log( error );
-        res.status( error.code ).json({ response: error.message, data: error });
+        res.status(500).json({ message: error.message.message });
     }
 };
 
@@ -17,7 +17,7 @@ export const getAplicacion = async (req: Request, res: Response): Promise<any> =
         const response = await aplicacionesService.getAplicacion( idAplicacion );
         res.status(200).json({ response: 'Consulta generada correctamente!', data: response });
     } catch (error : any) {
-        res.status( error.code ).json({ response: error.message, data: error });
+        res.status(500).json({ message: error.message.message });
     }
 };
 
@@ -27,7 +27,7 @@ export const deleteAplicacion = async (req: Request, res: Response): Promise<any
         await aplicacionesService.deleteAplicacion( idAplicacion );
         res.status(204).json({});
     } catch (error : any ) {
-        res.status( error.code ).json({ response: error.message, data: error });
+        res.status(500).json({ message: error.message.message });
     }
 };
 
@@ -37,7 +37,7 @@ export const insertAplicacion = async (req: Request, res: Response): Promise<any
         const response = await aplicacionesService.insertAplicacion( clave, nombre, redireccion );
         res.status(201).json({ response: 'La nueva aplicación ha sido agregado exitosamente!', data: response });
     } catch ( error : any ) {
-        res.status( error.code ).json({ response: error.message, data: error });
+        res.status(500).json({ message: error.message.message });
     }
 };
 
@@ -50,6 +50,7 @@ export const updateAplicacion = async (req: Request, res: Response): Promise<any
         await aplicacionesService.updateAplicacion( idAplicacion, clave, nombre, redireccion);
         res.status(204).json({});
     } catch ( error : any) {
-        res.status( error.code ).json({ response: error.message, data: error });
+        res.status(500).json({ message: error.message.message });
     }
 };
+
