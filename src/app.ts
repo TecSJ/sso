@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import modulosRoutes from './routes/modulosRoutes';
 import rolesRoutes from './routes/rolesRoutes';
 import gruposRoutes from './routes/gruposRoutes';
+import etiquetasRoutes from './routes/etiquetasRoutes';
 import credencialesRoutes from './routes/credencialesRoutes';
 import perfilesRoutes from './routes/perfilesRoutes';
 import aplicacionesRoutes from './routes/aplicacionesRoutes';
@@ -22,6 +23,7 @@ app.use(( req, res, next ) => {
 app.use('/api', modulosRoutes);
 app.use('/api', rolesRoutes);
 app.use('/api', gruposRoutes);
+app.use('/api', etiquetasRoutes);
 app.use('/api', credencialesRoutes);
 app.use('/api', perfilesRoutes);
 app.use('/api', aplicacionesRoutes);
