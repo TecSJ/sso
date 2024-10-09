@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 import * as credencialesService from '../services/credencialesService';
 
-export const getAllCredenciales = async (req: Request, res: Response) => {
+export const getCredenciales = async (req: Request, res: Response) => {
     try {
-        const data = await credencialesService.getAllCredenciales();
-        res.json(data);
-    } catch (error) {
-        res.status(500).json({ error: (error as Error).message });
+        const response = await credencialesService.getCredenciales();
+        res.status(200).json(response);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message.message });
     }
 };
 
@@ -14,64 +14,52 @@ export const insertCredencial = async (req: Request, res: Response): Promise<any
     try {
 
         const { curp, usuario, correo, celular, contrasena } = req.body;
-        const data = await credencialesService.insertCredencial(curp, usuario, correo, celular, contrasena);
-        res.json(data);
-    } catch (error) {
-        res.status(500).json({ error: (error as Error).message });
+        const response = await credencialesService.insertCredencial(curp, usuario, correo, celular, contrasena);
+        res.status(201).json(response);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message.message });
     }
 };
 
 
-export const getCredencialesById = async (req: Request, res: Response): Promise<any> => {
+export const getCredencial = async (req: Request, res: Response): Promise<any> => {
     try {
-        const idCredencial = parseInt(req.params.idCredencial);
-        if (isNaN(idCredencial)) {
-            return res.status(400).json({ error: 'idCredencial inválido:' });
-        }
-        const data = await credencialesService.getCredencialById(idCredencial);
-        res.json(data);
-    } catch (error) {
-        res.status(500).json({ error: (error as Error).message });
+        const idCredencial = req.params.idCredencial;
+        const response = await credencialesService.getCredencial(idCredencial);
+        res.status(200).json({ response: 'Consulta generada correctamente!', data: response });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message.message });
     }
 };
 
-export const updateCredencialesById = async (req: Request, res: Response) => {
+export const updateCredencial = async (req: Request, res: Response) => {
     try {
         const idCredencial = req.params.idCredencial;
         const { usuario, correo, celular, tipo } = req.body;
-        console.log(idCredencial, usuario, correo, celular, tipo)
-        const data = await credencialesService.uptateCredencial(idCredencial, usuario, correo, celular, tipo);
-        res.json(data);
-    } catch (error) {
-        res.status(500).json({ error: (error as Error).message });
+        await credencialesService.uptateCredencial(idCredencial, usuario, correo, celular, tipo);
+        res.status(204).json({});
+    } catch (error: any) {
+        res.status(500).json({ message: error.message.message });
     }
 };
 
-export const updateContrasena = async (req: Request, res: Response) => {
+export const setPassword = async (req: Request, res: Response) => {
     try {
-        const idCredencial = parseInt(req.params.idCredencial);
-        if (isNaN(idCredencial)) {
-            res.status(400).json({ error: 'idCredencial inválido:' });
-            return;
-        }
+        const idCredencial = req.params.idCredencial;
         const { contrasena } = req.body;
-        const data = await credencialesService.uptateContrasena(idCredencial, contrasena);
-        res.json(data);
-    } catch (error) {
-        res.status(500).json({ error: (error as Error).message });
+        await credencialesService.setPassword(idCredencial, contrasena);
+        res.status(204).json({});
+    } catch (error: any) {
+        res.status(500).json({ message: error.message.message });
     }
 };
 
-export const deleteCredencialesById = async (req: Request, res: Response) => {
+export const deleteCredencial = async (req: Request, res: Response) => {
     try {
-        const idCredencial = parseInt(req.params.idCredencial);
-        if (isNaN(idCredencial)) {
-            res.status(400).json({ error: 'idCredencial inválido:' });
-            return;
-        }
-        const data = await credencialesService.deleteCredencial(idCredencial);
-        res.json(data);
-    } catch (error) {
-        res.status(500).json({ error: (error as Error).message });
+        const idCredencial = req.params.idCredencial;
+        await credencialesService.deleteCredencial(idCredencial);
+        res.status(204).json({});
+    } catch (error: any) {
+        res.status(500).json({ message: error.message.message });
     }
 };

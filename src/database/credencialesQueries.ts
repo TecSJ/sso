@@ -1,7 +1,7 @@
 export const queries = {
-    getAllCredenciales: `SELECT idCredencial, curp, usuario, correo, celular, tipo, estado
+    getCredenciales: `SELECT idCredencial, curp, usuario, correo, celular, tipo, estado
                     FROM Credenciales;`,
-    getCredencialById: `SELECT idCredencial, curp, usuario, correo, celular, tipo, estado
+    getCredencial: `SELECT idCredencial, curp, usuario, correo, celular, tipo, estado
                     FROM Credenciales
                     WHERE idCredencial = ?;`,
     insertCredencial: `CALL proc_insert_credenciales(?, ?, ?, ?, ?, ?);`,
