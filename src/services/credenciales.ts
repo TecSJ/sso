@@ -1,5 +1,5 @@
-import { ssoDB } from '../database/connection';
-import { queries } from '../database/credencialesQueries';
+import { ssoDB } from '../queries/connection';
+import { queries } from '../queries/credenciales';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import { Exception } from '../util/Exception';

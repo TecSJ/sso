@@ -1,5 +1,5 @@
-import { ssoDB } from '../database/connection';
-import { queries } from '../database/rolesQueries';
+import { ssoDB } from '../queries/connection';
+import { queries } from '../queries/roles';
 import { Exception } from '../util/Exception';
 
 export const getRoles = async () => {

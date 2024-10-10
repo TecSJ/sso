@@ -1,5 +1,5 @@
-import { ssoDB } from '../database/connection';
-import { queries } from '../database/aplicacionesQueries';
+import { ssoDB } from '../queries/connection';
+import { queries } from '../queries/aplicaciones';
 import { Exception } from '../util/Exception';
 
 export const getAplicaciones = async () => {

@@ -1,5 +1,5 @@
-import { ssoDB } from '../database/connection';
-import { queries } from '../database/accesosQueries';
+import { ssoDB } from '../queries/connection';
+import { queries } from '../queries/accesos';
 import { Exception } from '../util/Exception';
 
 export const getAccesos = async () => {

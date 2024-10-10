@@ -1,13 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import modulosRoutes from './routes/modulosRoutes';
-import rolesRoutes from './routes/rolesRoutes';
-import gruposRoutes from './routes/gruposRoutes';
-import etiquetasRoutes from './routes/etiquetasRoutes';
-import credencialesRoutes from './routes/credencialesRoutes';
-import perfilesRoutes from './routes/perfilesRoutes';
-import aplicacionesRoutes from './routes/aplicacionesRoutes';
-
+import * as routes from './routes';
 dotenv.config();
 
 const app = express();
@@ -20,13 +13,13 @@ app.use(( req, res, next ) => {
     next();
 });
 
-app.use('/api', modulosRoutes);
-app.use('/api', rolesRoutes);
-app.use('/api', gruposRoutes);
-app.use('/api', etiquetasRoutes);
-app.use('/api', credencialesRoutes);
-app.use('/api', perfilesRoutes);
-app.use('/api', aplicacionesRoutes);
+app.use('/api', routes.mdulos);
+app.use('/api', routes.roles);
+app.use('/api', routes.grupos);
+app.use('/api', routes.etiquetas);
+app.use('/api', routes.credenciales);
+app.use('/api', routes.perfiles);
+app.use('/api', routes.aplicaciones);
 
 app.get('/', (req, res) => {
     res.send('API is running...');

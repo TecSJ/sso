@@ -1,5 +1,5 @@
-import { ssoDB } from '../database/connection';
-import { queries } from '../database/modulosQueries';
+import { ssoDB } from '../queries/connection';
+import { queries } from '../queries/modulos';
 import { Exception } from '../util/Exception';
 
 export const getModulos = async () => {

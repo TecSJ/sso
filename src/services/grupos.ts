@@ -1,5 +1,5 @@
-import { ssoDB } from '../database/connection';
-import { queries } from '../database/gruposQueries';
+import { ssoDB } from '../queries/connection';
+import { queries } from '../queries/grupos';
 import { Exception } from '../util/Exception';
 
 export const getGrupos = async () => {
