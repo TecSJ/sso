@@ -11,7 +11,7 @@ export const getPerfiles = async () => {
     }
 }
 
-export const getPerfil = async (idPerfil: number) => {
+export const getPerfil = async (idPerfil: string) => {
     try {
         const [perfiles] = await ssoDB.query(queries.getPerfil, [idPerfil]);
         return perfiles;
@@ -29,7 +29,7 @@ export const insertPerfil = async (clave: string, nombre: string) => {
     }
 }
 
-export const uptatePerfil = async (idPerfil: number, clave: string, nombre: string) => {
+export const uptatePerfil = async (idPerfil: string, clave: string, nombre: string) => {
     try {
         const [perfiles] = await ssoDB.query(queries.updatePerfil, [idPerfil, clave, nombre]);
         return perfiles;
@@ -38,7 +38,7 @@ export const uptatePerfil = async (idPerfil: number, clave: string, nombre: stri
     }
 }
 
-export const deletePerfil = async (idPerfil: number) => {
+export const deletePerfil = async (idPerfil: string) => {
     try {
         const [perfiles] = await ssoDB.query(queries.deletePerfil, [idPerfil]);
         return perfiles;
