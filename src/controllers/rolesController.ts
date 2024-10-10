@@ -33,8 +33,8 @@ export const deleteRol = async (req: Request, res: Response): Promise<any> => {
 export const insertRol = async (req: Request, res: Response): Promise<any> => {
     try {
         const { clave, nombre } = req.body;
-        await rolService.insertRol(clave, nombre);
-        res.status(201).json({ response: 'El nueveo rol ha sido agregado exitosamente!' });
+        const response = await rolService.insertRol(clave, nombre);
+        res.status(201).json(response);
     } catch (error: any) {
         res.status(500).json({ message: error.message.message });
     }
