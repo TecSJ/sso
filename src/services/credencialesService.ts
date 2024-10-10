@@ -6,19 +6,19 @@ import { Exception } from '../util/Exception';
 
 export const getCredenciales = async () => {
     try {
-        const [credenciales] = await ssoDB.query(queries.getAllCredenciales);
+        const [credenciales] = await ssoDB.query(queries.getCredenciales);
         return credenciales;
-    } catch (error) {
-        console.log(error);
+    } catch (error: any) {
+        throw new Exception(error.message, error);
     }
 }
 
 export const getCredencial = async (idCredencial: string) => {
     try {
-        const [credenciales] = await ssoDB.query(queries.getCredencialById, [idCredencial]);
+        const [credenciales] = await ssoDB.query(queries.getCredencial, [idCredencial]);
         return credenciales;
-    } catch (error) {
-        console.log(error);
+    } catch (error : any) {
+        throw new Exception(error.message, error);
     }
 }
 
@@ -30,8 +30,8 @@ export const insertCredencial = async (curp: string, usuario: string, correo: st
         const criptContrasena = await bcrypt.hash(contrasena, salt);
         const [credenciales] = await ssoDB.query(queries.insertCredencial, [uuid, curp, usuario, correo, celular, criptContrasena]);
         return credenciales;
-    } catch (error) {
-        console.log(error);
+    } catch (error: any ) {
+        throw new Exception(error.message, error);
     }
 }
 
@@ -50,8 +50,8 @@ export const setPassword = async (idCredencial: string, contrasena: string) => {
         const criptContrasena = await bcrypt.hash(contrasena, salt);
         const [credenciales] = await ssoDB.query(queries.updateContrasena, [idCredencial, criptContrasena]);
         return credenciales;
-    } catch (error) {
-        console.log(error);
+    } catch (error: any) {
+        throw new Exception(error.message, error);
     }
 }
 
@@ -59,7 +59,7 @@ export const deleteCredencial = async (idCredencial: string) => {
     try {
         const [credenciales] = await ssoDB.query(queries.deleteCredencial, [idCredencial]);
         return credenciales;
-    } catch (error) {
-        console.log(error);
+    } catch (error: any) {
+        throw new Exception(error.message, error);
     }
 }

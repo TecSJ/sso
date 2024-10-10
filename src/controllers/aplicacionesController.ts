@@ -33,8 +33,8 @@ export const deleteAplicacion = async (req: Request, res: Response): Promise<any
 export const insertAplicacion = async (req: Request, res: Response): Promise<any> => {
     try {
         const { clave, nombre, redireccion } = req.body;
-        await aplicacionesService.insertAplicacion(clave, nombre, redireccion);
-        res.status(201).json({ response: 'La nueva aplicación ha sido agregado exitosamente!' });
+        const response = await aplicacionesService.insertAplicacion(clave, nombre, redireccion);
+        res.status(201).json(response);
     } catch ( error : any ) {
         res.status(500).json({ message: error.message.message });
     }
