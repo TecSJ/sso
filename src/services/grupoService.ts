@@ -11,7 +11,7 @@ export const getGrupos = async () => {
     }
 }
 
-export const getGrupo = async (idGrupo: number) => {
+export const getGrupo = async (idGrupo: string) => {
     try {
         const [grupo] = await ssoDB.query(queries.getGrupo, [idGrupo]);
         return grupo;
@@ -20,7 +20,7 @@ export const getGrupo = async (idGrupo: number) => {
     }
 }
 
-export const deleteGrupo = async (idGrupo: number) => {
+export const deleteGrupo = async (idGrupo: string) => {
     try {
         const [grupo] = await ssoDB.query(queries.deleteGrupo, [idGrupo]);
         return grupo;
@@ -38,7 +38,7 @@ export const insertGrupo = async (clave: string, nombre: string) => {
     }
 }
 
-export const updateGrupo = async (idGrupo: number, clave: string, nombre: string) => {
+export const updateGrupo = async (idGrupo: string, clave: string, nombre: string) => {
     try {
         const [result] = await ssoDB.query(queries.updateGrupo, [idGrupo, clave, nombre]);
         return result;

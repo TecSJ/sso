@@ -2,47 +2,47 @@ import { ssoDB } from '../database/connection';
 import { queries } from '../database/etiquetasQueries';
 import { Exception } from '../util/Exception';
 
-export const getEtiquetas = async ( idGrupo: string ) => {
+export const getEtiquetas = async (idGrupo: string) => {
     try {
-        const [ result ] = await ssoDB.query(queries.getEtiquetas, [idGrupo] );
+        const [result] = await ssoDB.query(queries.getEtiquetas, [idGrupo]);
         return result;
-    } catch (error : any ) {
+    } catch (error: any) {
         throw new Exception(error.message, error);
     }
 }
 
-export const getEtiqueta = async ( idGrupo: string, idEtiqueta: string ) => {
+export const getEtiqueta = async (idGrupo: string, idEtiqueta: string) => {
     try {
-        const [ result ] = await ssoDB.query( queries.getEtiqueta, [ idGrupo, idEtiqueta] );
+        const [result] = await ssoDB.query( queries.getEtiqueta, [idGrupo, idEtiqueta]);
         return result;
-    } catch (error : any ) {
+    } catch (error: any) {
         throw new Exception(error.message, error);
     }
 }
 
-export const deleteEtiqueta = async ( idGrupo: string, idEtiqueta: string ) => {
+export const deleteEtiqueta = async (idGrupo: string, idEtiqueta: string) => {
     try {
-        const [ result ] = await ssoDB.query(queries.deleteEtiqueta, [ idGrupo, idEtiqueta]);
+        const [ result] = await ssoDB.query(queries.deleteEtiqueta, [idGrupo, idEtiqueta]);
         return result;
-    } catch (error : any ) {
+    } catch (error: any) {
         throw new Exception(error.message, error);
     }
 }
 
-export const insertEtiqueta = async ( idGrupo: string, nombre: string ) => {
+export const insertEtiqueta = async (idGrupo: string, nombre: string) => {
     try {
-        const [ result ] = await ssoDB.query(queries.insertEtiqueta , [ idGrupo, nombre ]);
+        const [ result] = await ssoDB.query(queries.insertEtiqueta , [idGrupo, nombre]);
         return result;
-    } catch (error : any ) {
+    } catch (error: any) {
         throw new Exception(error.message, error);
     }
 }
 
-export const updateEtiqueta = async ( idGrupo: string, idEtiqueta: string, nombre: string ) => {
+export const updateEtiqueta = async (idGrupo: string, idEtiqueta: string, nombre: string) => {
     try {
-        const [ result ] = await ssoDB.query(queries.updateEtiqueta, [idGrupo, idEtiqueta, nombre ]);
+        const [ result] = await ssoDB.query(queries.updateEtiqueta, [idGrupo, idEtiqueta, nombre]);
         return result;
-    } catch (error : any ) {
+    } catch (error: any) {
         throw new Exception(error.message, error);
     }
 }

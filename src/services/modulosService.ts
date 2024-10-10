@@ -11,7 +11,7 @@ export const getModulos = async () => {
     }
 }
 
-export const getModulo = async (idModulo: number) => {
+export const getModulo = async (idModulo: string) => {
     try {
         const [modulos] = await ssoDB.query(queries.getModulo, [idModulo]);
         return modulos;
@@ -20,7 +20,7 @@ export const getModulo = async (idModulo: number) => {
     }
 }
 
-export const insertModulo = async (idAplicacion:number, clave: string, nombre: string) => {
+export const insertModulo = async (idAplicacion:string, clave: string, nombre: string) => {
     try {
         const [modulos] = await ssoDB.query(queries.insertModulo, [idAplicacion, clave, nombre]);
         return modulos;
@@ -29,7 +29,7 @@ export const insertModulo = async (idAplicacion:number, clave: string, nombre: s
     }
 }
 
-export const uptateModulo = async (idModulo: number, idAplicacion:number, clave: string, nombre: string) => {
+export const uptateModulo = async (idModulo: string, idAplicacion:string, clave: string, nombre: string) => {
     try {
         const [modulos] = await ssoDB.query(queries.updateModulo, [idModulo, idAplicacion, clave, nombre]);
         return modulos;
@@ -38,7 +38,7 @@ export const uptateModulo = async (idModulo: number, idAplicacion:number, clave:
     }
 }
 
-export const deleteModulo = async (idModulo: number) => {
+export const deleteModulo = async (idModulo: string) => {
     try {
         const [modulos] = await ssoDB.query(queries.deleteModulo, [idModulo]);
         return modulos;
