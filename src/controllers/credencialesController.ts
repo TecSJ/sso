@@ -6,60 +6,60 @@ export const getCredenciales = async (req: Request, res: Response) => {
         const response = await credencialesService.getCredenciales();
         res.status(200).json(response);
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
-
-export const insertCredencial = async (req: Request, res: Response): Promise<any> => {
-    try {
-
-        const { curp, usuario, correo, celular, contrasena } = req.body;
-        const response = await credencialesService.insertCredencial(curp, usuario, correo, celular, contrasena);
-        res.status(201).json(response);
-    } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
-    }
-};
-
 
 export const getCredencial = async (req: Request, res: Response): Promise<any> => {
     try {
-        const idCredencial = req.params.idCredencial;
+        const { idCredencial } = req.params;
         const response = await credencialesService.getCredencial(idCredencial);
-        res.status(200).json({ response: 'Consulta generada correctamente!', data: response });
+        res.status(200).json(response);
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
-    }
-};
-
-export const updateCredencial = async (req: Request, res: Response) => {
-    try {
-        const idCredencial = req.params.idCredencial;
-        const { usuario, correo, celular, tipo } = req.body;
-        await credencialesService.uptateCredencial(idCredencial, usuario, correo, celular, tipo);
-        res.status(204).json({});
-    } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
-    }
-};
-
-export const setPassword = async (req: Request, res: Response) => {
-    try {
-        const idCredencial = req.params.idCredencial;
-        const { contrasena } = req.body;
-        await credencialesService.setPassword(idCredencial, contrasena);
-        res.status(204).json({});
-    } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 export const deleteCredencial = async (req: Request, res: Response) => {
     try {
-        const idCredencial = req.params.idCredencial;
+        const { idCredencial } = req.params;
         await credencialesService.deleteCredencial(idCredencial);
         res.status(204).json({});
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
+
+export const insertCredencial = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { curp, usuario, correo, celular, contrasena } = req.body;
+        const response = await credencialesService.insertCredencial(curp, usuario, correo, celular, contrasena);
+        res.status(201).json(response);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+export const updateCredencial = async (req: Request, res: Response) => {
+    try {
+        const { idCredencial } = req.params;
+        const { usuario, correo, celular, tipo } = req.body;
+        await credencialesService.uptateCredencial(idCredencial, usuario, correo, celular, tipo);
+        res.status(204).json({});
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const setPassword = async (req: Request, res: Response) => {
+    try {
+        const { idCredencial } = req.params;
+        const { contrasena } = req.body;
+        await credencialesService.setPassword(idCredencial, contrasena);
+        res.status(204).json({});
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
