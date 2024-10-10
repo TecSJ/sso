@@ -1,6 +1,6 @@
-import { ssoDB } from '../queries/connection';
+import { ssoDB } from '../model/Connection';
 import { queries } from '../queries/etiquetas';
-import { Exception } from '../util/Exception';
+import { Exception } from '../model/Exception';
 
 export const getEtiquetas = async (idGrupo: string) => {
     try {

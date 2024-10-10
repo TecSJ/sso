@@ -1,8 +1,8 @@
-import { ssoDB } from '../queries/connection';
+import { ssoDB } from '../model/Connection';
 import { queries } from '../queries/credenciales';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
-import { Exception } from '../util/Exception';
+import { Exception } from '../model/Exception';
 
 export const getCredenciales = async () => {
     try {

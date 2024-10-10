@@ -1,6 +1,6 @@
-import { ssoDB } from '../queries/connection';
+import { ssoDB } from '../model/Connection';
 import { queries } from '../queries/modulos';
-import { Exception } from '../util/Exception';
+import { Exception } from '../model/Exception';
 
 export const getModulos = async () => {
     try {

@@ -1,6 +1,6 @@
-import { ssoDB } from '../queries/connection';
+import { ssoDB } from '../model/Connection';
 import { queries } from '../queries/preferencias';
-import { Exception } from '../util/Exception';
+import { Exception } from '../model/Exception';
 
 export const getPreferencias = async () => {
     try {
