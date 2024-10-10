@@ -1,11 +1,13 @@
 import { Router } from "express";
-import * as aplicacionesController from '../controllers/aplicacionesController';
+import { getAplicaciones, getAplicacion, insertAplicacion, deleteAplicacion, updateAplicacion } from '../controllers/aplicacionesController';
+import { validateSchema } from '../middleware/validateSchema'
+import { insertSchema } from '../schema/aplicacioneSchema'
 
 const router = Router();
-router.get('/aplicaciones', aplicacionesController.getAplicaciones);
-router.get('/aplicaciones/:idAplicacion', aplicacionesController.getAplicacion);
-router.post('/aplicaciones', aplicacionesController.insertAplicacion);
-router.delete('/aplicaciones/:idAplicacion', aplicacionesController.deleteAplicacion);
-router.put('/aplicaciones/:idAplicacion', aplicacionesController.updateAplicacion);
+router.get('/aplicaciones', getAplicaciones);
+router.get('/aplicaciones/:idAplicacion', getAplicacion);
+router.post('/aplicaciones', validateSchema ( insertSchema ), insertAplicacion);
+router.delete('/aplicaciones/:idAplicacion', deleteAplicacion);
+router.put('/aplicaciones/:idAplicacion', updateAplicacion);
 
 export default router;

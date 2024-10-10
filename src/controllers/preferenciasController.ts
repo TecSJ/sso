@@ -6,28 +6,27 @@ export const getPreferencias = async (req: Request, res: Response) => {
         const response = await preferenciasService.getPreferencias();
         res.status(200).json(response);
     } catch (error: any) {
-        console.log(error);
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 export const getPreferencia = async (req: Request, res: Response): Promise<any> => {
     try {
-        const idPreferencia = req.params.idPreferencia;
+        const { idPreferencia } = req.params;
         const response = await preferenciasService.getPreferencia(idPreferencia);
         res.status(200).json(response);
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 export const deletePreferencia = async (req: Request, res: Response): Promise<any> => {
     try {
-        const idPreferencia = req.params.idPreferencia;
+        const { idPreferencia } = req.params;
         await preferenciasService.deletePreferencia(idPreferencia);
         res.status(204).json({});
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -35,21 +34,21 @@ export const insertPreferencia = async (req: Request, res: Response): Promise<an
     try {
         const { idCredencial, twoNF, cambiarContrasena } = req.body;
         const response = await preferenciasService.insertPreferencia(idCredencial, twoNF, cambiarContrasena);
-        res.status(201).json({ response: 'La nueva preferencia ha sido agregada exitosamente!' });
+        res.status(201).json(response);
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 
 export const updatePreferencia = async (req: Request, res: Response): Promise<any> => {
     try {
-        const idPreferencia = req.params.idPreferencia;
+        const { idPreferencia } = req.params;
         const { idCredencial, twoNF, cambiarContrasena } = req.body;
         await preferenciasService.updatePreferencia(idPreferencia, idCredencial, twoNF, cambiarContrasena);
         res.status(204).json({});
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 

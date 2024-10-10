@@ -6,28 +6,27 @@ export const getAccesos = async (req: Request, res: Response) => {
         const response = await accesosService.getAccesos();
         res.status(200).json(response);
     } catch (error: any) {
-        console.log(error);
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 export const getAcceso = async (req: Request, res: Response): Promise<any> => {
     try {
-        const idAcceso = req.params.idAcceso;
+        const { idAcceso } = req.params;
         const response = await accesosService.getAcceso(idAcceso);
         res.status(200).json(response);
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 export const deleteAcceso = async (req: Request, res: Response): Promise<any> => {
     try {
-        const idAcceso = req.params.idAcceso;
+        const { idAcceso } = req.params;
         await accesosService.deleteAcceso(idAcceso);
         res.status(204).json({});
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -35,21 +34,21 @@ export const insertAcceso = async (req: Request, res: Response): Promise<any> =>
     try {
         const { idRol, idModulo, accion1, accion2, accion3, accion4, accion5 } = req.body;
         const response = await accesosService.insertAcceso(idRol, idModulo, accion1, accion2, accion3, accion4, accion5);
-        res.status(201).json({ response: 'El nuevo acceso ha sido agregado exitosamente!' });
+        res.status(201).json(response);
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 
 export const updateAcceso = async (req: Request, res: Response): Promise<any> => {
     try {
-        const idAcceso = req.params.idAcceso;
+        const { idAcceso } = req.params;
         const { idRol, idModulo, accion1, accion2, accion3, accion4, accion5 } = req.body;
         await accesosService.updateAcceso(idAcceso, idRol, idModulo, accion1, accion2, accion3, accion4, accion5);
         res.status(204).json({});
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 

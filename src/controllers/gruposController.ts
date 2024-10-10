@@ -6,47 +6,47 @@ export const getGrupos = async (req: Request, res: Response) => {
         const response = await grupoService.getGrupos();
         res.status(200).json(response);
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 export const getGrupo = async (req: Request, res: Response): Promise<any> => {
     try {
-        const idGrupo = req.params.idGrupo;
+        const { idGrupo } = req.params;
         const response = await grupoService.getGrupo(idGrupo);
         res.status(200).json(response);
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 export const deleteGrupo = async (req: Request, res: Response): Promise<any> => {
     try {
-        const idGrupo = req.params.idGrupo;
+        const { idGrupo } = req.params;
         await grupoService.deleteGrupo(idGrupo);
         res.status(204).json({});
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 export const insertGrupo = async (req: Request, res: Response): Promise<any> => {
     try {
         const { clave, nombre } = req.body;
-        await grupoService.insertGrupo(clave, nombre);
-        res.status(201).json({ response: 'El nuevo grupo ha sido agregado exitosamente!'} );
+        const response = await grupoService.insertGrupo(clave, nombre);
+        res.status(201).json(response);
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 export const updateGrupo = async (req: Request, res: Response): Promise<any> => {
     try {
-        const idGrupo = req.params.idGrupo;
+        const { idGrupo } = req.params;
         const { clave, nombre } = req.body;
         await grupoService.updateGrupo(idGrupo, clave, nombre);
         res.status(204).json({});
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };

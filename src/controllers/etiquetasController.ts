@@ -7,7 +7,7 @@ export const getEtiquetas = async (req: Request, res: Response) => {
         const response = await etiquetaService.getEtiquetas(idGrupo);
         res.status(200).json(response);
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -17,7 +17,7 @@ export const getEtiqueta = async (req: Request, res: Response): Promise<any> => 
         const response = await etiquetaService.getEtiqueta(idGrupo, idEtiqueta);
         res.status(200).json(response);
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -27,7 +27,7 @@ export const deleteEtiqueta = async (req: Request, res: Response): Promise<any> 
         await etiquetaService.deleteEtiqueta(idGrupo, idEtiqueta);
         res.status(204).json({});
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -38,7 +38,7 @@ export const insertEtiqueta = async (req: Request, res: Response): Promise<any> 
         const response = await etiquetaService.insertEtiqueta(idGrupo, nombre);
         res.status(201).json(response);
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -50,7 +50,7 @@ export const updateEtiqueta = async (req: Request, res: Response): Promise<any> 
         await etiquetaService.updateEtiqueta(idGrupo, idEtiqueta, nombre);
         res.status(204).json({});
     } catch (error: any) {
-        res.status(500).json({ message: error.message.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
