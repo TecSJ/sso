@@ -20,6 +20,16 @@ export const getRol = async (req: Request, res: Response): Promise<any> => {
     }
 };
 
+export const filterRoles = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { filtros, orden, limite, pagina } = req.body;
+        const response = await service.filterRoles( filtros, orden, limite, pagina );
+        res.status(200).json(response);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export const deleteRol = async (req: Request, res: Response): Promise<any> => {
     try {
         const { idRol } = req.params;

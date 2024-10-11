@@ -20,6 +20,16 @@ export const getAcceso = async (req: Request, res: Response): Promise<any> => {
     }
 };
 
+export const filterAccesos = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { filtros, orden, limite, pagina } = req.body;
+        const response = await service.filterAccesos( filtros, orden, limite, pagina );
+        res.status(200).json(response);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export const deleteAcceso = async (req: Request, res: Response): Promise<any> => {
     try {
         const { idAcceso } = req.params;

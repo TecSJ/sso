@@ -20,6 +20,16 @@ export const getAplicacion = async (req: Request, res: Response): Promise<any> =
     }
 };
 
+export const filterAplicaciones = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { filtros, orden, limite, pagina } = req.body;
+        const response = await service.filterAplicaciones( filtros, orden, limite, pagina );
+        res.status(200).json(response);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export const deleteAplicacion = async (req: Request, res: Response): Promise<any> => {
     try {
         const idAplicacion = req.params.idAplicacion;

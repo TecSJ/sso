@@ -20,6 +20,17 @@ export const getModulo = async (req: Request, res: Response): Promise<any> => {
     }
 };
 
+export const filterModulos = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { filtros, orden, limite, pagina } = req.body;
+        const response = await service.filterModulos( filtros, orden, limite, pagina );
+        res.status(200).json(response);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
 export const deleteModulo = async (req: Request, res: Response) => {
     try {
         const { idModulo } = req.params;

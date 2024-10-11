@@ -1,6 +1,7 @@
 import { ssoDB } from '../model/Connection';
 import { queries } from '../queries/accesos';
 import { Exception } from '../model/Exception';
+import { QueryBuilder } from '../model/QueryBuilder';
 
 export const getAccesos = async () => {
     try {
@@ -15,6 +16,15 @@ export const getAcceso = async (idAcceso: string) => {
     try {
         const [result] = await ssoDB.query(queries.getAcceso, [idAcceso]);
         return result;
+    } catch (error: any) {
+        throw new Exception(error.message, error);
+    }
+}
+
+export const filterAccesos = async ( filtros: string | undefined, orden: string | undefined, limite : number | undefined, pagina: number | undefined ) => {
+    try {
+        const [modulos] = await ssoDB.query( QueryBuilder.getQuery( queries.filterAccesos, filtros, orden, limite, pagina ) );
+        return modulos;
     } catch (error: any) {
         throw new Exception(error.message, error);
     }

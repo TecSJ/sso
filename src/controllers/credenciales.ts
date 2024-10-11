@@ -20,6 +20,16 @@ export const getCredencial = async (req: Request, res: Response): Promise<any> =
     }
 };
 
+export const filterCredenciales = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { filtros, orden, limite, pagina } = req.body;
+        const response = await service.filterCredenciales( filtros, orden, limite, pagina );
+        res.status(200).json(response);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export const deleteCredencial = async (req: Request, res: Response) => {
     try {
         const { idCredencial } = req.params;

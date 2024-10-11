@@ -20,6 +20,16 @@ export const getGrupo = async (req: Request, res: Response): Promise<any> => {
     }
 };
 
+export const filterGrupos = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { filtros, orden, limite, pagina } = req.body;
+        const response = await service.filterGrupos( filtros, orden, limite, pagina );
+        res.status(200).json(response);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export const deleteGrupo = async (req: Request, res: Response): Promise<any> => {
     try {
         const { idGrupo } = req.params;

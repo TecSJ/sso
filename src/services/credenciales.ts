@@ -3,6 +3,7 @@ import { queries } from '../queries/credenciales';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import { Exception } from '../model/Exception';
+import { QueryBuilder } from '../model/QueryBuilder';
 
 export const getCredenciales = async () => {
     try {
@@ -18,6 +19,15 @@ export const getCredencial = async (idCredencial: string) => {
         const [credenciales] = await ssoDB.query(queries.getCredencial, [idCredencial]);
         return credenciales;
     } catch (error : any) {
+        throw new Exception(error.message, error);
+    }
+}
+
+export const filterCredenciales = async ( filtros: string | undefined, orden: string | undefined, limite: number | undefined, pagina: number | undefined ) => {
+    try {
+        const [modulos] = await ssoDB.query( QueryBuilder.getQuery( queries.filterCredenciales, filtros, orden, limite, pagina ) );
+        return modulos;
+    } catch (error: any) {
         throw new Exception(error.message, error);
     }
 }

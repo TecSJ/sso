@@ -20,6 +20,16 @@ export const getPerfil = async (req: Request, res: Response): Promise<any> => {
     }
 };
 
+export const filterPerfil = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { filtros, orden, limite, pagina } = req.body;
+        const response = await service.filterPerfiles( filtros, orden, limite, pagina );
+        res.status(200).json(response);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export const deletePerfil = async (req: Request, res: Response) => {
     try {
         const { idPerfil } = req.params;
