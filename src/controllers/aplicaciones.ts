@@ -12,7 +12,7 @@ export const getAplicaciones = async (req: Request, res: Response) => {
 
 export const getAplicacion = async (req: Request, res: Response): Promise<any> => {
     try {
-        const idAplicacion = req.params.idAplicacion;
+        const { idAplicacion } = req.params;
         const response = await service.getAplicacion(idAplicacion);
         res.status(200).json(response);
     } catch (error : any) {
@@ -32,7 +32,7 @@ export const filterAplicaciones = async (req: Request, res: Response): Promise<a
 
 export const deleteAplicacion = async (req: Request, res: Response): Promise<any> => {
     try {
-        const idAplicacion = req.params.idAplicacion;
+        const { idAplicacion } = req.params;
         await service.deleteAplicacion(idAplicacion);
         res.status(204).json({});
     } catch (error : any ) {
@@ -53,7 +53,7 @@ export const insertAplicacion = async (req: Request, res: Response): Promise<any
 
 export const updateAplicacion = async (req: Request, res: Response): Promise<any> => {
     try {
-        const idAplicacion = req.params.idAplicacion;
+        const { idAplicacion } = req.params;
         const { clave, nombre, redireccion } = req.body;
         await service.updateAplicacion(idAplicacion, clave, nombre, redireccion);
         res.status(204).json({});

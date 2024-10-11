@@ -4,6 +4,6 @@ export const queries = {
     filterAplicaciones: `SELECT * FROM Aplicaciones  `,
     deleteAplicacion: `CALL proc_delete_aplicaciones(?);`,
     insertAplicacion: `CALL proc_insert_aplicaciones(?, ?, ? );`,
-    updateAplicacionById: `CALL proc_update_aplicaciones(?, ?, ?, ?);`,
+    updateAplicacion: `CALL proc_update_aplicaciones(?, ?, ?, ?);`,
 }
 

@@ -18,6 +18,7 @@ app.use('/api', routes.roles);
 app.use('/api', routes.grupos);
 app.use('/api', routes.etiquetas);
 app.use('/api', routes.credenciales);
+app.use('/api', routes.codigos);
 app.use('/api', routes.perfiles);
 app.use('/api', routes.aplicaciones);
 

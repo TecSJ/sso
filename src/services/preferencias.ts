@@ -23,8 +23,8 @@ export const getPreferencia = async (idPreferencia: string) => {
 
 export const filterPreferencias = async ( filtros: string | undefined, orden: string | undefined, limite: number | undefined, pagina: number | undefined ) => {
     try {
-        const [modulos] = await ssoDB.query( QueryBuilder.getQuery( queries.filterPreferencias, filtros, orden, limite, pagina ) );
-        return modulos;
+        const [result] = await ssoDB.query( QueryBuilder.getQuery( queries.filterPreferencias, filtros, orden, limite, pagina ) );
+        return result;
     } catch (error: any) {
         throw new Exception(error.message, error);
     }
