@@ -9,8 +9,6 @@ export const getCredenciales = async () => {
     try {
         const [result] = await ssoDB.query(queries.getCredenciales);
         return result;
-        const [result] = await ssoDB.query(queries.getCredenciales);
-        return result;
     } catch (error: any) {
         throw new Exception(error.message, error);
     }
@@ -18,8 +16,6 @@ export const getCredenciales = async () => {
 
 export const getCredencial = async (idCredencial: string) => {
     try {
-        const [result] = await ssoDB.query(queries.getCredencial, [idCredencial]);
-        return result;
         const [result] = await ssoDB.query(queries.getCredencial, [idCredencial]);
         return result;
     } catch (error : any) {
@@ -95,8 +91,6 @@ export const setPassword = async (idCredencial: string, contrasena: string) => {
     try {
         const salt = await bcrypt.genSalt(10);
         const criptContrasena = await bcrypt.hash(contrasena, salt);
-        const [result] = await ssoDB.query(queries.updateContrasena, [idCredencial, criptContrasena]);
-        return result;
         const [result] = await ssoDB.query(queries.updateContrasena, [idCredencial, criptContrasena]);
         return result;
     } catch (error: any) {
