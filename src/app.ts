@@ -16,7 +16,6 @@ app.use(( req, res, next ) => {
 app.use('/roles', routes.roles);
 app.use('/grupos', routes.grupos);
 app.use('/credenciales', routes.credenciales);
-app.use('/perfiles', routes.perfiles);
 app.use('/aplicaciones', routes.aplicaciones );
 
 app.get('/', (req, res) => {

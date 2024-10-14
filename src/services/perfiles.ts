@@ -3,56 +3,49 @@ import { queries } from '../queries/perfiles';
 import { Exception } from '../model/Exception';
 import { QueryBuilder } from '../model/QueryBuilder';
 
-export const getPerfiles = async () => {
+export const getPerfil = async ( idRol: string) => {
     try {
-        const [result] = await ssoDB.query(queries.getPerfiles);
-        return result;
+        const [result]: any = await ssoDB.query( queries.getPerfil, [idRol]);
+        if( result.length > 0 ){
+            return result;
+        }else{
+            return undefined;
+        }
     } catch (error: any) {
         throw new Exception(error.message, error);
     }
 }
 
-export const getPerfil = async (idPerfil: string) => {
+export const getPerfiles = async ( filtros: string | undefined, orden: string | undefined, limite: number | undefined, pagina: number | undefined ) => {
     try {
-        const [result] = await ssoDB.query(queries.getPerfil, [idPerfil]);
-        return result;
+        const [result]: any = await ssoDB.query( QueryBuilder.getQuery( queries.getPerfiles, filtros, orden, limite, pagina ) );
+        if( result.length > 0 ){
+            return result;
+        }else{
+            return undefined;
+        }
     } catch (error: any) {
         throw new Exception(error.message, error);
     }
 }
 
-export const filterPerfiles = async ( filtros: string | undefined, orden: string | undefined, limite: number | undefined, pagina: number | undefined ) => {
+export const deletePerfil = async ( idRol: string, idCredencial: string ) => {
     try {
-        const [result] = await ssoDB.query( QueryBuilder.getQuery( queries.filterPerfiles, filtros, orden, limite, pagina ) );
-        return result;
+        await ssoDB.query( queries.deletePerfil, [ idRol,idCredencial ]);
+        return undefined;
     } catch (error: any) {
         throw new Exception(error.message, error);
     }
 }
+
 
 export const insertPerfil = async (clave: string, nombre: string) => {
     try {
-        const [result] = await ssoDB.query(queries.insertPerfil, [clave, nombre]);
-        return result;
+        const [result]: any = await ssoDB.query(queries.insertPerfil, [clave, nombre]);
+        return result[0][0];
     } catch (error: any) {
         throw new Exception(error.message, error);
     }
 }
 
-export const uptatePerfil = async (idPerfil: string, clave: string, nombre: string) => {
-    try {
-        const [result] = await ssoDB.query(queries.updatePerfil, [idPerfil, clave, nombre]);
-        return result;
-    } catch (error: any) {
-        throw new Exception(error.message, error);
-    }
-}
 
-export const deletePerfil = async (idPerfil: string) => {
-    try {
-        const [result] = await ssoDB.query(queries.deletePerfil, [idPerfil]);
-        return result;
-    } catch (error: any) {
-        throw new Exception(error.message, error);
-    }
-}
