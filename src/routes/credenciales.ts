@@ -2,6 +2,7 @@ import { Router } from "express";
 import * as credenciales from '../controllers/credenciales';
 import * as codigos from '../controllers/codigos';
 import * as preferencias from '../controllers/preferencias';
+import * as historial from '../controllers/historial';
 
 const router = Router();
 
@@ -12,6 +13,10 @@ router.get('/codigos', codigos.getCodigos );
 
 router.get('/:idCredencial/preferencias', preferencias.getPreferencia );
 router.put('/:idCredencial/preferencias', preferencias.updatePreferencia );
+
+router.get('/:idCredencial/historial', historial.getHistorial );
+router.get('/bitacora', historial.getBitacora );
+router.post('/:idCredencial/historial', historial.insertHistorial );
 
 router.get('/:idCredencial', credenciales.getCredencial );
 router.put('/:idCredencial', credenciales.updateCredencial );
