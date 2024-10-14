@@ -1,6 +1,7 @@
 import { Router } from "express";
 import * as credenciales from '../controllers/credenciales';
 import * as codigos from '../controllers/codigos';
+import * as preferencias from '../controllers/preferencias';
 
 const router = Router();
 
@@ -9,6 +10,8 @@ router.get('/:idCredencial/codigos', codigos.getCodigos );
 router.post('/:idCredencial/codigos', codigos.insertCodigo );
 router.get('/codigos', codigos.getCodigos );
 
+router.get('/:idCredencial/preferencias', preferencias.getPreferencia );
+router.put('/:idCredencial/preferencias', preferencias.updatePreferencia );
 
 router.get('/:idCredencial', credenciales.getCredencial );
 router.put('/:idCredencial', credenciales.updateCredencial );
