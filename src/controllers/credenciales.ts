@@ -42,8 +42,8 @@ export const deleteCredencial = async (req: Request, res: Response) => {
 
 export const insertCredencial = async (req: Request, res: Response): Promise<any> => {
     try {
-        const { curp, usuario, correo, celular, contrasena } = req.body;
-        const response = await service.insertCredencial(curp, usuario, correo, celular, contrasena);
+        const { curp, correo, celular, contrasena, tipo } = req.body;
+        const response = await service.insertCredencial( curp, correo, celular, contrasena, tipo );
         res.status(201).json(response);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
@@ -54,9 +54,31 @@ export const insertCredencial = async (req: Request, res: Response): Promise<any
 export const updateCredencial = async (req: Request, res: Response) => {
     try {
         const { idCredencial } = req.params;
-        const { usuario, correo, celular, tipo } = req.body;
-        await service.uptateCredencial(idCredencial, usuario, correo, celular, tipo);
+        const { curp, celular, contrasena, tipo } = req.body;
+        await service.uptateCredencial(idCredencial, curp, celular, contrasena, tipo );
         res.status(204).json({});
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const getCodigo = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { idCredencial } = req.params;
+        const { medio } = req.body;
+        const response = await service.getCodigo(idCredencial, medio);
+        res.status(200).json(response);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const insertCodigo = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { idCredencial } = req.params;
+        const { medio } = req.body;
+        const response = await service.insertCodigo( idCredencial, medio );
+        res.status(201).json(response);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }

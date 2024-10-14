@@ -13,13 +13,11 @@ app.use(( req, res, next ) => {
     next();
 });
 
-app.use('/api', routes.mdulos);
-app.use('/api', routes.roles);
-app.use('/api', routes.grupos);
-app.use('/api', routes.etiquetas);
-app.use('/api', routes.credenciales);
-app.use('/api', routes.perfiles);
-app.use('/api', routes.aplicaciones);
+app.use('/roles', routes.roles);
+app.use('/grupos', routes.grupos);
+app.use('/credenciales', routes.credenciales);
+app.use('/perfiles', routes.perfiles);
+app.use('/aplicaciones', routes.aplicaciones );
 
 app.get('/', (req, res) => {
     res.send('API is running...');

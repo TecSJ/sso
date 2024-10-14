@@ -23,8 +23,8 @@ export const getAcceso = async (idAcceso: string) => {
 
 export const filterAccesos = async ( filtros: string | undefined, orden: string | undefined, limite : number | undefined, pagina: number | undefined ) => {
     try {
-        const [modulos] = await ssoDB.query( QueryBuilder.getQuery( queries.filterAccesos, filtros, orden, limite, pagina ) );
-        return modulos;
+        const [result] = await ssoDB.query( QueryBuilder.getQuery( queries.filterAccesos, filtros, orden, limite, pagina ) );
+        return result;
     } catch (error: any) {
         throw new Exception(error.message, error);
     }

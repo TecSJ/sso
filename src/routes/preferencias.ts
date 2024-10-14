@@ -2,11 +2,11 @@ import { Router } from "express";
 import * as controller from '../controllers/preferencias';
 
 const router = Router();
-router.get('/preferencias', controller.getPreferencias);
-router.get('/preferencias/:idPreferencia', controller.getPreferencia);
-router.get('/preferencias/filtros', controller.filterPreferencias);
-router.post('/preferencias', controller.insertPreferencia);
-router.delete('/preferencias/:idPreferencia', controller.deletePreferencia);
-router.put('/preferencias/:idPreferencia', controller.updatePreferencia);
+router.get('/', controller.getPreferencias);
+router.get('/:idPreferencia', controller.getPreferencia);
+router.get('/filtros', controller.filterPreferencias);
+router.post('/', controller.insertPreferencia);
+router.delete('/:idPreferencia', controller.deletePreferencia);
+router.put('/:idPreferencia', controller.updatePreferencia);
 
 export default router;

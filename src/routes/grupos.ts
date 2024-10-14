@@ -1,12 +1,23 @@
-import { Router } from "express";
-import * as controller from '../controllers/grupos';
+import e, { Router } from "express";
+import * as grupos from '../controllers/grupos';
+import * as etiquetas from '../controllers/etiquetas';
 
 const router = Router();
-router.get('/grupos', controller.getGrupos);
-router.get('/grupos/:idGrupo', controller.getGrupo);
-router.get('/grupos/filtros', controller.filterGrupos);
-router.post('/grupos', controller.insertGrupo);
-router.delete('/grupos/:idGrupo', controller.deleteGrupo);
-router.put('/grupos/:idGrupo', controller.updateGrupo);
 
+router.get('/:idGrupo/etiquetas/:idEtiqueta', etiquetas.getEtiqueta);
+router.put('/:idGrupo/etiquetas/:idEtiqueta', etiquetas.updateEtiqueta);
+router.delete('/:idGrupo/etiquetas/:idEtiqueta', etiquetas.deleteEtiqueta);
+
+router.get('/:idGrupo/etiquetas', etiquetas.getEtiquetas);
+router.post('/:idGrupo/etiquetas', etiquetas.insertEtiqueta);
+
+router.get('/etiquetas', etiquetas.getEtiquetas);
+
+// Rutas de grupos (ordenadas de más específica a más genérica)
+router.get('/:idGrupo', grupos.getGrupo);
+router.put('/:idGrupo', grupos.updateGrupo);
+router.delete('/:idGrupo', grupos.deleteGrupo);
+
+router.get('/', grupos.getGrupos);
+router.post('/', grupos.insertGrupo);
 export default router;

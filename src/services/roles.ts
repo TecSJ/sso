@@ -5,8 +5,8 @@ import { QueryBuilder } from '../model/QueryBuilder';
 
 export const getRoles = async () => {
     try {
-        const [roles] = await ssoDB.query(queries.getRoles);
-        return roles;
+        const [result] = await ssoDB.query(queries.getRoles);
+        return result;
     } catch (error: any) {
         throw new Exception(error.message, error);
     }
@@ -14,8 +14,8 @@ export const getRoles = async () => {
 
 export const getRol = async (idRol: string) => {
     try {
-        const [roles] = await ssoDB.query(queries.getRol, [idRol]);
-        return roles;
+        const [result] = await ssoDB.query(queries.getRol, [idRol]);
+        return result;
     } catch (error: any) {
         throw new Exception(error.message, error);
     }
@@ -23,8 +23,8 @@ export const getRol = async (idRol: string) => {
 
 export const filterRoles = async ( filtros: string | undefined, orden: string | undefined, limite: number | undefined, pagina: number | undefined ) => {
     try {
-        const [modulos] = await ssoDB.query( QueryBuilder.getQuery( queries.filterRoles, filtros, orden, limite, pagina ) );
-        return modulos;
+        const [result] = await ssoDB.query( QueryBuilder.getQuery( queries.filterRoles, filtros, orden, limite, pagina ) );
+        return result;
     } catch (error: any) {
         throw new Exception(error.message, error);
     }
@@ -32,8 +32,8 @@ export const filterRoles = async ( filtros: string | undefined, orden: string | 
 
 export const deleteRol = async (idRol: string) => {
     try {
-        const [rol] = await ssoDB.query(queries.deleteRol, [idRol]);
-        return rol;
+        const [result] = await ssoDB.query(queries.deleteRol, [idRol]);
+        return result;
     } catch (error: any) {
         throw new Exception(error.message, error);
     }

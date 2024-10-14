@@ -1,10 +1,9 @@
 export const queries = {
-    getEtiquetas: `SELECT * FROM Etiquetas WHERE idGrupo = ?;`,
-    getEtiqueta: `SELECT idEtiqueta, idGrupo, nombre FROM Etiquetas WHERE idGrupo = ? AND idEtiqueta = ?;`,
-    filterEtiquetas: `SELECT * FROM Etiquetas  `,
-    deleteEtiqueta: `DELETE FROM Etiquetas WHERE idGrupo = ? AND idEtiqueta = ?`,
+    getEtiquetas: `SELECT * FROM Etiquetas `,
+    getEtiqueta: `SELECT * FROM Etiquetas WHERE idEtiqueta = ?;`,
+    deleteEtiqueta: `CALL proc_delete_etiquetas(?);`,
     insertEtiqueta: `CALL proc_insert_etiquetas(?, ?);`,
-    updateEtiqueta: `CALL proc_update_etiquetas(?, ?, ?);`
+    updateEtiqueta: `CALL proc_update_etiquetas(?, ?);`
 }
 
 

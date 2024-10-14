@@ -1,30 +1,29 @@
 import { Request, Response } from 'express';
 import * as service from '../services/grupos';
 
-export const getGrupos = async (req: Request, res: Response) => {
-    try {
-        const response = await service.getGrupos();
-        res.status(200).json(response);
-    } catch (error: any) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
 export const getGrupo = async (req: Request, res: Response): Promise<any> => {
     try {
         const { idGrupo } = req.params;
         const response = await service.getGrupo(idGrupo);
-        res.status(200).json(response);
+        if ( response ){
+            res.status(200).json(response);
+        }else{
+            res.status(204).json({});
+        }
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
 };
 
-export const filterGrupos = async (req: Request, res: Response): Promise<any> => {
+export const getGrupos = async (req: Request, res: Response): Promise<any> => {
     try {
         const { filtros, orden, limite, pagina } = req.body;
-        const response = await service.filterGrupos( filtros, orden, limite, pagina );
-        res.status(200).json(response);
+        const response = await service.getGrupos( filtros, orden, limite, pagina );
+        if ( response ){
+            res.status(200).json(response);
+        }else{
+            res.status(204).json({});
+        }
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }

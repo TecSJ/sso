@@ -2,11 +2,11 @@ import { Router } from "express";
 import * as controller from '../controllers/accesos';
 
 const router = Router();
-router.get('/accesos', controller.getAccesos);
-router.get('/accesos/:idAcceso', controller.getAcceso);
-router.get('/accesos/filtros', controller.filterAccesos);
-router.post('/accesos', controller.insertAcceso);
-router.delete('/accesos/:idAcceso', controller.deleteAcceso);
-router.put('/accesos/:idAcceso', controller.updateAcceso);
+router.get('/', controller.getAccesos);
+router.get('/:idAcceso', controller.getAcceso);
+router.get('/filtros', controller.filterAccesos);
+router.post('/', controller.insertAcceso);
+router.delete('/:idAcceso', controller.deleteAcceso);
+router.put('/:idAcceso', controller.updateAcceso);
 
 export default router;
