@@ -1,19 +1,19 @@
 import { Router } from "express";
-import * as controller from '../controllers/credenciales';
-import { validateSchema } from "../middleware/validateSchema";
-import * as schema from '../model/Schema';
+import * as credenciales from '../controllers/credenciales';
+import * as codigos from '../controllers/codigos';
 
 const router = Router();
-router.get('/', controller.getCredenciales);
-router.get('/filtros', controller.filterCredenciales );
-router.get('/:idCredencial', controller.getCredencial );
-router.get('/:idCredencial/codigo', controller.getCodigo );
-router.post('/:idCredencial/codigo', controller.insertCodigo );
-router.post('/', controller.insertCredencial);
-router.put('/:idCredencial', validateSchema( schema.contrasenas ) ,controller.updateCredencial);
-router.put('/:idCredencial/cambiarContrasena', controller.setPassword);
-router.delete('/:idCredencial', controller.deleteCredencial);
+
+router.get('/codigos/:idCodigo', codigos.getCodigo );
+router.get('/:idCredencial/codigos', codigos.getCodigos );
+router.post('/:idCredencial/codigos', codigos.insertCodigo );
+router.get('/codigos', codigos.getCodigos );
 
 
+router.get('/:idCredencial', credenciales.getCredencial );
+router.put('/:idCredencial', credenciales.updateCredencial );
+router.delete('/:idCredencial', credenciales.deleteCredencial );
+router.get('/', credenciales.getCredenciales );
+router.post('/', credenciales.insertCredencial );
 
 export default router;
