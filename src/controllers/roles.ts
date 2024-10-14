@@ -1,30 +1,29 @@
 import { Request, Response } from 'express';
 import * as service from '../services/roles';
 
-export const getRoles = async (req: Request, res: Response) => {
-    try {
-        const response = await service.getRoles();
-        res.status(200).json(response);
-    } catch (error: any) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
 export const getRol = async (req: Request, res: Response): Promise<any> => {
     try {
         const { idRol } = req.params;
         const response = await service.getRol(idRol);
-        res.status(200).json(response);
+        if ( response ){
+            res.status(200).json(response);
+        }else{
+            res.status(204).json({});
+        }
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
 };
 
-export const filterRoles = async (req: Request, res: Response): Promise<any> => {
+export const getRoles = async (req: Request, res: Response): Promise<any> => {
     try {
         const { filtros, orden, limite, pagina } = req.body;
-        const response = await service.filterRoles( filtros, orden, limite, pagina );
-        res.status(200).json(response);
+        const response = await service.getRoles( filtros, orden, limite, pagina );
+        if ( response ){
+            res.status(200).json(response);
+        }else{
+            res.status(204).json({});
+        }
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
