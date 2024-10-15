@@ -17,6 +17,7 @@ app.use('/roles', routes.roles);
 app.use('/grupos', routes.grupos);
 app.use('/credenciales', routes.credenciales);
 app.use('/aplicaciones', routes.aplicaciones );
+app.use('/parametros', routes.parametros );
 
 app.get('/', (req, res) => {
     res.send('API is running...');

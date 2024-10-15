@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { validateSchema } from '../middleware/validateSchema'
 import * as aplicaciones from '../controllers/aplicaciones';
 import * as modulos from '../controllers/modulos';
 
