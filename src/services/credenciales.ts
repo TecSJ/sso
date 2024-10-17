@@ -6,6 +6,7 @@ import { Exception } from '../model/Exception';
 import { QueryBuilder } from '../model/QueryBuilder';
 import axios from 'axios';
 import https from 'https';
+import crypto from 'crypto';
 
 const agent = new https.Agent({  
     rejectUnauthorized: false
@@ -68,11 +69,16 @@ export const CreateMoodle = async (curp: string, password: string, name:string, 
         const userValidate = await axios.get(userValidateUrl, { httpsAgent: agent });
 
         if(typeof(userValidate.data[0]) === 'undefined'){
+
+            const md5Password = crypto.createHash('md5').update(curp).digest('hex');
+
+            //console.log(md5Password);
+
             const createUserUrl = process.env.moodle_url+
             '&wsfunction=core_user_create_users'+
             '&users[0][username]='+curp.toLowerCase()+
             '&users[0][auth]=manual'+
-            '&users[0][password]='+password+
+            '&users[0][password]=A'+md5Password+'*'+
             '&users[0][firstname]='+name+
             '&users[0][lastname]='+firstName+' '+secondName+
             '&users[0][email]='+email+
@@ -85,10 +91,10 @@ export const CreateMoodle = async (curp: string, password: string, name:string, 
             '&users[0][calendartype]=gregorian'+
             '&moodlewsrestformat=json';
             
-            console.log(createUserUrl);
+            //console.log(createUserUrl);
 
-            const createUser = await axios.get(createUserUrl, { httpsAgent: agent });
-            console.log(createUser);
+            /*const createUser = */await axios.get(createUserUrl, { httpsAgent: agent });
+            //console.log(createUser);
 
         }
 
