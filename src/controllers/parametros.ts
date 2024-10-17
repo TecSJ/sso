@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as service from '../services/Parametros';
+import * as service from '../services/parametros';
 
 export const getParametro = async (req: Request, res: Response): Promise<any> => {
     try {
