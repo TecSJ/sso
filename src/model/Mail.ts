@@ -8,13 +8,17 @@ export default class Mailer {
             service: 'gmail',
             auth: {
                 type: 'OAuth2',
+                user: process.env.MAIL_USER,
+                clientId: process.env.MAIL_ID,
+                clientSecret: process.env.MAIL_SECRET,
+                refreshToken: process.env.MAIL_TOKEN
             }
         });
     }
 
     public async enviarCorreo( destinatario: string, asunto: string, contenido: string): Promise<void> {
         const mailOptions = {
-            from: "uriel.aguilera@tecmm.edu.mx",
+            from: process.env.MAIL_USER,
             to: destinatario,
             subject: asunto,
             text: contenido

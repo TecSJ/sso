@@ -11,4 +11,3 @@ export const contrasenas = z.object({
   .regex(/[a-z]/, { message: "La contraseña debe contener al menos una letra minúscula" })
   .regex(/\d/, { message: "La contraseña debe contener al menos un número" })
 });
-

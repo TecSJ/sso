@@ -3,6 +3,8 @@ import * as credenciales from '../controllers/credenciales';
 import * as codigos from '../controllers/codigos';
 import * as preferencias from '../controllers/preferencias';
 import * as historial from '../controllers/historial';
+import { validateSchema } from "../middleware/validateSchema";
+import * as rules from '../model/Schema';
 
 const router = Router();
 
