@@ -41,12 +41,10 @@ export const deleteCredencial = async (req: Request, res: Response) => {
 
 export const insertCredencial = async (req: Request, res: Response): Promise<any> => {
     try {
-        const { curp, correo, name, firstName, secondName, celular, contrasena, tipo } = req.body;
-        const response = await service.insertCredencial( curp, correo, celular, contrasena, tipo );
-        
-        await service.CreateMoodle(curp, contrasena, name, firstName, secondName, correo, "zapopan", "isic");
+        const { curp, nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, contrasena, tipo } = req.body;
+        const response = await service.insertCredencial( curp, nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, contrasena, tipo );
+        await service.insertMoodle(curp, contrasena, nombre, primerApellido, segundoApellido, correo, "General", "General");
         res.status(201).json(response);
-        //res.status(201).json({ok: true});
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }

@@ -47,55 +47,45 @@ export const deleteCredencial = async (idCredencial: string) => {
     }
 }
 
-export const insertCredencial = async (curp: string, correo: string, celular: string, contrasena: string, tipo: string ) => {
+export const insertCredencial = async ( curp: string, nombre: string, primerApellido: string, segundoApellido:string, fechaNacimiento:string, estadoNacimiento:string, correo: string, celular: string, contrasena: string, tipo: string ) => {
     try {
         const idCredencial = uuidv4();
         const salt = await bcrypt.genSalt(10);
         const criptContrasena = await bcrypt.hash(contrasena, salt);
-        const [result]: any = await ssoDB.query(queries.insertCredencial, [ idCredencial, curp, correo, celular, criptContrasena, tipo ]);
+        const [result]: any = await ssoDB.query( queries.insertCredencial, [ idCredencial, curp,  nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, criptContrasena, tipo ]);
         return result[0][0];
     } catch (error: any ) {
         throw new Exception(error.message, error);
     }
 }
 
-export const CreateMoodle = async (curp: string, password: string, name:string, firstName: string, secondName: string, email:string, extension:string, program:string) => {
+export const insertMoodle = async ( curp: string, contrasena: string, nombre:string, primerApellido: string, segundoApellido: string, correo:string, grupo:string, etiqueta:string) => {
     try{
-        const userValidateUrl = process.env.moodle_url+
+        const userValidateUrl = process.env.MOODLE_URL+
         '&wsfunction=core_user_get_users_by_field'+
         '&field=username&values[0]='+curp.toLowerCase()+
         '&moodlewsrestformat=json';
 
         const userValidate = await axios.get(userValidateUrl, { httpsAgent: agent });
-
         if(typeof(userValidate.data[0]) === 'undefined'){
-
             const md5Password = crypto.createHash('md5').update(curp).digest('hex');
-
-            //console.log(md5Password);
-
-            const createUserUrl = process.env.moodle_url+
+            const createUserUrl = process.env.MOODLE_URL+
             '&wsfunction=core_user_create_users'+
             '&users[0][username]='+curp.toLowerCase()+
             '&users[0][auth]=manual'+
             '&users[0][password]=A'+md5Password+'*'+
-            '&users[0][firstname]='+name+
-            '&users[0][lastname]='+firstName+' '+secondName+
-            '&users[0][email]='+email+
+            '&users[0][firstname]='+nombre+
+            '&users[0][lastname]='+primerApellido+' '+segundoApellido+
+            '&users[0][email]='+correo+
             '&users[0][maildisplay]=1'+
             '&users[0][country]=MX'+
-            '&users[0][institution]='+extension+
-            '&users[0][department]='+program+
+            '&users[0][institution]='+grupo+
+            '&users[0][department]='+etiqueta+
             '&users[0][idnumber]='+curp.toLowerCase()+
             '&users[0][lang]=es_mx'+
             '&users[0][calendartype]=gregorian'+
             '&moodlewsrestformat=json';
-            
-            //console.log(createUserUrl);
-
-            /*const createUser = */await axios.get(createUserUrl, { httpsAgent: agent });
-            //console.log(createUser);
-
+            await axios.get(createUserUrl, { httpsAgent: agent });
         }
 
     }catch(error: any){
