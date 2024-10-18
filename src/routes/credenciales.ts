@@ -20,6 +20,8 @@ router.get('/:idCredencial/historial', historial.getHistorial );
 router.get('/bitacora', historial.getBitacora );
 router.post('/:idCredencial/historial', historial.insertHistorial );
 
+router.put('/:idCredencial/set-contrasena', credenciales.setPassword );
+
 router.get('/:idCredencial', credenciales.getCredencial );
 router.put('/:idCredencial', credenciales.updateCredencial );
 router.delete('/:idCredencial', credenciales.deleteCredencial );

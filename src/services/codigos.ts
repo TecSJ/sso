@@ -41,6 +41,14 @@ export const insertCodigo = async ( idCredencial: string, tipo: string, medio: s
                 asunto = 'Código de validación'
                 contenido = `El código de validación es: ${result[0][0].clave }`
             }
+            if( tipo === 'Autenticación' ){
+                asunto = 'Código de autenticación'
+                contenido = `El código de autenticación es: ${result[0][0].clave }`
+            }
+            if( tipo === 'Recuperación' ){
+                asunto = 'Código de recuperación'
+                contenido = `El código de recuperación es: ${result[0][0].clave }`
+            }
             mail.enviarCorreo( destinatario, asunto , contenido );
         }
         if( medio === 'Celular' ){

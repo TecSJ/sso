@@ -2,24 +2,20 @@ import { Exception } from './Exception';
 import fs from 'fs';
 import jwt, { SignOptions, Algorithm } from 'jsonwebtoken';
 
-export class JWT {
+export default class JWT {
 
-    public getToken (idCredencial: string, curp: string, cuenta: string): string | undefined {
+    public static getToken ( idCredencial: string, curp: string, correo: string, celular: string ): string  {
         try {
-            const payload = { idCredencial, curp, cuenta };
-            const llavePrivada = fs.readFileSync( '../../admin.key', 'utf8');
-            const autor = 'Tecnologico superior de Jalisco';
-            const usuario = cuenta;
-            const dominio = 'tsj.mx';
-
+            const payload = { idCredencial, curp, correo, celular };
+            const llavePrivada = fs.readFileSync(`${__dirname}/admin.key`, 'utf8');
             const opcionesFirma: SignOptions = {
-                issuer: autor,
-                subject: usuario,
-                audience: dominio,
+                issuer: 'Tecnologico superior de Jalisco',
+                subject: curp,
+                audience: 'tsj.mx',
                 expiresIn: "24h",
                 algorithm: "RS256" as Algorithm 
             };
-            const token = jwt.sign(payload, llavePrivada, opcionesFirma);
+            const token = jwt.sign( payload, llavePrivada, opcionesFirma);
             return token;
 
         } catch (error : any ) {
