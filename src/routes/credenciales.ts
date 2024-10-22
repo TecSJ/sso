@@ -3,29 +3,28 @@ import * as credenciales from '../controllers/credenciales';
 import * as codigos from '../controllers/codigos';
 import * as preferencias from '../controllers/preferencias';
 import * as historial from '../controllers/historial';
-import { validateSchema } from "../middleware/validateSchema";
-import * as rules from '../model/Schema';
+import Autenticacion from '../middleware/Autenticacion';
 
 const router = Router();
 
-router.get('/codigos/:idCodigo', codigos.getCodigo );
-router.get('/:idCredencial/codigos', codigos.getCodigos );
-router.post('/:idCredencial/codigos', codigos.insertCodigo );
-router.get('/codigos', codigos.getCodigos );
+router.get('/codigos/:idCodigo', Autenticacion('Codigos','2'), codigos.getCodigo );
+router.get('/:idCredencial/codigos', Autenticacion('Codigos','2'), codigos.getCodigos );
+router.post('/:idCredencial/codigos', Autenticacion('Codigos','1'), codigos.insertCodigo );
+router.get('/codigos', Autenticacion('Codigos','2'), codigos.getCodigos );
 
-router.get('/:idCredencial/preferencias', preferencias.getPreferencia );
-router.put('/:idCredencial/preferencias', preferencias.updatePreferencia );
+router.get('/:idCredencial/preferencias',Autenticacion('Preferencias','2'), preferencias.getPreferencia );
+router.put('/:idCredencial/preferencias', Autenticacion('Preferencias','3'), preferencias.updatePreferencia );
 
-router.get('/:idCredencial/historial', historial.getHistorial );
-router.get('/bitacora', historial.getBitacora );
-router.post('/:idCredencial/historial', historial.insertHistorial );
+router.get('/:idCredencial/historial', Autenticacion('Historial','2'), historial.getHistorial );
+router.get('/bitacora', Autenticacion('Historial','2'), historial.getBitacora );
+router.post('/:idCredencial/historial', Autenticacion('Historial','1'), historial.insertHistorial );
 
 router.put('/:idCredencial/set-contrasena', credenciales.setPassword );
 
-router.get('/:idCredencial', credenciales.getCredencial );
-router.put('/:idCredencial', credenciales.updateCredencial );
-router.delete('/:idCredencial', credenciales.deleteCredencial );
-router.get('/', credenciales.getCredenciales );
-router.post('/', credenciales.insertCredencial );
+router.get('/:idCredencial', Autenticacion('Credenciales','2'), credenciales.getCredencial );
+router.put('/:idCredencial', Autenticacion('Credenciales','3'), credenciales.updateCredencial );
+router.delete('/:idCredencial', Autenticacion('Credenciales','4'), credenciales.deleteCredencial );
+router.get('/', Autenticacion('Credenciales','2'), credenciales.getCredenciales );
+router.post('/', Autenticacion('Credenciales','1'), credenciales.insertCredencial );
 
 export default router;
