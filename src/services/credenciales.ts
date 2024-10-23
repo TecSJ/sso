@@ -7,6 +7,7 @@ import { QueryBuilder } from '../model/QueryBuilder';
 import axios from 'axios';
 import https from 'https';
 import crypto from 'crypto';
+import * as codigos from './codigos';
 
 const agent = new https.Agent({  
     rejectUnauthorized: false
@@ -53,6 +54,8 @@ export const insertCredencial = async ( curp: string, nombre: string, primerApel
         const salt = await bcrypt.genSalt(10);
         const criptContrasena = await bcrypt.hash(contrasena, salt);
         const [result]: any = await ssoDB.query( queries.insertCredencial, [ idCredencial, curp,  nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, criptContrasena, tipo ]);
+        codigos.insertCodigo( idCredencial, 'Validación', 'Correo', correo );
+        codigos.insertCodigo( idCredencial, 'Validación', 'Celular', correo );
         return result[0][0];
     } catch (error: any ) {
         throw new Exception(error.message, error);
