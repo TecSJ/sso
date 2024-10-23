@@ -15,7 +15,14 @@ export const getSesion = async ( curp: string | undefined , correo: string | und
                 throw new Error('La credencial esta bloqueada!');
             }
             if( credencial.estado === 'Activo' ){
-                throw new Error('La credencial no esta validada!');
+                const correo_val = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Validación,medio:eq:Correo,estado:eq:Confirmado`, undefined, 1, 1 );
+                const celular_val = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Validación,medio:eq:Celular,estado:eq:Confirmado`, undefined, 1, 1 );
+                if( !correo_val ){
+                    throw new Error('El codigo de validación del correo aun no ha sido confirmado!');
+                }
+                if( !celular_val ){
+                    throw new Error('El codigo de validación del celular aun no ha sido confirmado!');
+                }
             }
             if( credencial.estado === 'Validado' ){
                 const coinciden = await bcrypt.compare( contrasena, credencial.contrasena );
