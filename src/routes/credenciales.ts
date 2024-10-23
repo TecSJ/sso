@@ -25,6 +25,6 @@ router.get('/:idCredencial', Autenticacion('Credenciales','2'), credenciales.get
 router.put('/:idCredencial', Autenticacion('Credenciales','3'), credenciales.updateCredencial );
 router.delete('/:idCredencial', Autenticacion('Credenciales','4'), credenciales.deleteCredencial );
 router.get('/', Autenticacion('Credenciales','2'), credenciales.getCredenciales );
-router.post('/', Autenticacion('Credenciales','1'), credenciales.insertCredencial );
+router.post('/', credenciales.insertCredencial );
 
 export default router;
