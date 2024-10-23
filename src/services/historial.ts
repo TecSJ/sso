@@ -29,9 +29,9 @@ export const getBitacora = async ( filtros: string | undefined, orden: string | 
     }
 }
 
-export const insertHistorial = async ( idCredencial: string, detalles: string) => {
+export const insertHistorial = async ( idCredencial: string, aplicacion: string, modulo: string, accion: string, recurso: string, tipo: string ) => {
     try {
-        const [ result]: any = await ssoDB.query( queries.insertHistorial , [ idCredencial, detalles ]);
+        const [ result]: any = await ssoDB.query( queries.insertHistorial , [ idCredencial, aplicacion, modulo, accion, recurso, tipo ]);
         return result[0][0];
     } catch (error: any) {
         throw new Exception(error.message, error);

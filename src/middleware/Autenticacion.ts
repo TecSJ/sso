@@ -32,6 +32,7 @@ const Autenticacion = (modulo: string, accion: string) => {
             if (result.length === 0) { throw new Error('Acceso denegado!'); }
             const acceso = result[0];
             if ( acceso[`accion${accion}`] === 0) { throw new Error('Acceso denegado!'); }
+            req.params._idCredencial = datos.idCredencial;
             next();
 
         } catch ( error: any ) {

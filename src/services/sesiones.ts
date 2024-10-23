@@ -45,11 +45,3 @@ export const getSesion = async ( curp: string | undefined , correo: string | und
     }
 }
 
-export const deleteSesion = async (idAplicacion: string) => {
-    try {
-        // instruccción para cacnelar una sesion
-        return undefined;
-    } catch (error : any ) {
-        throw new Exception(error.message, error);
-    }
-}

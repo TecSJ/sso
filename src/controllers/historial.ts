@@ -32,8 +32,8 @@ export const getBitacora = async (req: Request, res: Response) => {
 export const insertHistorial = async (req: Request, res: Response): Promise<any> => {
     try {
         const { idCredencial } = req.params;
-        const { detalles } = req.body;
-        const response = await service.insertHistorial( idCredencial, detalles );
+        const { idAplicacion, idModulo, accion, recurso, tipo } = req.body;
+        const response = await service.insertHistorial( idCredencial, idAplicacion, idModulo, accion, recurso, tipo );
         res.status(201).json(response);
     } catch ( error : any ) {
         res.status(500).json({ message: error.message });
