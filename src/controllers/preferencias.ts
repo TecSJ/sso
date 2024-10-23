@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import * as service from '../services/preferencias';
 import * as bitacora from '../services/historial';
+import { Exception } from '../model/Exception';
 
 export const getPreferencia = async (req: Request, res: Response): Promise<any> => {
 
@@ -15,7 +16,10 @@ export const getPreferencia = async (req: Request, res: Response): Promise<any> 
         }
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Preferencias','2',  error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -29,7 +33,10 @@ export const updatePreferencia = async (req: Request, res: Response): Promise<an
         res.status(204).json({});
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Preferencias','3',  error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 

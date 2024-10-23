@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import * as service from '../services/credenciales';
 import * as bitacora from '../services/historial';
+import { Exception } from '../model/Exception';
 
 export const getCredencial = async (req: Request, res: Response): Promise<any> => {
     const { idCredencial, _idCredencial } = req.params;
@@ -14,7 +15,10 @@ export const getCredencial = async (req: Request, res: Response): Promise<any> =
         }
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Credenciales','2', error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -32,11 +36,14 @@ export const getCredenciales = async (req: Request, res: Response): Promise<any>
         }
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Credenciales','2', error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
-export const deleteCredencial = async (req: Request, res: Response) => {
+export const deleteCredencial = async (req: Request, res: Response): Promise<any> =>{
     
     const { idCredencial, _idCredencial } = req.params;
     try {
@@ -45,7 +52,10 @@ export const deleteCredencial = async (req: Request, res: Response) => {
         res.status(204).json({});
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Credenciales','4', error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -64,12 +74,15 @@ export const insertCredencial = async (req: Request, res: Response): Promise<any
         res.status(201).json(response);
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Credenciales','1', error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
 
-export const updateCredencial = async (req: Request, res: Response) => {
+export const updateCredencial = async (req: Request, res: Response): Promise<any> => {
 
     const { idCredencial, _idCredencial } = req.params;
     const { curp, correo, celular, contrasena, tipo } = req.body;
@@ -79,11 +92,14 @@ export const updateCredencial = async (req: Request, res: Response) => {
         res.status(204).json({});
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Credenciales','3', error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
-export const setPassword = async (req: Request, res: Response) => {
+export const setPassword = async (req: Request, res: Response): Promise<any> => {
 
     const { idCredencial, _idCredencial } = req.params;
     const { contrasena } = req.body;
@@ -93,7 +109,10 @@ export const setPassword = async (req: Request, res: Response) => {
         res.status(204).json({});
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Credenciales','5', error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 

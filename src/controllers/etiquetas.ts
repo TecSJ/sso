@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import * as service from '../services/etiquetas';
 import * as bitacora from '../services/historial';
+import { Exception } from '../model/Exception';
 
 export const getEtiqueta = async (req: Request, res: Response): Promise<any> => {
     
@@ -15,7 +16,10 @@ export const getEtiqueta = async (req: Request, res: Response): Promise<any> => 
         }
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Etiquetas','2', error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -41,7 +45,10 @@ export const getEtiquetas = async (req: Request, res: Response): Promise<any> =>
         }
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Etiquetas','2', error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -54,7 +61,10 @@ export const deleteEtiqueta = async (req: Request, res: Response): Promise<any> 
         res.status(204).json({});
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Etiquetas','4', error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -68,7 +78,10 @@ export const insertEtiqueta = async (req: Request, res: Response): Promise<any> 
         res.status(201).json(response);
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Etiquetas','1', error.message,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -83,7 +96,10 @@ export const updateEtiqueta = async (req: Request, res: Response): Promise<any> 
         res.status(204).json({});
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Etiquetas','3', error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 

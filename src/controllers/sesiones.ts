@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import * as service from '../services/sesiones';
+import { Exception } from '../model/Exception';
 
 export const getSesion = async (req: Request, res: Response): Promise<any> => {
 
@@ -15,7 +16,10 @@ export const getSesion = async (req: Request, res: Response): Promise<any> => {
         }else{
             res.status(204).json({});
         }
-    } catch (error : any) {
-        res.status(500).json({ message: error.message });
+    } catch ( error : any) {
+        if ( error instanceof Exception) {
+            return res.status(500).json({ code: error.code, message: error.message });
+        }
+        return res.status(500).json({ message: 'Error interno del servidor', error: error.message });
     }
 };

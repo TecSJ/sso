@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import * as service from '../services/roles';
 import * as bitacora from '../services/historial';
+import { Exception } from '../model/Exception';
 
 export const getRol = async (req: Request, res: Response): Promise<any> => {
 
@@ -15,7 +16,10 @@ export const getRol = async (req: Request, res: Response): Promise<any> => {
         }
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Roles','2',  error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -33,7 +37,10 @@ export const getRoles = async (req: Request, res: Response): Promise<any> => {
         }
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Roles','2',  error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -46,7 +53,10 @@ export const deleteRol = async (req: Request, res: Response): Promise<any> => {
         res.status(204).json({});
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Roles','4',  error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -60,7 +70,10 @@ export const insertRol = async (req: Request, res: Response): Promise<any> => {
         res.status(201).json(response);
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Roles','1',  error.message, 'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -74,6 +87,9 @@ export const updateRol = async (req: Request, res: Response): Promise<any> => {
         res.status(204).json({});
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Roles','3',  error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };

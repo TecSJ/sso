@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import * as service from '../services/codigos';
 import * as bitacora from '../services/historial';
+import { Exception } from '../model/Exception';
 
 export const getCodigo = async (req: Request, res: Response): Promise<any> => {
     const { idCodigo, _idCredencial } = req.params;
@@ -14,7 +15,10 @@ export const getCodigo = async (req: Request, res: Response): Promise<any> => {
         }
     } catch (error : any) {
         bitacora.insertHistorial( _idCredencial,'sso','Codigos','2', error.message ,'Succes' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -40,7 +44,10 @@ export const getCodigos = async (req: Request, res: Response): Promise<any> => {
         }
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Codigos','2', error.message ,'Succes' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -70,7 +77,10 @@ export const insertCodigo = async (req: Request, res: Response): Promise<any> =>
         res.status(201).json(response);
     } catch ( error : any ) {
         bitacora.insertHistorial( _idCredencial,'sso','Codigos','1', error.message ,'Succes' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 

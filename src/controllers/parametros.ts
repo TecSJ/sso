@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import * as service from '../services/parametros';
 import * as bitacora from '../services/historial';
+import { Exception } from '../model/Exception';
 
 export const getParametro = async (req: Request, res: Response): Promise<any> => {
     
@@ -15,11 +16,14 @@ export const getParametro = async (req: Request, res: Response): Promise<any> =>
         }
     } catch (error : any) {
         bitacora.insertHistorial( _idCredencial,'sso','Parametros','2',  error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
-export const getParametros = async (req: Request, res: Response) => {
+export const getParametros = async (req: Request, res: Response): Promise<any> => {
 
     const { _idCredencial } = req.params;
     const { filtros, orden, limite, pagina } = req.body;
@@ -33,7 +37,10 @@ export const getParametros = async (req: Request, res: Response) => {
         }
     } catch ( error : any ) {
         bitacora.insertHistorial( _idCredencial,'sso','Parametros','2',  error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -47,7 +54,10 @@ export const updateParametro = async (req: Request, res: Response): Promise<any>
         res.status(204).json({});
     } catch ( error : any) {
         bitacora.insertHistorial( _idCredencial,'sso','Parametros','3',  error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 

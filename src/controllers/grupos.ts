@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import * as service from '../services/grupos';
 import * as bitacora from '../services/historial';
+import { Exception } from '../model/Exception';
 
 export const getGrupo = async (req: Request, res: Response): Promise<any> => {
 
@@ -15,7 +16,10 @@ export const getGrupo = async (req: Request, res: Response): Promise<any> => {
         }
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Grupo','2',  error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -33,7 +37,10 @@ export const getGrupos = async (req: Request, res: Response): Promise<any> => {
         }
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Grupo','2',  error.message ,'Succes' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -46,7 +53,10 @@ export const deleteGrupo = async (req: Request, res: Response): Promise<any> => 
         res.status(204).json({});
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Grupo','4',  error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -60,7 +70,10 @@ export const insertGrupo = async (req: Request, res: Response): Promise<any> => 
         res.status(201).json(response);
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Grupo','1',  error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -74,6 +87,9 @@ export const updateGrupo = async (req: Request, res: Response): Promise<any> => 
         res.status(204).json({});
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Grupo','3',  error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };

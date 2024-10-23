@@ -1,12 +1,14 @@
 export class Exception extends Error {
-    
-    public message: string;
-    constructor( message: string, error: any) {
   
+  public code: string;
+  public originalError?: Error;
+  constructor(code: string, message: string, error?: Error) {
       super(message);
-      this.message = message;
+      this.code = code;
       if (error) {
-        console.error('Original error:', error);
+          this.originalError = error;
+          this.stack = error.stack;
+          console.error('Original error:', error); // Loguea el error original
       }
-    }
   }
+}

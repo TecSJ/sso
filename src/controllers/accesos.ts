@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import * as service from '../services/accesos';
 import * as bitacora from '../services/historial';
+import { Exception } from '../model/Exception';
 
 export const getAcceso = async (req: Request, res: Response): Promise<any> => {
     const { idRol, _idCredencial } = req.params;
@@ -15,7 +16,10 @@ export const getAcceso = async (req: Request, res: Response): Promise<any> => {
         }
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Accesos','2', error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -41,7 +45,10 @@ export const getAccesos = async (req: Request, res: Response): Promise<any> => {
         }
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Accesos','2', error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -55,7 +62,10 @@ export const deleteAcceso = async (req: Request, res: Response): Promise<any> =>
         res.status(204).json({});
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Accesos','4',  error.message ,'Succes' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -69,7 +79,10 @@ export const insertAcceso = async (req: Request, res: Response): Promise<any> =>
         res.status(201).json(response);
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Accesos','1',  error.message ,'Fail' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
@@ -84,7 +97,10 @@ export const updateAcceso = async (req: Request, res: Response): Promise<any> =>
         res.status(204).json({});
     } catch (error: any) {
         bitacora.insertHistorial( _idCredencial,'sso','Accesos','3', error.message,'Succes' );
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
     }
 };
 
