@@ -13,16 +13,16 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
         const coinciden = await bcrypt.compare(contrasena, credencial.contrasena);
         if (coinciden) {
             if (credencial.estado === 'Inactivo') {
-                throw new Exception('0003', 'La cuenta esta bloqueada!');
+                throw new Exception('403', 'La cuenta esta bloqueada!');
             }
             if (credencial.estado === 'Activo') {
                 const correo_val = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Validación,medio:eq:Correo,estado:eq:Confirmado`, undefined, 1, 1);
                 const celular_val = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Validación,medio:eq:Celular,estado:eq:Confirmado`, undefined, 1, 1);
                 if (!correo_val) {
-                    throw new Exception('0004', 'Error de validación de correo!');
+                    throw new Exception('400', 'Error de validación de correo!');
                 }
                 if (!celular_val) {
-                    throw new Exception('0005', 'Error de validación de celular!');
+                    throw new Exception('400', 'Error de validación de celular!');
                 }
             }
             if (credencial.estado === 'Validado') {
@@ -30,21 +30,21 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
                 const correo_auth = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Autenticación,medio:eq:Correo,estado:eq:Confirmado`, undefined, 1, 1);
                 const celular_auth = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Autenticación,medio:eq:Celular,estado:eq:Confirmado`, undefined, 1, 1);
                 if (!correo_auth) {
-                    throw new Exception('0006', 'Error de autenticación de correo!');
+                    throw new Exception('401', 'Error de autenticación de correo!');
                 }
                 if (response.dobleFactor === 'S') {
                     if (!celular_auth) {
-                        throw new Exception('0007', 'Error de autenticación de celular!');
+                        throw new Exception('401', 'Error de autenticación de celular!');
                     }
                 }
                 const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular);
                 return token;
             }
         } else {
-            throw new Exception('0002', 'Password Incorrecto!');
+            throw new Exception('401', 'Password Incorrecto!');
         }
     } else {
-        throw new Exception('0001', 'Cuenta no valida!');
+        throw new Exception('401', 'Cuenta no valida!');
     }
 }
 

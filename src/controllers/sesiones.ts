@@ -18,7 +18,7 @@ export const getSesion = async (req: Request, res: Response): Promise<any> => {
         }
     } catch ( error : any) {
         if ( error instanceof Exception) {
-            return res.status(500).json({ code: error.code, message: error.message });
+            return res.status( parseInt(error.code)).json({ code: error.code, message: error.message });
         }
         return res.status(500).json({ message: 'Error interno del servidor', error: error.message });
     }
