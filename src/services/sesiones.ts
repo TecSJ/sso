@@ -48,3 +48,7 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
     }
 }
 
+export const deleteSession = async ( idCredencial: string ) => {
+    await ssoDB.query( queries.deleteSesion, [ idCredencial ]);
+    return undefined;
+}

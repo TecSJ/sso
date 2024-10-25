@@ -17,14 +17,14 @@ app.use(( req, res, next ) => {
 
 if ( process.env.NODE_ENV === 'dev' ) {
     app.listen( PORT , () => {});
-  }else{
+}else{
     const privateKey  = fs.readFileSync( process.env.SSL_KEY as string, 'utf8');
     const certificate = fs.readFileSync( process.env.SSL_CERT as string, 'utf8');
     const ca = fs.readFileSync( process.env.SSL_CA as string, 'utf8' );
     const credentials = { key: privateKey, ca: ca, cert: certificate };
     const app_ssl = https.createServer( credentials, app );
     app_ssl.listen( PORT, () => {} );
-  }
+}
   
 app.use('/roles', routes.roles);
 app.use('/grupos', routes.grupos);

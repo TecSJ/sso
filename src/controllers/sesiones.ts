@@ -23,3 +23,17 @@ export const getSesion = async (req: Request, res: Response): Promise<any> => {
         return res.status(500).json({ message: 'Error interno del servidor', error: error.message });
     }
 };
+
+export const deleteSesion = async (req: Request, res: Response): Promise<any> => {
+
+    const { _idCredencial } = req.params;
+    try {
+        await service.deleteSession( _idCredencial );
+        res.status(204).json({});
+    } catch (error: any) {
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
+    }
+};
