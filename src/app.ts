@@ -1,5 +1,7 @@
 import express from 'express';
 import * as routes from './routes';
+import fs from 'fs';
+import https from 'https';
 
 const PORT: number = parseInt( process.env.PORT as string );
 
@@ -13,6 +15,17 @@ app.use(( req, res, next ) => {
     next();
 });
 
+if ( process.env.NODE_ENV === 'dev' ) {
+    app.listen( PORT , () => {});
+  }else{
+    const privateKey  = fs.readFileSync( process.env.SSL_KEY as string, 'utf8');
+    const certificate = fs.readFileSync( process.env.SSL_CERT as string, 'utf8');
+    const ca = fs.readFileSync( process.env.SSL_CA as string, 'utf8' );
+    const credentials = { key: privateKey, ca: ca, cert: certificate };
+    const app_ssl = https.createServer( credentials, app );
+    app_ssl.listen( PORT, () => {} );
+  }
+  
 app.use('/roles', routes.roles);
 app.use('/grupos', routes.grupos);
 app.use('/credenciales', routes.credenciales);
@@ -21,10 +34,5 @@ app.use('/parametros', routes.parametros );
 app.use('/sesiones', routes.sesiones );
 
 app.get('/', (req, res) => {
-    res.send('API is running...');
-});
-
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    res.send(`SSO en producción esta ejecutandose en https:${ PORT }`);
 });
