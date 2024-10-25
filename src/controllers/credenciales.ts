@@ -65,7 +65,7 @@ export const insertCredencial = async (req: Request, res: Response): Promise<any
     const { curp, nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, contrasena, tipo } = req.body;
     const X_API_KEY = req.headers['api_key'] as string | undefined;
     try {
-        if( X_API_KEY != 'c9754e70-a265-4363-97c7-3b7322fe4490'){
+        if( X_API_KEY != process.env.X_API_KEY ){
             throw new Error('Falta api-key!')
         }
         const response = await service.insertCredencial( curp, nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, contrasena, tipo );
