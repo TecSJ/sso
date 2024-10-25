@@ -13,32 +13,44 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
         const coinciden = await bcrypt.compare(contrasena, credencial.contrasena);
         if (coinciden) {
             if (credencial.estado === 'Inactivo') {
-                throw new Exception('403', 'La cuenta esta bloqueada!');
+                throw new Exception('403', 'La cuenta está bloqueada!');
             }
             if (credencial.estado === 'Activo') {
                 const correo_val = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Validación,medio:eq:Correo,estado:eq:Confirmado`, undefined, 1, 1);
                 const celular_val = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Validación,medio:eq:Celular,estado:eq:Confirmado`, undefined, 1, 1);
-                if (!correo_val) {
-                    throw new Exception('400', 'Error de validación de correo!');
-                }
-                if (!celular_val) {
-                    throw new Exception('400', 'Error de validación de celular!');
+                if (!correo_val || !celular_val) {
+                    return {
+                        statusCode: 202,
+                        message: 'Validación de correo o celular requerida.',
+                        actionRequired: 'VALIDATE_CONTACT_INFO',
+                        validationNeeded: {
+                            correo: !correo_val ? true : false,
+                            celular: !celular_val ? true : false,
+                        },
+                    };
                 }
             }
             if (credencial.estado === 'Validado') {
                 const response = await preferencias.getPreferencia(credencial.idCredencial);
                 const correo_auth = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Autenticación,medio:eq:Correo,estado:eq:Confirmado`, undefined, 1, 1);
                 const celular_auth = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Autenticación,medio:eq:Celular,estado:eq:Confirmado`, undefined, 1, 1);
-                if (!correo_auth) {
-                    throw new Exception('401', 'Error de autenticación de correo!');
-                }
-                if (response.dobleFactor === 'S') {
-                    if (!celular_auth) {
-                        throw new Exception('401', 'Error de autenticación de celular!');
-                    }
+
+                if (!correo_auth || (response.dobleFactor === 'S' && !celular_auth)) {
+                    return {
+                        statusCode: 202,
+                        message: 'Autenticación de correo o celular requerida.',
+                        actionRequired: 'AUTHENTICATE_CONTACT_INFO',
+                        authenticationNeeded: {
+                            correo: !correo_auth ? true : false,
+                            celular: response.dobleFactor === 'S' && !celular_auth ? true : false,
+                        },
+                    };
                 }
                 const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular);
-                return token;
+                return {
+                    statusCode: 200,
+                    token,
+                };
             }
         } else {
             throw new Exception('401', 'Password Incorrecto!');
@@ -46,7 +58,7 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
     } else {
         throw new Exception('401', 'Cuenta no valida!');
     }
-}
+};
 
 export const deleteSession = async ( idCredencial: string ) => {
     await ssoDB.query( queries.deleteSesion, [ idCredencial ]);
