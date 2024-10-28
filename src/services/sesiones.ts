@@ -28,7 +28,8 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
                             celular: !celular_val,
                         },
                         correo: credencial.correo,
-                        celular: credencial.celular
+                        celular: credencial.celular,
+                        credencial: credencial.idCredencial
                     };
                 }
             }
@@ -47,7 +48,8 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
                             celular: response?.dobleFactor === 'S' && !celular_auth,
                         },
                         correo: credencial.correo,
-                        celular: credencial.celular
+                        celular: credencial.celular,
+                        credencial: credencial.idCredencial
                     };
                 }
                 const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular);

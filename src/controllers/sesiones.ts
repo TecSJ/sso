@@ -18,6 +18,9 @@ export const getSesion = async (req: Request, res: Response): Promise<any> => {
                 actionRequired: response.actionRequired,
                 validationNeeded: response.validationNeeded,
                 authenticationNeeded: response.authenticationNeeded,
+                correo: response.correo,
+                celular: response.celular,
+                credencial: response.credencial
             });
         } else {
             res.status(204).json({});
