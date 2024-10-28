@@ -1,6 +1,8 @@
 import { ssoDB } from '../model/Connection';
+import { RowDataPacket } from 'mysql2';
 import { queries } from '../queries/historial';
 import { QueryBuilder } from '../model/QueryBuilder';
+import { Aplicacion } from '../types'; 
 
 export const getHistorial = async (idCredencial: string) => {
     const [result]: any = await ssoDB.query(queries.getHistorial, [idCredencial]);
@@ -21,7 +23,7 @@ export const getBitacora = async (filtros: string | undefined, orden: string | u
 }
 
 export const insertHistorial = async (idCredencial: string, aplicacion: string, modulo: string, accion: string, recurso: string, tipo: string) => {
-    const [result]: any = await ssoDB.query(queries.insertHistorial, [idCredencial, aplicacion, modulo, accion, recurso, tipo]);
+    const [result]: any = await ssoDB.query( queries.insertHistorial, [idCredencial, aplicacion, modulo, accion, recurso, tipo]);
     return result[0][0];
 }
 

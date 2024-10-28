@@ -24,9 +24,11 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
                         message: 'Validación de correo o celular requerida.',
                         actionRequired: 'VALIDATE_CONTACT_INFO',
                         validationNeeded: {
-                            correo: !correo_val ? true : false,
-                            celular: !celular_val ? true : false,
+                            correo: !correo_val,
+                            celular: !celular_val,
                         },
+                        correo: credencial.correo,
+                        celular: credencial.celular
                     };
                 }
             }
@@ -35,15 +37,17 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
                 const correo_auth = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Autenticación,medio:eq:Correo,estado:eq:Confirmado`, undefined, 1, 1);
                 const celular_auth = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Autenticación,medio:eq:Celular,estado:eq:Confirmado`, undefined, 1, 1);
 
-                if (!correo_auth || (response.dobleFactor === 'S' && !celular_auth)) {
+                if (!correo_auth || (response?.dobleFactor === 'S' && !celular_auth)) {
                     return {
                         statusCode: 202,
                         message: 'Autenticación de correo o celular requerida.',
                         actionRequired: 'AUTHENTICATE_CONTACT_INFO',
                         authenticationNeeded: {
-                            correo: !correo_auth ? true : false,
-                            celular: response.dobleFactor === 'S' && !celular_auth ? true : false,
+                            correo: !correo_auth,
+                            celular: response?.dobleFactor === 'S' && !celular_auth,
                         },
+                        correo: credencial.correo,
+                        celular: credencial.celular
                     };
                 }
                 const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular);
@@ -62,5 +66,12 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
 
 export const deleteSession = async ( idCredencial: string ) => {
     await ssoDB.query( queries.deleteSesion, [ idCredencial ]);
+    return undefined;
+}
+
+export const setPassword = async ( idCredencial: string, contrasena: string) => {
+    const salt = await bcrypt.genSalt(10);
+    const criptContrasena = await bcrypt.hash(contrasena, salt);
+    await ssoDB.query(queries.updateContrasena, [idCredencial, criptContrasena]);
     return undefined;
 }

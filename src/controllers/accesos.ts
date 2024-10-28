@@ -1,31 +1,28 @@
 import { Request, Response } from 'express';
 import * as service from '../services/accesos';
-import * as bitacora from '../services/historial';
 import { Exception } from '../model/Exception';
+import { Acceso } from '../types';
 
 export const getAcceso = async (req: Request, res: Response): Promise<any> => {
-    const { idRol, _idCredencial } = req.params;
+    const { idRol } = req.params;
     const { idModulo } = req.body;
     try {
-        const response = await service.getAcceso(idRol,idModulo);
-        bitacora.insertHistorial( _idCredencial,'sso','Accesos','2', '?' ,'Succes' );
-        if ( response ){
-            res.status(200).json(response);
-        }else{
-            res.status(204).json({});
+        const response: Acceso | undefined = await service.getAcceso(idRol,idModulo);
+        if (response) {
+            return res.status(200).json(response);
         }
+        return res.status(204).json({});
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Accesos','2', error.message ,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
 
 export const getAccesos = async (req: Request, res: Response): Promise<any> => {
     
-    const { idRol, _idCredencial } = req.params;
+    const { idRol } = req.params;
     const { filtros, orden, limite, pagina } = req.body;
     try {
         let _filtros = filtros || '';
@@ -36,52 +33,45 @@ export const getAccesos = async (req: Request, res: Response): Promise<any> => {
                 _filtros = `idRol:eq:${idRol}`;
             }
         }
-        const response = await service.getAccesos( _filtros, orden, limite, pagina );
-        bitacora.insertHistorial( _idCredencial,'sso','Accesos','2','*','Succes' );
-        if ( response ){
-            res.status(200).json(response);
-        }else{
-            res.status(204).json({});
+        const response: Acceso[] | undefined = await service.getAccesos( _filtros, orden, limite, pagina );
+        if (response && response.length > 0) {
+            return res.status(200).json(response);
         }
+        return res.status(204).json({});
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Accesos','2', error.message ,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
 
 export const deleteAcceso = async (req: Request, res: Response): Promise<any> => {
 
-    const { idRol, _idCredencial } = req.params;
+    const { idRol } = req.params;
     const { idModulo } = req.body;
     try {
-        await service.deleteAcceso( idRol, idModulo);
-        bitacora.insertHistorial( _idCredencial,'sso','Accesos','4', '?' ,'Succes' );
-        res.status(204).json({});
+        const affectedRows: number = await service.deleteAcceso( idRol, idModulo);
+        return res.status(204).json({ 'affectedRows': affectedRows});
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Accesos','4',  error.message ,'Succes' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
 
 export const insertAcceso = async (req: Request, res: Response): Promise<any> => {
 
-    const { idRol, _idCredencial } = req.params;
+    const { idRol } = req.params;
     const { idModulo, accion1, accion2, accion3, accion4, accion5 } = req.body;
     try {
-        const response = await service.insertAcceso( idRol, idModulo, accion1, accion2, accion3, accion4, accion5);
-        bitacora.insertHistorial( _idCredencial,'sso','Accesos','1', response.idAcceso ,'Succes' );
+        const response: Acceso | undefined =  await service.insertAcceso( idRol, idModulo, accion1, accion2, accion3, accion4, accion5);
         res.status(201).json(response);
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Accesos','1',  error.message ,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
@@ -89,17 +79,15 @@ export const insertAcceso = async (req: Request, res: Response): Promise<any> =>
 
 export const updateAcceso = async (req: Request, res: Response): Promise<any> => {
     
-    const { idRol, _idCredencial } = req.params;
+    const { idRol } = req.params;
     const { idModulo, accion1, accion2, accion3, accion4, accion5 } = req.body;
     try {
-        await service.updateAcceso( idRol, idModulo, accion1, accion2, accion3, accion4, accion5);
-        bitacora.insertHistorial( _idCredencial,'sso','Accesos','3', '?','Succes' );
-        res.status(204).json({});
+        const response: Acceso | undefined = await service.updateAcceso( idRol, idModulo, accion1, accion2, accion3, accion4, accion5);
+        return res.status(204).json(response);
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Accesos','3', error.message,'Succes' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };

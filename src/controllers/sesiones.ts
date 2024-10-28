@@ -44,3 +44,18 @@ export const deleteSesion = async (req: Request, res: Response): Promise<any> =>
     }
 };
 
+export const setPassword = async (req: Request, res: Response): Promise<any> => {
+    const { idCredencial } = req.params;
+    const { contrasena } = req.body;
+    try {
+        await service.setPassword( idCredencial, contrasena);
+        res.status(204).json({});
+    } catch (error: any) {
+        res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor'
+        });
+    }
+};
+
+

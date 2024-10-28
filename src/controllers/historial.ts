@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import * as service from '../services/historial';
 import { Exception } from '../model/Exception';
 
+
 export const getHistorial = async (req: Request, res: Response): Promise<any> => {
     try {
         const { idCredencial } = req.params;
@@ -35,6 +36,8 @@ export const getBitacora = async (req: Request, res: Response): Promise<any> => 
         });
     }
 };
+
+
 
 export const insertHistorial = async (req: Request, res: Response): Promise<any> => {
     try {

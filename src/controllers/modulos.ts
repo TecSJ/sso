@@ -1,31 +1,28 @@
 import { Request, Response } from 'express';
 import * as service from '../services/modulos';
-import * as bitacora from '../services/historial';
 import { Exception } from '../model/Exception';
+import { Modulo } from '../types';
 
 export const getModulo = async (req: Request, res: Response): Promise<any> => {
 
-    const { idModulo, _idCredencial } = req.params;
+    const { idModulo } = req.params;
     try {
-        const response = await service.getModulo(idModulo);
-        bitacora.insertHistorial( _idCredencial,'sso','Modulos','2', idModulo ,'Succes' );
-        if ( response ){
-            res.status(200).json(response);
-        }else{
-            res.status(204).json({});
+        const response: Modulo | undefined =  await service.getModulo(idModulo);
+        if (response) {
+            return res.status(200).json(response);
         }
+        return res.status(204).json({});
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Modulos','2',  error.message ,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
 
 export const getModulos = async (req: Request, res: Response): Promise<any> => {
 
-    const { idAplicacion, _idCredencial } = req.params;
+    const { idAplicacion } = req.params;
     const { filtros, orden, limite, pagina } = req.body;
     try {
         let _filtros = filtros || '';
@@ -36,18 +33,15 @@ export const getModulos = async (req: Request, res: Response): Promise<any> => {
                 _filtros = `idAplicacion:eq:${idAplicacion}`;
             }
         }
-        const response = await service.getModulos( _filtros , orden, limite, pagina );
-        bitacora.insertHistorial( _idCredencial,'sso','Modulos','2', '*' ,'Succes' );
-        if ( response ){
-            res.status(200).json(response);
-        }else{
-            res.status(204).json({});
+        const response: Modulo[] | undefined = await service.getModulos( _filtros , orden, limite, pagina );
+        if (response && response.length > 0) {
+            return res.status(200).json(response);
         }
+        return res.status(204).json({});
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Modulos','2',  error.message ,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
@@ -55,50 +49,44 @@ export const getModulos = async (req: Request, res: Response): Promise<any> => {
 
 export const deleteModulo = async (req: Request, res: Response): Promise<any> => {
 
-    const { idModulo, _idCredencial } = req.params;
+    const { idModulo } = req.params;
     try {
-        await service.deleteModulo(idModulo);
-        bitacora.insertHistorial( _idCredencial,'sso','Modulos','4', idModulo ,'Succes' );
-        res.status(204).json({});
+        const affectedRows: number = await service.deleteModulo(idModulo);
+        return res.status(204).json({ 'affectedRows': affectedRows});
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Modulos','4',  error.message ,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
 
 export const insertModulo = async (req: Request, res: Response): Promise<any> => {
 
-    const { idAplicacion, _idCredencial } = req.params;
+    const { idAplicacion } = req.params;
     const { clave, nombre } = req.body;
     try {
-        const response = await service.insertModulo(idAplicacion, clave, nombre);
-        bitacora.insertHistorial( _idCredencial,'sso','Modulos','1', response.idModulo ,'Succes' );
-        res.status(201).json( response );
+        const response: Modulo | undefined =  await service.insertModulo(idAplicacion, clave, nombre);
+        return res.status(201).json(response);
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Modulos','1',  error.message ,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
 
 export const updateModulo = async (req: Request, res: Response): Promise<any> => {
 
-    const { idModulo, _idCredencial } = req.params;
+    const { idModulo } = req.params;
     const { clave, nombre } = req.body;
     try {
-        await service.uptateModulo( idModulo, clave, nombre);
-        bitacora.insertHistorial( _idCredencial,'sso','Modulos','3', idModulo ,'Succes' );
-        res.status(204).json({});
+        const response: Modulo | undefined = await service.uptateModulo( idModulo, clave, nombre);
+        return res.status(204).json(response);
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Modulos','3',  error.message ,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };

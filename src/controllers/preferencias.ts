@@ -1,41 +1,36 @@
 import { Request, Response } from 'express';
 import * as service from '../services/preferencias';
-import * as bitacora from '../services/historial';
 import { Exception } from '../model/Exception';
+import { Preferencia } from '../types';
 
 export const getPreferencia = async (req: Request, res: Response): Promise<any> => {
 
-    const { idCredencial, _idCredencial } = req.params;
+    const { idCredencial } = req.params;
     try {
-        const response = await service.getPreferencia(idCredencial);
-        bitacora.insertHistorial( _idCredencial,'sso','Preferencias','2', '?' ,'Succes' );
-        if ( response ){
-            res.status(200).json(response);
-        }else{
-            res.status(204).json({});
+        const response: Preferencia | undefined =  await service.getPreferencia(idCredencial);
+        if (response) {
+            return res.status(200).json(response);
         }
+        return res.status(204).json({});
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Preferencias','2',  error.message ,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
 
 export const updatePreferencia = async (req: Request, res: Response): Promise<any> => {
     
-    const { idCredencial, _idCredencial } = req.params;
+    const { idCredencial } = req.params;
     const { dobleFactor, cambiarContrasena } = req.body;
     try {
-        await service.updatePreferencia( idCredencial, dobleFactor, cambiarContrasena);
-        bitacora.insertHistorial( _idCredencial,'sso','Preferencias','3', '?' ,'Succes' );
-        res.status(204).json({});
+        const response: Preferencia | undefined = await service.updatePreferencia( idCredencial, dobleFactor, cambiarContrasena);
+        return res.status(204).json(response);
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Preferencias','3',  error.message ,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };

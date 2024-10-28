@@ -1,79 +1,68 @@
 import { Request, Response } from 'express';
 import * as service from '../services/perfiles';
-import * as bitacora from '../services/historial';
 import { Exception } from '../model/Exception';
+import { Perfil } from '../types';
 
 export const getPerfil = async (req: Request, res: Response): Promise<any> => {
 
-    const { idRol, _idCredencial } = req.params;
+    const { idRol } = req.params;
     try {
-        const response = await service.getPerfil( idRol );
-        bitacora.insertHistorial( _idCredencial,'sso','Perfiles','2', '?' ,'Succes' );
-        if ( response ){
-            res.status(200).json(response);
-        }else{
-            res.status(204).json({});
+        const response: Perfil | undefined = await service.getPerfil( idRol );
+        if (response) {
+            return res.status(200).json(response);
         }
+        return res.status(204).json({});
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Perfiles','2',  error.message ,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
 
 export const getPerfiles = async (req: Request, res: Response): Promise<any> => {
 
-    const { _idCredencial } = req.params;
     const { filtros, orden, limite, pagina } = req.body;
     try {
-        const response = await service.getPerfiles( filtros, orden, limite, pagina );
-        bitacora.insertHistorial( _idCredencial,'sso','Perfiles','2', '*' ,'Succes' );
-        if ( response ){
-            res.status(200).json(response);
-        }else{
-            res.status(204).json({});
+        const response: Perfil[] | undefined = await service.getPerfiles( filtros, orden, limite, pagina );
+        if (response && response.length > 0) {
+            return res.status(200).json(response);
         }
+        return res.status(204).json({});
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Perfiles','2',  error.message ,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
 
 export const deletePerfil = async (req: Request, res: Response): Promise<any> => {
 
-    const { idRol, _idCredencial } = req.params;
+    const { idRol } = req.params;
     const { idCredencial } = req.body;
     try {
-        await service.deletePerfil( idRol, idCredencial );
-        bitacora.insertHistorial( _idCredencial,'sso','Perfiles','4', '?' ,'Succes' );
-        res.status(204).json({});
+        const affectedRows: number =  await service.deletePerfil( idRol, idCredencial );
+        return res.status(204).json({ 'affectedRows': affectedRows});
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Perfiles','4',  error.message ,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
 
 export const insertPerfil = async (req: Request, res: Response): Promise<any> => {
 
-    const { idRol, _idCredencial } = req.params;
+    const { idRol } = req.params;
     const { idCredencial } = req.body;
     try {
-        const response = await service.insertPerfil(idRol, idCredencial);
-        bitacora.insertHistorial( _idCredencial,'sso','Perfiles','1', response.idPerfil ,'Succes' );
-        res.status(201).json(response);
+        const response: Perfil | undefined =  await service.insertPerfil(idRol, idCredencial);
+        return res.status(201).json(response);
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Perfiles','1',  error.message ,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };

@@ -1,37 +1,30 @@
 import { ssoDB } from '../model/Connection';
+import { RowDataPacket } from 'mysql2';
 import { queries } from '../queries/grupos';
-import { Exception } from '../model/Exception';
 import { QueryBuilder } from '../model/QueryBuilder';
+import { Grupo } from '../types';
 
-export const getGrupo = async (idGrupo: string) => {
-    const [result]: any = await ssoDB.query(queries.getGrupo, [idGrupo]);
-    if (result.length > 0) {
-        return result[0];
-    } else {
-        return undefined;
-    }
+export const getGrupo = async (idGrupo: string): Promise<Grupo | undefined> => {
+    const [rows] = await ssoDB.query<RowDataPacket[]>(queries.getGrupo, [idGrupo]);
+    return rows[0] as Grupo || undefined;
 }
 
-export const getGrupos = async (filtros: string | undefined, orden: string | undefined, limite: number | undefined, pagina: number | undefined) => {
-    const [result]: any = await ssoDB.query(QueryBuilder.getQuery(queries.getGrupos, filtros, orden, limite, pagina));
-    if (result.length > 0) {
-        return result;
-    } else {
-        return undefined;
-    }
+export const getGrupos = async (filtros?: string, orden?: string, limite?: number, pagina?: number): Promise<Grupo[] | undefined> => {
+    const [rows] = await ssoDB.query<RowDataPacket[]>(QueryBuilder.getQuery(queries.getGrupos, filtros, orden, limite, pagina));
+    return rows.length > 0 ? (rows as Grupo[]) : undefined;
 }
 
-export const deleteGrupo = async (idGrupo: string) => {
-    await ssoDB.query(queries.deleteGrupo, [idGrupo]);
-    return undefined;
+export const deleteGrupo = async (idGrupo: string): Promise<number> => {
+    const [result]: any = await ssoDB.query(queries.deleteGrupo, [idGrupo]);
+    return result.affectedRows;
 }
 
-export const insertGrupo = async (clave: string, nombre: string) => {
-    const [result]: any = await ssoDB.query(queries.insertGrupo, [clave, nombre]);
-    return result[0][0];
+export const insertGrupo = async (clave: string, nombre: string): Promise<Grupo | undefined> => {
+    const [rows] = await ssoDB.query<RowDataPacket[]>(queries.insertGrupo, [clave, nombre]);
+    return  rows[0] as Grupo || undefined;
 }
 
-export const updateGrupo = async (idGrupo: string, clave: string, nombre: string) => {
-    const [result] = await ssoDB.query(queries.updateGrupo, [idGrupo, clave, nombre]);
-    return undefined;
+export const updateGrupo = async (idGrupo: string, clave: string, nombre: string): Promise<Grupo | undefined> => {
+    const [rows] = await ssoDB.query<RowDataPacket[]>(queries.updateGrupo, [idGrupo, clave, nombre]);
+    return  rows[0] as Grupo || undefined;
 }

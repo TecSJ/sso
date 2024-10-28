@@ -1,31 +1,28 @@
 import { Request, Response } from 'express';
 import * as service from '../services/etiquetas';
-import * as bitacora from '../services/historial';
 import { Exception } from '../model/Exception';
+import { Etiqueta } from '../types';
 
 export const getEtiqueta = async (req: Request, res: Response): Promise<any> => {
     
-    const { idEtiqueta, _idCredencial } = req.params;
+    const { idEtiqueta } = req.params;
     try {
-        const response = await service.getEtiqueta( idEtiqueta);
-        bitacora.insertHistorial( _idCredencial,'sso','Etiquetas','2', idEtiqueta ,'Succes' );
-        if ( response ){
-            res.status(200).json(response);
-        }else{
-            res.status(204).json({});
+        const response: Etiqueta | undefined =  await service.getEtiqueta( idEtiqueta);
+        if (response) {
+            return res.status(200).json(response);
         }
+        return res.status(204).json({});
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Etiquetas','2', error.message ,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
 
 export const getEtiquetas = async (req: Request, res: Response): Promise<any> => {
     
-    const { idGrupo, _idCredencial } = req.params;
+    const { idGrupo } = req.params;
     const { filtros, orden, limite, pagina } = req.body;
     try {
         let _filtros = filtros || '';
@@ -36,51 +33,44 @@ export const getEtiquetas = async (req: Request, res: Response): Promise<any> =>
                 _filtros = `idGrupo:eq:${idGrupo}`;
             }
         }
-        const response = await service.getEtiquetas( _filtros, orden, limite, pagina );
-        bitacora.insertHistorial( _idCredencial,'sso','Etiquetas','2', '*' ,'Succes' );
-        if ( response ){
-            res.status(200).json(response);
-        }else{
-            res.status(204).json({});
+        const response: Etiqueta[] | undefined = await service.getEtiquetas( _filtros, orden, limite, pagina );
+        if (response && response.length > 0) {
+            return res.status(200).json(response);
         }
+        return res.status(204).json({});
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Etiquetas','2', error.message ,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
 
 export const deleteEtiqueta = async (req: Request, res: Response): Promise<any> => {
     
-    const { idEtiqueta, _idCredencial } = req.params;
+    const { idEtiqueta } = req.params;
     try {
-        await service.deleteEtiqueta(idEtiqueta);
-        bitacora.insertHistorial( _idCredencial,'sso','Etiquetas','4', idEtiqueta ,'Succes' );
-        res.status(204).json({});
+        const affectedRows: number =  await service.deleteEtiqueta(idEtiqueta);
+        return res.status(204).json({ 'affectedRows': affectedRows});
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Etiquetas','4', error.message ,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
 
 export const insertEtiqueta = async (req: Request, res: Response): Promise<any> => {
     
-    const { idGrupo, _idCredencial } = req.params;
+    const { idGrupo } = req.params;
     const { nombre } = req.body;
     try {
-        const response = await service.insertEtiqueta( idGrupo, nombre );
-        bitacora.insertHistorial( _idCredencial,'sso','Etiquetas','1', '?' ,'Succes' );
-        res.status(201).json(response);
+        const response: Etiqueta | undefined = await service.insertEtiqueta( idGrupo, nombre );
+        return res.status(201).json(response);
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Etiquetas','1', error.message,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
@@ -88,17 +78,15 @@ export const insertEtiqueta = async (req: Request, res: Response): Promise<any> 
 
 export const updateEtiqueta = async (req: Request, res: Response): Promise<any> => {
 
-    const { idEtiqueta, _idCredencial } = req.params;
+    const { idEtiqueta } = req.params;
     const { nombre } = req.body;
     try {
-        await service.updateEtiqueta( idEtiqueta, nombre);
-        bitacora.insertHistorial( _idCredencial,'sso','Etiquetas','3', idEtiqueta ,'Succes' );
-        res.status(204).json({});
+        const response: Etiqueta | undefined = await service.updateEtiqueta( idEtiqueta, nombre);
+        res.status(204).json(response);
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Etiquetas','3', error.message ,'Fail' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };

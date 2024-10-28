@@ -1,30 +1,27 @@
 import { Request, Response } from 'express';
 import * as service from '../services/codigos';
-import * as bitacora from '../services/historial';
 import { Exception } from '../model/Exception';
+import { Codigo } from '../types';
 
 export const getCodigo = async (req: Request, res: Response): Promise<any> => {
-    const { idCodigo, _idCredencial } = req.params;
+    const { idCodigo } = req.params;
     try {
-        const response = await service.getCodigo(idCodigo);
-        bitacora.insertHistorial( _idCredencial,'sso','Codigos','2', idCodigo ,'Succes' );
-        if ( response ){
-            res.status(200).json(response);
-        }else{
-            res.status(204).json({});
+        const response: Codigo | undefined =  await service.getCodigo(idCodigo);
+        if (response) {
+            return res.status(200).json(response);
         }
+        return res.status(204).json({});
     } catch (error : any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Codigos','2', error.message ,'Succes' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
 
 export const getCodigos = async (req: Request, res: Response): Promise<any> => {
     
-    const { idCredencial, _idCredencial } = req.params;
+    const { idCredencial } = req.params;
     const { filtros, orden, limite, pagina } = req.body;
     try {
         let _filtros = filtros || '';
@@ -35,18 +32,15 @@ export const getCodigos = async (req: Request, res: Response): Promise<any> => {
                 _filtros = `idCredencial:eq:${idCredencial}`;
             }
         }
-        const response = await service.getCodigos( _filtros, orden, limite, pagina );
-        bitacora.insertHistorial( _idCredencial,'sso','Codigos','2', '*' ,'Succes' );
-        if ( response ){
-            res.status(200).json(response);
-        }else{
-            res.status(204).json({});
+        const response: Codigo[] | undefined = await service.getCodigos( _filtros, orden, limite, pagina );
+        if (response && response.length > 0) {
+            return res.status(200).json(response);
         }
+        return res.status(204).json({});
     } catch (error: any) {
-        bitacora.insertHistorial( _idCredencial,'sso','Codigos','2', error.message ,'Succes' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
@@ -54,7 +48,7 @@ export const getCodigos = async (req: Request, res: Response): Promise<any> => {
 
 export const insertCodigo = async (req: Request, res: Response): Promise<any> => {
 
-    const { idCredencial, _idCredencial } = req.params;
+    const { idCredencial } = req.params;
     const { tipo, medio, destinatario } = req.body;
     try {        
         if ( !destinatario ) {
@@ -72,14 +66,12 @@ export const insertCodigo = async (req: Request, res: Response): Promise<any> =>
                 return res.status(400).json({ message: "El destinatario debe tener el formato ##-##########." });
             }
         }
-        const response = await service.insertCodigo( idCredencial, tipo, medio, destinatario );
-        bitacora.insertHistorial( _idCredencial,'sso','Codigos','1', response.idCodigo ,'Succes' );
+        const response: Codigo | undefined = await service.insertCodigo( idCredencial, tipo, medio, destinatario );
         res.status(201).json(response);
     } catch ( error : any ) {
-        bitacora.insertHistorial( _idCredencial,'sso','Codigos','1', error.message ,'Succes' );
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor'
+            message: error.message || 'Error interno del servidor',
         });
     }
 };
