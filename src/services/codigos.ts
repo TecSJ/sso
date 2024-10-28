@@ -3,7 +3,8 @@ import { RowDataPacket } from 'mysql2';
 import { queries } from '../queries/codigos';
 import { QueryBuilder } from '../model/QueryBuilder';
 import Mail from '../model/Mail'
-import { Codigo } from '../types';
+import { Codigo, Credencial } from '../types';
+import * as credencial from './credenciales'
 
 export const getCodigo = async (idCodigo: string): Promise<Codigo | undefined> => {
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.getCodigo, [idCodigo]);
@@ -15,10 +16,12 @@ export const getCodigos = async (filtros?: string, orden?: string, limite?: numb
     return rows.length > 0 ? (rows as Codigo[]) : undefined;
 }
 
-export const insertCodigo = async (idCredencial: string, tipo: string, medio: string, destinatario: string): Promise<Codigo | undefined> => {
+export const insertCodigo = async (idCredencial: string, tipo: string, medio: string ): Promise<Codigo | undefined> => {
+
+    const data: Credencial | undefined = await credencial.getCredencial(idCredencial);
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.insertCodigo, [idCredencial, tipo, medio]);
     const codigo = rows[0] as Codigo;
-    if (medio === 'Correo') {
+    if (medio === 'Correo' && data?.correo) {
         const mail = new Mail();
         let asunto = '';
         let contenido = '';
@@ -34,7 +37,7 @@ export const insertCodigo = async (idCredencial: string, tipo: string, medio: st
             asunto = 'Código de recuperación'
             contenido = `El código de recuperación es: ${codigo.clave}`
         }
-        mail.enviarCorreo(destinatario, asunto, contenido);
+        mail.enviarCorreo( data?.correo, asunto, contenido);
     }
     if (medio === 'Celular') {
         // Anexar el codigo de uso para whatsapp business

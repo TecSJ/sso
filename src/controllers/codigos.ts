@@ -49,24 +49,9 @@ export const getCodigos = async (req: Request, res: Response): Promise<any> => {
 export const insertCodigo = async (req: Request, res: Response): Promise<any> => {
 
     const { idCredencial } = req.params;
-    const { tipo, medio, destinatario } = req.body;
-    try {        
-        if ( !destinatario ) {
-            return res.status(400).json({ message: "El destinatario es un campo obligatorio." });
-        }
-        const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (medio === "Correo") {
-            if (!correoRegex.test(destinatario)) {
-                return res.status(400).json({ message: "El destinatario debe ser un correo electrónico válido." });
-            }
-        }
-        const celularRegex = /^\d{2}-\d{10}$/;
-        if (medio === "Celular") {
-            if (!celularRegex.test(destinatario)) {
-                return res.status(400).json({ message: "El destinatario debe tener el formato ##-##########." });
-            }
-        }
-        const response: Codigo | undefined = await service.insertCodigo( idCredencial, tipo, medio, destinatario );
+    const { tipo, medio } = req.body;
+    try { 
+        const response: Codigo | undefined = await service.insertCodigo( idCredencial, tipo, medio );
         res.status(201).json(response);
     } catch ( error : any ) {
         return res.status(500).json({
