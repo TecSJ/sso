@@ -52,7 +52,7 @@ export const insertCodigo = async (req: Request, res: Response): Promise<any> =>
     const { tipo, medio } = req.body;
     try { 
         const response: Codigo | undefined = await service.insertCodigo( idCredencial, tipo, medio );
-        res.status(201).json(response);
+        res.status(201).json({ status: 'OK' });
     } catch ( error : any ) {
         return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
