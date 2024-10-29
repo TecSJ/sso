@@ -7,7 +7,7 @@ import * as preferencias from '../services/preferencias';
 import * as codigos from '../services/codigos';
 
 export const getSesion = async (curp: string | undefined, correo: string | undefined, celular: string | undefined, contrasena: string) => {
-    const [result]: any = await ssoDB.query(queries.iniciarSesion, [curp, correo, celular]);
+    const [result]: any = await ssoDB.query(queries.iniciarSesion, [curp, correo, `__-${celular}`]);
     if (result.length > 0) {
         const credencial = result[0];
         const coinciden = await bcrypt.compare(contrasena, credencial.contrasena);
@@ -32,8 +32,7 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
                         credencial: credencial.idCredencial
                     };
                 }
-            }
-            if (credencial.estado === 'Validado') {
+            } else {
                 const response = await preferencias.getPreferencia(credencial.idCredencial);
                 const correo_auth = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Autenticación,medio:eq:Correo,estado:eq:Confirmado`, undefined, 1, 1);
                 const celular_auth = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Autenticación,medio:eq:Celular,estado:eq:Confirmado`, undefined, 1, 1);
