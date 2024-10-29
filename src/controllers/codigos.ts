@@ -63,8 +63,12 @@ export const insertCodigo = async (req: Request, res: Response): Promise<any> =>
 
 export const validarCodigo = async (req: Request, res: Response): Promise<any> => {
     const { idCredencial, codigo } = req.params;
+    const X_API_KEY = req.headers['api_key'] as string | undefined;
     const { medio, tipo } = req.body;
     try {
+        if (X_API_KEY !== process.env.X_API_KEY) {
+            throw new Exception('401', 'Falta api-key');
+        }
         const response: Codigo | undefined =  await service.validarCodigo( idCredencial, codigo, medio, tipo );
         if (response) {
             return res.status(200).json({ estatus: 'OK'});
