@@ -35,7 +35,6 @@ export const insertCredencial = async (curp: string, nombre: string, primerApell
     const criptContrasena = await bcrypt.hash(contrasena, salt);
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.insertCredencial, [idCredencial, curp, nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, criptContrasena, tipo]);
     codigos.insertCodigo( idCredencial, 'Validación', 'Correo');
-    codigos.insertCodigo( idCredencial, 'Validación', 'Celular');
     return  rows[0] as Credencial || undefined;
 }
 
