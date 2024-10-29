@@ -52,7 +52,7 @@ export const insertCodigo = async (req: Request, res: Response): Promise<any> =>
     const { tipo, medio } = req.body;
     try { 
         const response: Codigo | undefined = await service.insertCodigo( idCredencial, tipo, medio );
-        res.status(201).json({ status: 'OK' });
+        res.status(201).json(response);
     } catch ( error : any ) {
         return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
@@ -61,3 +61,19 @@ export const insertCodigo = async (req: Request, res: Response): Promise<any> =>
     }
 };
 
+export const validarCodigo = async (req: Request, res: Response): Promise<any> => {
+    const { idCredencial, codigo } = req.params;
+    const { medio, tipo } = req.body;
+    try {
+        const response: Codigo | undefined =  await service.validarCodigo( idCredencial, codigo, medio, tipo );
+        if (response) {
+            return res.status(200).json({ estatus: 'OK'});
+        }
+        return res.status(204).json({});
+    } catch (error : any) {
+        return res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor',
+        });
+    }
+};
