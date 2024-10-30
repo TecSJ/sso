@@ -12,6 +12,7 @@ router.get('/:idCredencial/codigos', Autenticacion('Codigos','2'), codigos.getCo
 router.post('/:idCredencial/codigos', codigos.insertCodigo );
 router.get('/codigos', Autenticacion('Codigos','2'), codigos.getCodigos );
 router.post('/:idCredencial/codigos/:codigo', codigos.validarCodigo );
+router.delete('/:idCredencial/codigos', codigos.deleteCodigo );
 
 router.get('/:idCredencial/preferencias',Autenticacion('Preferencias','2'), preferencias.getPreferencia );
 router.put('/:idCredencial/preferencias', Autenticacion('Preferencias','3'), preferencias.updatePreferencia );

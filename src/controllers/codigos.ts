@@ -45,6 +45,19 @@ export const getCodigos = async (req: Request, res: Response): Promise<any> => {
     }
 };
 
+export const deleteCodigo = async (req: Request, res: Response): Promise<any> => {
+    const { idCredencial } = req.params;
+    try {
+        const affectedRows: number = await service.deleteCodigos(idCredencial);
+        return res.status(204).json({ 'affectedRows': affectedRows});
+    } catch (error: any) {
+        return res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor',
+        });
+    }
+};
+
 
 export const insertCodigo = async (req: Request, res: Response): Promise<any> => {
 

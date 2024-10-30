@@ -16,6 +16,11 @@ export const getCodigos = async (filtros?: string, orden?: string, limite?: numb
     return rows.length > 0 ? (rows as Codigo[]) : undefined;
 }
 
+export const deleteCodigos = async ( idCredencial: string): Promise<number> => {
+    const [result]: any = await ssoDB.query( queries.deletCodigo, [idCredencial]);
+    return result.affectedRows;
+};
+
 export const insertCodigo = async (idCredencial: string, tipo: string, medio: string ): Promise<Codigo | undefined> => {
 
     const data: Credencial | undefined = await credencial.getCredencial(idCredencial);
