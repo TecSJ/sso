@@ -7,7 +7,7 @@ import * as preferencias from '../services/preferencias';
 import * as codigos from '../services/codigos';
 
 export const getSesion = async (curp: string | undefined, correo: string | undefined, celular: string | undefined, contrasena: string) => {
-    const [result]: any = await ssoDB.query(queries.iniciarSesion, [curp, correo, `__-${celular}`]);
+    const [result]: any = await ssoDB.query(queries.getCredencial, [curp, correo, `__-${celular}`]);
     if (result.length > 0) {
         const credencial = result[0];
         const coinciden = await bcrypt.compare(contrasena, credencial.contrasena);
@@ -51,6 +51,7 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
                         credencial: credencial.idCredencial
                     };
                 }
+                await codigos.deleteCodigos( credencial.idCredencial );
                 const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular);
                 return {
                     statusCode: 200,
@@ -70,9 +71,40 @@ export const deleteSession = async ( idCredencial: string ) => {
     return undefined;
 }
 
-export const setPassword = async ( idCredencial: string, contrasena: string) => {
-    const salt = await bcrypt.genSalt(10);
-    const criptContrasena = await bcrypt.hash(contrasena, salt);
-    await ssoDB.query(queries.updateContrasena, [idCredencial, criptContrasena]);
-    return undefined;
+export const setPassword = async ( curp: string, correo: string, celular: string, contrasena: string ) => {
+
+    const [result]: any = await ssoDB.query(queries.getCredencial, [curp, correo, `__-${celular}`]);
+    if (result.length > 0) {
+        const credencial = result[0];
+            if (credencial.estado === 'Inactivo') {
+                throw new Exception('403', 'La cuenta está bloqueada!');
+            }
+            if (credencial.estado === 'Activo') {
+                throw new Exception('403', 'La cuenta no esta validada!');
+            } else {
+                const correo_auth = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Recuperación,medio:eq:Correo,estado:eq:Confirmado`, undefined, 1, 1);
+                const celular_auth = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Recuperación,medio:eq:Celular,estado:eq:Confirmado`, undefined, 1, 1);
+
+                if (!correo_auth && !celular_auth) {
+                    return {
+                        statusCode: 202,
+                        message: 'Autenticación de correo o celular requerida.',
+                        actionRequired: 'AUTHENTICATE_CONTACT_INFO',
+                        authenticationNeeded: {
+                            correo: !correo_auth,
+                            celular: !celular_auth,
+                        },
+                        correo: credencial.correo,
+                        celular: credencial.celular,
+                        credencial: credencial.idCredencial
+                    };
+                }
+                const salt = await bcrypt.genSalt(10);
+                const criptContrasena = await bcrypt.hash(contrasena, salt);
+                await ssoDB.query( queries.updateContrasena, [ credencial.idCredencial, criptContrasena ]);
+                return { statusCode: 200 };
+            }
+    } else {
+        throw new Exception('401', 'Cuenta no valida!');
+    }
 }
