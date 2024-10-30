@@ -103,6 +103,7 @@ export const setPassword = async (curp: string, correo: string, celular: string,
         };
     }
     const salt = await bcrypt.genSalt(10);
+    await codigos.deleteCodigos( credencial.idCredencial );
     const criptContrasena = await bcrypt.hash(contrasena, salt);
     await ssoDB.query(queries.updateContrasena, [credencial.idCredencial, criptContrasena]);
     return { statusCode: 200 };
