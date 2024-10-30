@@ -9,7 +9,7 @@ const router = Router();
 
 router.get('/codigos/:idCodigo', Autenticacion('Codigos','2'), codigos.getCodigo );
 router.get('/:idCredencial/codigos', Autenticacion('Codigos','2'), codigos.getCodigos );
-router.post('/:idCredencial/codigos', Autenticacion('Codigos','1'), codigos.insertCodigo );
+router.post('/:idCredencial/codigos', codigos.insertCodigo );
 router.get('/codigos', Autenticacion('Codigos','2'), codigos.getCodigos );
 router.get('/:idCredencial/codigos/:codigo', codigos.validarCodigo );
 
