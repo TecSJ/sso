@@ -60,7 +60,7 @@ export const insertCredencial = async (req: Request, res: Response): Promise<any
         }
         const response: Credencial | undefined =  await service.insertCredencial( curp, nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, contrasena, tipo );
         await service.insertMoodle(curp, contrasena, nombre, primerApellido, segundoApellido, correo, "General", "General");
-        return res.status(201).json(response);
+        return res.status(201).json({ idCredencial: response?.idCredencial, curp: curp, nombre: nombre, primerApellido: primerApellido, segundoApellido: segundoApellido, correo: correo, celular: celular, tipo: tipo  });
     } catch (error: any) {
         return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
