@@ -11,7 +11,7 @@ router.get('/codigos/:idCodigo', Autenticacion('Codigos','2'), codigos.getCodigo
 router.get('/:idCredencial/codigos', Autenticacion('Codigos','2'), codigos.getCodigos );
 router.post('/:idCredencial/codigos', codigos.insertCodigo );
 router.get('/codigos', Autenticacion('Codigos','2'), codigos.getCodigos );
-router.get('/:idCredencial/codigos/:codigo', codigos.validarCodigo );
+router.post('/:idCredencial/codigos/:codigo', codigos.validarCodigo );
 
 router.get('/:idCredencial/preferencias',Autenticacion('Preferencias','2'), preferencias.getPreferencia );
 router.put('/:idCredencial/preferencias', Autenticacion('Preferencias','3'), preferencias.updatePreferencia );
