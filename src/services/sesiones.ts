@@ -10,6 +10,9 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
     const [result]: any = await ssoDB.query(queries.getCredencial, [curp, correo, `__-${celular}`]);
     if (result.length > 0) {
         const credencial = result[0];
+        if( !contrasena ){
+            return { statusCode: 0, credencial: credencial.idCredencial };
+        }
         const coinciden = await bcrypt.compare(contrasena, credencial.contrasena);
         if (coinciden) {
             if (credencial.estado === 'Inactivo') {
@@ -91,8 +94,8 @@ export const setPassword = async (curp: string, correo: string, celular: string,
     if (!correo_auth && !celular_auth) {
         return {
             statusCode: 202,
-            message: 'Autenticación de correo o celular requerida.',
-            actionRequired: 'AUTHENTICATE_CONTACT_INFO',
+            message: 'Recuperación de correo o celular requerida.',
+            actionRequired: 'RECOVER_CONTACT_INFO',
             authenticationNeeded: {
                 correo: !correo_auth,
                 celular: !celular_auth,

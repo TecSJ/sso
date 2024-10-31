@@ -10,20 +10,26 @@ export const getSesion = async (req: Request, res: Response): Promise<any> => {
             throw new Exception('401', 'Falta api-key');
         }
         const response = await service.getSesion(curp, correo, celular, contrasena);
-        if (response?.statusCode === 200) {
-            return res.status(200).json({ token: response.token });
-        } else if (response?.statusCode === 202) {
-            return res.status(202).json({
-                message: response.message,
-                actionRequired: response.actionRequired,
-                validationNeeded: response.validationNeeded,
-                authenticationNeeded: response.authenticationNeeded,
-                correo: response.correo,
-                celular: response.celular,
-                credencial: response.credencial
-            });
-        } else {
-            return res.status(204).json({});
+        switch (response?.statusCode) {
+            case 0:
+                return res.status(200).json({ idCredencial: response.credencial });
+            
+            case 200:
+                return res.status(200).json({ token: response.token });
+            
+            case 202:
+                return res.status(202).json({
+                    message: response.message,
+                    actionRequired: response.actionRequired,
+                    validationNeeded: response.validationNeeded,
+                    authenticationNeeded: response.authenticationNeeded,
+                    correo: response.correo,
+                    celular: response.celular,
+                    credencial: response.credencial
+                });
+        
+            default:
+                return res.status(400).json({ message: "Unexpected status code" });
         }
     } catch (error: any) {
         if (error instanceof Exception) {
