@@ -6,7 +6,7 @@ import { Miembro } from '../types';
 
 export const getMiembro = async (idMiembro: string): Promise<Miembro | undefined> => {
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.getMiembro, [idMiembro]);
-    return rows[0] as Miembro || undefined;
+    return rows[0][0] as Miembro || undefined;
 }
 
 export const getMiembros = async (filtros?: string, orden?: string, limite?: number, pagina?: number) => {
@@ -21,11 +21,11 @@ export const deleteMiembro = async (idMiembro: string): Promise<number> => {
 
 export const insertMiembro = async (idGrupo: string, idCredencial: string) => {
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.insertMiembro, [idGrupo, idCredencial]);
-    return  rows[0] as Miembro || undefined;
+    return  rows[0][0] as Miembro || undefined;
 }
 
 export const updateMiembro = async (idMiembro: string, idGrupo: string): Promise<Miembro | undefined> => {
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.updateMiembro, [idMiembro, idGrupo]);
-    return  rows[0] as Miembro || undefined;
+    return  rows[0][0] as Miembro || undefined;
 }
 

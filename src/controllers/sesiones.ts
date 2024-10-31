@@ -11,9 +11,9 @@ export const getSesion = async (req: Request, res: Response): Promise<any> => {
         }
         const response = await service.getSesion(curp, correo, celular, contrasena);
         if (response?.statusCode === 200) {
-            res.status(200).json({ token: response.token });
+            return res.status(200).json({ token: response.token });
         } else if (response?.statusCode === 202) {
-            res.status(202).json({
+            return res.status(202).json({
                 message: response.message,
                 actionRequired: response.actionRequired,
                 validationNeeded: response.validationNeeded,
@@ -23,7 +23,7 @@ export const getSesion = async (req: Request, res: Response): Promise<any> => {
                 credencial: response.credencial
             });
         } else {
-            res.status(204).json({});
+            return res.status(204).json({});
         }
     } catch (error: any) {
         if (error instanceof Exception) {
@@ -38,9 +38,9 @@ export const deleteSesion = async (req: Request, res: Response): Promise<any> =>
     const { _idCredencial } = req.params;
     try {
         await service.deleteSession( _idCredencial );
-        res.status(204).json({});
+        return res.status(204).json({});
     } catch (error: any) {
-        res.status(500).json({
+        return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
             message: error.message || 'Error interno del servidor'
         });
@@ -56,9 +56,9 @@ export const setPassword = async (req: Request, res: Response): Promise<any> => 
         }
         const response = await service.setPassword(curp, correo, celular, contrasena);
         if (response?.statusCode === 200) {
-            res.status(200).json({ status: 'OK' });
+            return res.status(200).json({ status: 'OK' });
         } else if (response?.statusCode === 202) {
-            res.status(202).json({
+            return res.status(202).json({
                 message: response.message,
                 actionRequired: response.actionRequired,
                 authenticationNeeded: response.authenticationNeeded,
@@ -67,7 +67,7 @@ export const setPassword = async (req: Request, res: Response): Promise<any> => 
                 credencial: response.credencial
             });
         } else {
-            res.status(204).json({});
+            return res.status(204).json({});
         }
     } catch (error: any) {
         if (error instanceof Exception) {

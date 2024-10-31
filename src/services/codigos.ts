@@ -8,7 +8,7 @@ import * as credencial from './credenciales'
 
 export const getCodigo = async (idCodigo: string): Promise<Codigo | undefined> => {
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.getCodigo, [idCodigo]);
-    return rows[0] as Codigo || undefined;
+    return rows[0][0] as Codigo || undefined;
 }
 
 export const getCodigos = async (filtros?: string, orden?: string, limite?: number, pagina?: number): Promise<Codigo[] | undefined>  => {
@@ -57,5 +57,5 @@ export const validarCodigo = async ( idCredencial: string, clave: string, medio:
     if( codigo ){
         await ssoDB.query(queries.confirmarCodigo, [ codigo.idCodigo ]);
     }
-    return rows[0] as Codigo || undefined;
+    return rows[0][0] as Codigo || undefined;
 }

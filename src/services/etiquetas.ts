@@ -6,7 +6,7 @@ import { Etiqueta } from '../types';
 
 export const getEtiqueta = async (idEtiqueta: string): Promise<Etiqueta | undefined> => {
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.getEtiqueta, [idEtiqueta]);
-    return rows[0] as Etiqueta || undefined;
+    return rows[0][0] as Etiqueta || undefined;
 }
 
 export const getEtiquetas = async (filtros?: string, orden?: string, limite?: number, pagina?: number): Promise<Etiqueta[] | undefined> => {

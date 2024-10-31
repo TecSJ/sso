@@ -16,7 +16,7 @@ const agent = new https.Agent({
 
 export const getCredencial = async (idCredencial: string): Promise<Credencial | undefined> => {
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.getCredencial, [idCredencial]);
-    return rows[0] as Credencial || undefined;
+    return rows[0][0] as Credencial || undefined;
 }
 
 export const getCredenciales = async ( filtros?: string, orden?: string, limite?: number, pagina?: number ): Promise<Credencial[] | undefined> => {
@@ -29,13 +29,13 @@ export const deleteCredencial = async (idCredencial: string): Promise<number> =>
     return result.affectedRows;
 }
 
-export const insertCredencial = async (curp: string, nombre: string, primerApellido: string, segundoApellido: string, fechaNacimiento: string, estadoNacimiento: string, correo: string, celular: string, contrasena: string, tipo: string): Promise<Credencial > => {
+export const insertCredencial = async (curp: string, nombre: string, primerApellido: string, segundoApellido: string, fechaNacimiento: string, estadoNacimiento: string, correo: string, celular: string, contrasena: string, tipo: string): Promise<Credencial | undefined > => {
     const idCredencial = uuidv4();
     const salt = await bcrypt.genSalt(10);
     const criptContrasena = await bcrypt.hash(contrasena, salt);
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.insertCredencial, [idCredencial, curp, nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, criptContrasena, tipo]);
     codigos.insertCodigo( idCredencial, 'Validación', 'Correo');
-    return  rows[0][0] as Credencial;
+    return  rows[0][0] as Credencial  || undefined;
 }
 
 export const insertMoodle = async (curp: string, contrasena: string, nombre: string, primerApellido: string, segundoApellido: string, correo: string, grupo: string, etiqueta: string) => {

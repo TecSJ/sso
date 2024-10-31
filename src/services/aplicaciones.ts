@@ -6,7 +6,7 @@ import { Aplicacion } from '../types/'
 
 export const getAplicacion = async (idAplicacion: string): Promise<Aplicacion | undefined> => {
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.getAplicacion, [idAplicacion]);
-    return rows[0] as Aplicacion || undefined;
+    return rows[0][0] as Aplicacion || undefined;
 };
 
 export const getAplicaciones = async ( filtros?: string, orden?: string, limite?: number, pagina?: number ): Promise<Aplicacion[] | undefined> => {

@@ -6,7 +6,7 @@ import { Perfil } from '../types';
 
 export const getPerfil = async (idRol: string) => {
     const [rows] = await ssoDB.query<RowDataPacket[]>( queries.getPerfil, [idRol]);
-    return rows[0] as Perfil || undefined;
+    return rows[0][0] as Perfil || undefined;
 }
 
 export const getPerfiles = async (filtros: string | undefined, orden: string | undefined, limite: number | undefined, pagina: number | undefined) => {
@@ -22,7 +22,7 @@ export const deletePerfil = async (idRol: string, idCredencial: string): Promise
 
 export const insertPerfil = async (clave: string, nombre: string): Promise<Perfil | undefined> => {
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.insertPerfil, [clave, nombre]);
-    return  rows[0] as Perfil || undefined;
+    return rows[0][0] as Perfil || undefined;
 }
 
 
