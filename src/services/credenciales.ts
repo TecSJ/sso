@@ -73,5 +73,5 @@ export const uptateCredencial = async (idCredencial: string, curp: string, corre
         contrasena = await bcrypt.hash(contrasena, salt);
     }
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.updateCredencial, [idCredencial, curp, correo, celular, contrasena, tipo]);
-    return  rows[0] as Credencial || undefined;
+    return  rows[0][0] as Credencial || undefined;
 }

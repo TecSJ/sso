@@ -21,11 +21,11 @@ export const deleteEtiqueta = async (idEtiqueta: string): Promise<number> => {
 
 export const insertEtiqueta = async (idGrupo: string, nombre: string): Promise<Etiqueta | undefined> => {
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.insertEtiqueta, [idGrupo, nombre]);
-    return  rows[0] as Etiqueta || undefined;
+    return  rows[0][0] as Etiqueta || undefined;
 }
 
 export const updateEtiqueta = async (idEtiqueta: string, nombre: string): Promise<Etiqueta | undefined> => {
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.updateEtiqueta, [idEtiqueta, nombre]);
-    return  rows[0] as Etiqueta || undefined;
+    return  rows[0][0] as Etiqueta || undefined;
 }
 

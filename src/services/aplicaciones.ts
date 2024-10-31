@@ -21,11 +21,11 @@ export const deleteAplicacion = async (idAplicacion: string): Promise<number> =>
 
 export const insertAplicacion = async ( clave: string, nombre: string, redireccion: string): Promise<Aplicacion | undefined> => {
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.insertAplicacion, [clave, nombre, redireccion]);
-    return  rows[0] as Aplicacion || undefined;
+    return  rows[0][0] as Aplicacion || undefined;
 }
 
 export const updateAplicacion = async (idAplicacion: string, clave: string, nombre: string, redireccion: string): Promise<Aplicacion | undefined> => {
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.updateAplicacion, [idAplicacion, clave, nombre, redireccion]);
-    return  rows[0] as Aplicacion || undefined;
+    return  rows[0][0] as Aplicacion || undefined;
 }
 
