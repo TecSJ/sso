@@ -58,9 +58,9 @@ export const insertCredencial = async (req: Request, res: Response): Promise<any
         if( X_API_KEY != process.env.X_API_KEY ){
             throw new Error('Falta api-key!')
         }
-        const response: Credencial | undefined =  await service.insertCredencial( curp, nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, contrasena, tipo );
+        const response: Credencial =  await service.insertCredencial( curp, nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, contrasena, tipo );
         await service.insertMoodle(curp, contrasena, nombre, primerApellido, segundoApellido, correo, "General", "General");
-        return res.status(201).json({ idCredencial: response?.idCredencial, curp: curp, nombre: nombre, primerApellido: primerApellido, segundoApellido: segundoApellido, correo: correo, celular: celular, tipo: tipo  });
+        return res.status(201).json({ idCredencial: response.idCredencial, curp: curp, nombre: nombre, primerApellido: primerApellido, segundoApellido: segundoApellido, correo: correo, celular: celular, tipo: tipo  });
     } catch (error: any) {
         return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
