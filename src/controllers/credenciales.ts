@@ -8,11 +8,11 @@ export const getCredencial = async (req: Request, res: Response): Promise<any> =
     try {
         const response: Credencial | undefined = await service.getCredencial(idCredencial);
         if (response) {
-            return res.status(200).json(response);
+            res.status(200).json(response);
         }
-        return res.status(204).json({});
+        res.status(204).json({});
     } catch (error: any) {
-        return res.status(500).json({
+        res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
             message: error.message || 'Error interno del servidor',
         });
@@ -25,11 +25,11 @@ export const getCredenciales = async (req: Request, res: Response): Promise<any>
     try {
         const response: Credencial[] | undefined = await service.getCredenciales( filtros, orden, limite, pagina );
         if (response && response.length > 0) {
-            return res.status(200).json(response);
+            res.status(200).json(response);
         }
-        return res.status(204).json({});
+        res.status(204).json({});
     } catch (error: any) {
-        return res.status(500).json({
+        res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
             message: error.message || 'Error interno del servidor',
         });
@@ -41,9 +41,9 @@ export const deleteCredencial = async (req: Request, res: Response): Promise<any
     const { idCredencial } = req.params;
     try {
         const affectedRows: number =  await service.deleteCredencial(idCredencial);
-        return res.status(204).json({ 'affectedRows': affectedRows});
+        res.status(204).json({ 'affectedRows': affectedRows});
     } catch (error: any) {
-        return res.status(500).json({
+        res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
             message: error.message || 'Error interno del servidor',
         });
@@ -60,9 +60,9 @@ export const insertCredencial = async (req: Request, res: Response): Promise<any
         }
         const response: Credencial =  await service.insertCredencial( curp, nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, contrasena, tipo );
         await service.insertMoodle(curp, contrasena, nombre, primerApellido, segundoApellido, correo, "General", "General");
-        return res.status(201).json({ idCredencial: response.idCredencial, curp: curp, nombre: nombre, primerApellido: primerApellido, segundoApellido: segundoApellido, correo: correo, celular: celular, tipo: tipo  });
+        res.status(201).json({ idCredencial: response.idCredencial, curp: curp, nombre: nombre, primerApellido: primerApellido, segundoApellido: segundoApellido, correo: correo, celular: celular, tipo: tipo  });
     } catch (error: any) {
-        return res.status(500).json({
+        res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
             message: error.message || 'Error interno del servidor',
         });
@@ -78,7 +78,7 @@ export const updateCredencial = async (req: Request, res: Response): Promise<any
         const response: Credencial | undefined = await service.uptateCredencial(idCredencial, curp, correo, celular, contrasena, tipo );
         res.status(204).json(response);
     } catch (error: any) {
-        return res.status(500).json({
+        res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
             message: error.message || 'Error interno del servidor',
         });
