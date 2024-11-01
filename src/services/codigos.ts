@@ -25,7 +25,7 @@ export const insertCodigo = async (idCredencial: string, tipo: string, medio: st
 
     const data: Credencial | undefined = await credencial.getCredencial(idCredencial);
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.insertCodigo, [idCredencial, tipo, medio]);
-    const codigo = rows[0] as Codigo;
+    const codigo = rows[0][0] as Codigo;
     if (medio === 'Correo' && data?.correo) {
         const mail = new Mail();
         let asunto = '';
