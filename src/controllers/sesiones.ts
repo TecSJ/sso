@@ -62,7 +62,7 @@ export const setPassword = async (req: Request, res: Response): Promise<any> => 
         }
         const response = await service.setPassword(curp, correo, celular, contrasena);
         if (response?.statusCode === 200) {
-            return res.status(200).json({ status: 'OK' });
+            return res.status(200).json({ token: response.token });
         } else if (response?.statusCode === 202) {
             return res.status(202).json({
                 message: response.message,

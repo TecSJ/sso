@@ -109,5 +109,9 @@ export const setPassword = async (curp: string, correo: string, celular: string,
     await codigos.deleteCodigos( credencial.idCredencial );
     const criptContrasena = await bcrypt.hash(contrasena, salt);
     await ssoDB.query(queries.updateContrasena, [credencial.idCredencial, criptContrasena]);
-    return { statusCode: 200 };
+    const token = JWT.getToken( credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular );
+    return {
+        statusCode: 200,
+        token,
+    };
 };
