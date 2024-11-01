@@ -53,9 +53,9 @@ export const insertCodigo = async (idCredencial: string, tipo: string, medio: st
 
 export const validarCodigo = async ( idCredencial: string, clave: string, medio: string, tipo: string): Promise<Codigo> => {
     const [rows] = await ssoDB.query<RowDataPacket[]>( queries.validarCodigo, [ idCredencial, clave, medio, tipo ]);
-    const codigo = rows[0][0] as Codigo || undefined;
+    const codigo = rows[0] as Codigo || undefined;
     if( codigo ){
         await ssoDB.query(queries.confirmarCodigo, [ codigo.idCodigo ]);
     }
-    return codigo;
+    return rows[0] as Codigo || undefined;
 }
