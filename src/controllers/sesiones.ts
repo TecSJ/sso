@@ -41,10 +41,28 @@ export const getSesion = async (req: Request, res: Response): Promise<any> => {
 
 export const getValidacion = async (req: Request, res: Response): Promise<any> => {
 
-    const { curp, correo, celular, contrasena } = req.body;
+    const { curp, correo, celular } = req.body;
     const X_API_KEY = req.headers['api_key'] as string | undefined;
     try {
         const response = await service.getValidacion(curp, correo, celular );
+        if (response) {
+            return res.status(200).json(response);
+        }
+        return res.status(204).json({});
+    } catch (error: any) {
+        return res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor',
+        });
+    }
+};
+
+export const getAuntenticacion = async (req: Request, res: Response): Promise<any> => {
+
+    const { curp, correo, celular } = req.body;
+    const X_API_KEY = req.headers['api_key'] as string | undefined;
+    try {
+        const response = await service.getAutenticacion(curp, correo, celular );
         if (response) {
             return res.status(200).json(response);
         }

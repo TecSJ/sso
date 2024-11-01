@@ -6,6 +6,7 @@ const router = Router();
 router.post('/', sesiones.getSesion );
 router.delete('/', sesiones.deleteSesion );
 router.get('/is-valid', sesiones.getValidacion );
+router.get('/is-auth', sesiones.getAuntenticacion );
 router.put('/:idCredencial/set-contrasena', sesiones.setPassword );
 
 export default router;

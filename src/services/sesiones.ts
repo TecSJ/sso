@@ -87,7 +87,32 @@ export const getValidacion = async (curp: string | undefined, correo: string | u
             const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular);
             return { token: token };
         } else {
-            throw new Exception('401', 'Cuenta no validada!');
+            throw new Exception('401', 'Cuenta no esta validada!');
+        }
+    } else {
+        throw new Exception('401', 'Cuenta no valida!');
+    }
+};
+
+export const getAutenticacion = async (curp: string | undefined, correo: string | undefined, celular: string | undefined) => {
+    const [result]: any = await ssoDB.query(queries.getCredencial, [curp, correo, `__-${celular}`]);
+    if (result.length > 0) {
+        const credencial = result[0];
+        if (credencial.estado === 'Inactivo') {
+            throw new Exception('403', 'La cuenta está bloqueada!');
+        }
+        if (credencial.estado === 'Validado') {
+            
+            const response = await preferencias.getPreferencia(credencial.idCredencial);
+            const correo_auth = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Autenticación,medio:eq:Correo,estado:eq:Confirmado`, undefined, 1, 1);
+            const celular_auth = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Autenticación,medio:eq:Celular,estado:eq:Confirmado`, undefined, 1, 1);
+            if (!correo_auth || (response?.dobleFactor === 'S' && !celular_auth)) {
+                throw new Exception('401', 'Cuenta no esta auntenticada!');
+            }
+            const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular);
+            return { token: token };
+        } else {
+            throw new Exception('401', 'Cuenta no esta validada!');
         }
     } else {
         throw new Exception('401', 'Cuenta no valida!');
