@@ -69,7 +69,7 @@ export const insertCodigo = async (req: Request, res: Response): Promise<any> =>
             throw new Exception('401', 'Falta api-key');
         }
         const response: Codigo | undefined = await service.insertCodigo( idCredencial, tipo, medio );
-        res.status(201).json(response);
+        res.status(201).json({ idCredencial: response?.idCredencial, medio: response?.medio, tipo: response?.tipo });
     } catch ( error : any ) {
         return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
