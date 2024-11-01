@@ -12,11 +12,11 @@ export const getSesion = async (req: Request, res: Response): Promise<any> => {
         const response = await service.getSesion(curp, correo, celular, contrasena);
         switch (response?.statusCode) {
             case 0:
-                return res.status(200).json({ idCredencial: response.credencial });
-            
+                return res.status(200).json({ idCredencial: response.credencial, correo: response.correo, celular: response.celular });
+
             case 200:
                 return res.status(200).json({ token: response.token });
-            
+
             case 202:
                 return res.status(202).json({
                     message: response.message,
@@ -27,7 +27,7 @@ export const getSesion = async (req: Request, res: Response): Promise<any> => {
                     celular: response.celular,
                     credencial: response.credencial
                 });
-        
+
             default:
                 return res.status(400).json({ message: "Unexpected status code" });
         }
