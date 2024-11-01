@@ -10,7 +10,7 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
     const [result]: any = await ssoDB.query(queries.getCredencial, [curp, correo, `__-${celular}`]);
     if (result.length > 0) {
         const credencial = result[0];
-        if( !contrasena ){
+        if (!contrasena) {
             return { statusCode: 0, credencial: credencial.idCredencial, correo: credencial.correo, celular: credencial.celular };
         }
         const coinciden = await bcrypt.compare(contrasena, credencial.contrasena);
@@ -34,8 +34,8 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
                         celular: credencial.celular,
                         credencial: credencial.idCredencial
                     };
-                }{
-                const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular);
+                } {
+                    const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular);
                     return {
                         statusCode: 200,
                         token,
@@ -60,7 +60,7 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
                         credencial: credencial.idCredencial
                     };
                 }
-                await codigos.deleteCodigos( credencial.idCredencial );
+                await codigos.deleteCodigos(credencial.idCredencial);
                 const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular);
                 return {
                     statusCode: 200,
@@ -75,8 +75,28 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
     }
 };
 
-export const deleteSession = async ( idCredencial: string ) => {
-    await ssoDB.query( queries.deleteSesion, [ idCredencial ]);
+
+export const getValidacion = async (curp: string | undefined, correo: string | undefined, celular: string | undefined) => {
+    const [result]: any = await ssoDB.query(queries.getCredencial, [curp, correo, `__-${celular}`]);
+    if (result.length > 0) {
+        const credencial = result[0];
+        if (credencial.estado === 'Inactivo') {
+            throw new Exception('403', 'La cuenta está bloqueada!');
+        }
+        if (credencial.estado === 'Validado') {
+            const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular);
+            return { token: token };
+        } else {
+            throw new Exception('401', 'Cuenta no validada!');
+        }
+    } else {
+        throw new Exception('401', 'Cuenta no valida!');
+    }
+};
+
+
+export const deleteSession = async (idCredencial: string) => {
+    await ssoDB.query(queries.deleteSesion, [idCredencial]);
     return undefined;
 }
 
@@ -112,10 +132,10 @@ export const setPassword = async (curp: string, correo: string, celular: string,
         };
     }
     const salt = await bcrypt.genSalt(10);
-    await codigos.deleteCodigos( credencial.idCredencial );
+    await codigos.deleteCodigos(credencial.idCredencial);
     const criptContrasena = await bcrypt.hash(contrasena, salt);
     await ssoDB.query(queries.updateContrasena, [credencial.idCredencial, criptContrasena]);
-    const token = JWT.getToken( credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular );
+    const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular);
     return {
         statusCode: 200,
         token,
