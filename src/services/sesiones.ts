@@ -11,7 +11,7 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
     if (result.length > 0) {
         const credencial = result[0];
         if( !contrasena ){
-            return { statusCode: 0, credencial: credencial.idCredencial };
+            return { statusCode: 0, credencial: credencial.idCredencial, correo: credencial.correo, celular: credencial.celular };
         }
         const coinciden = await bcrypt.compare(contrasena, credencial.contrasena);
         if (coinciden) {
