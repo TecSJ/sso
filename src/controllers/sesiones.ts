@@ -16,7 +16,6 @@ export const getSesion = async (req: Request, res: Response): Promise<any> => {
 
             case 200:
                 return res.status(200).json({ token: response.token });
-
             case 202:
                 return res.status(202).json({
                     message: response.message,

@@ -34,6 +34,12 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
                         celular: credencial.celular,
                         credencial: credencial.idCredencial
                     };
+                }{
+                const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular);
+                    return {
+                        statusCode: 200,
+                        token,
+                    };
                 }
             } else {
                 const response = await preferencias.getPreferencia(credencial.idCredencial);
