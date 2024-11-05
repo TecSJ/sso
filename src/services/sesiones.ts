@@ -46,14 +46,14 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
                 const correo_auth = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Autenticación,medio:eq:Correo,estado:eq:Confirmado`, undefined, 1, 1);
                 const celular_auth = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Autenticación,medio:eq:Celular,estado:eq:Confirmado`, undefined, 1, 1);
 
-                if (!correo_auth || (response?.dobleFactor === 'S' && !celular_auth)) {
+                if (!correo_auth || !celular_auth) {
                     return {
                         statusCode: 202,
                         message: 'Autenticación de correo o celular requerida.',
                         actionRequired: 'AUTHENTICATE_CONTACT_INFO',
                         authenticationNeeded: {
                             correo: !correo_auth,
-                            celular: response?.dobleFactor === 'S' && !celular_auth,
+                            celular: !celular_auth,
                         },
                         correo: credencial.correo,
                         celular: credencial.celular,
@@ -102,7 +102,7 @@ export const getAutenticacion = async (curp: string | undefined, correo: string 
             throw new Exception('403', 'La cuenta está bloqueada!');
         }
         if (credencial.estado === 'Validado') {
-            
+
             const response = await preferencias.getPreferencia(credencial.idCredencial);
             const correo_auth = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Autenticación,medio:eq:Correo,estado:eq:Confirmado`, undefined, 1, 1);
             const celular_auth = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Autenticación,medio:eq:Celular,estado:eq:Confirmado`, undefined, 1, 1);
