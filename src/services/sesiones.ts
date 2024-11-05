@@ -77,7 +77,7 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
 
 
 export const getValidacion = async (curp: string | undefined, correo: string | undefined, celular: string | undefined) => {
-    const [result]: any = await ssoDB.query(queries.getCredencial, [curp, correo, `__-${celular}`]);
+    const [result]: any = await ssoDB.query(queries.getCredencial, [curp, correo, celular]);
     if (result.length > 0) {
         const credencial = result[0];
         if (credencial.estado === 'Inactivo') {
