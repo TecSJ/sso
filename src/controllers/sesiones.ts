@@ -44,6 +44,9 @@ export const getValidacion = async (req: Request, res: Response): Promise<any> =
     const { curp, correo, celular } = req.body;
     const X_API_KEY = req.headers['api_key'] as string | undefined;
     try {
+        if (X_API_KEY !== process.env.X_API_KEY) {
+            throw new Exception('401', 'Falta api-key');
+        }
         const response = await service.getValidacion(curp, correo, celular );
         if (response) {
             return res.status(200).json(response);
@@ -62,6 +65,9 @@ export const getAuntenticacion = async (req: Request, res: Response): Promise<an
     const { curp, correo, celular } = req.body;
     const X_API_KEY = req.headers['api_key'] as string | undefined;
     try {
+        if (X_API_KEY !== process.env.X_API_KEY) {
+            throw new Exception('401', 'Falta api-key');
+        }
         const response = await service.getAutenticacion(curp, correo, celular );
         if (response) {
             return res.status(200).json(response);
