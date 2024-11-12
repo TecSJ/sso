@@ -37,9 +37,10 @@ export const getAplicaciones = async (req: Request, res: Response): Promise<any>
 };
 
 export const deleteAplicacion = async (req: Request, res: Response): Promise<any> => {
-    const { idAplicacion } = req.params;
+    const aplicaciones: { idAplicacion: number }[] = req.body;
     try {
-        const affectedRows: number = await service.deleteAplicacion(idAplicacion);
+        const idAplicaciones = aplicaciones.map((app: { idAplicacion: number }) => app.idAplicacion);
+        const affectedRows: number = await service.deleteAplicaciones(idAplicaciones);
         return res.status(204).json({ 'affectedRows': affectedRows});
     } catch (error: any) {
         return res.status(500).json({
