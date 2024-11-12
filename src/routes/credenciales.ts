@@ -15,14 +15,14 @@ router.post('/:idCredencial/codigos/:codigo', codigos.validarCodigo );
 router.delete('/:idCredencial/codigos', codigos.deleteCodigo );
 
 router.get('/:idCredencial/preferencias',Autenticacion('Preferencias','2'), preferencias.getPreferencia );
-router.put('/:idCredencial/preferencias', Autenticacion('Preferencias','3'), preferencias.updatePreferencia );
+router.patch('/:idCredencial/preferencias', Autenticacion('Preferencias','3'), preferencias.updatePreferencia );
 
 router.get('/:idCredencial/historial', Autenticacion('Historial','2'), historial.getHistorial );
 router.get('/bitacora', Autenticacion('Historial','2'), historial.getBitacora );
 router.post('/:idCredencial/historial', Autenticacion('Historial','1'), historial.insertHistorial );
 
 router.get('/:idCredencial', Autenticacion('Credenciales','2'), credenciales.getCredencial );
-router.put('/:idCredencial', Autenticacion('Credenciales','3'), credenciales.updateCredencial );
+router.patch('/:idCredencial', Autenticacion('Credenciales','3'), credenciales.updateCredencial );
 router.delete('/:idCredencial', Autenticacion('Credenciales','4'), credenciales.deleteCredencial );
 router.get('/', Autenticacion('Credenciales','2'), credenciales.getCredenciales );
 router.post('/', credenciales.insertCredencial );
