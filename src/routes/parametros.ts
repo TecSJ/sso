@@ -5,7 +5,7 @@ import Autenticacion from '../middleware/Autenticacion';
 const router = Router();
 
 router.get('/:idParametro', Autenticacion('Parametros','2') ,parametros.getParametro );
-router.put('/:idParametro', Autenticacion('Parametros','3'), parametros.updateParametro );
+router.patch('/:idParametro', Autenticacion('Parametros','3'), parametros.updateParametro );
 router.get('/', Autenticacion('Parametros','2') ,parametros.getParametros );
 
 export default router;

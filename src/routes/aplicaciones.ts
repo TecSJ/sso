@@ -15,7 +15,7 @@ router.get('/modulos',Autenticacion('Modulos','2'), modulos.getModulos);
 
 // Rutas relacionadas con aplicaciones (más generales)
 router.get('/:idAplicacion',Autenticacion('Aplicaciones','2'), aplicaciones.getAplicacion);
-router.put('/:idAplicacion',Autenticacion('Aplicaciones','3'), aplicaciones.updateAplicacion);
+router.patch('/:idAplicacion',Autenticacion('Aplicaciones','3'), aplicaciones.updateAplicacion);
 router.delete('/:idAplicacion',Autenticacion('Aplicaciones','4'), aplicaciones.deleteAplicacion);
 
 router.get('/',Autenticacion('Aplicaciones','2'), aplicaciones.getAplicaciones);

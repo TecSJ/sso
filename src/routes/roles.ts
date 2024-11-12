@@ -7,7 +7,7 @@ const router = Router();
 
 // Rutas de accesos (más específicas primero)
 router.get('/:idRol/accesos', Autenticacion('Accesos','2'), accesos.getAcceso);
-router.put('/:idRol/accesos', Autenticacion('Accesos','3'), accesos.updateAcceso);
+router.patch('/:idRol/accesos', Autenticacion('Accesos','3'), accesos.updateAcceso);
 router.delete('/:idRol/accesos', Autenticacion('Accesos','4'), accesos.deleteAcceso);
 router.post('/:idRol/accesos', Autenticacion('Accesos','1'), accesos.insertAcceso);
 router.get('/accesos', Autenticacion('Accesos','2'), accesos.getAccesos);
@@ -20,7 +20,7 @@ router.get('/perfiles', Autenticacion('Perfiles','2'), perfiles.getPerfiles);
 
 // Rutas de roles (más específicas primero)
 router.get('/:idRol', Autenticacion('Roles','2'), roles.getRol);
-router.put('/:idRol', Autenticacion('Roles','3'),  roles.updateRol);
+router.patch('/:idRol', Autenticacion('Roles','3'),  roles.updateRol);
 router.delete('/:idRol', Autenticacion('Roles','4'),  roles.deleteRol);
 router.get('/', Autenticacion('Roles','2'), roles.getRoles);
 router.post('/', Autenticacion('Roles','2'), roles.insertRol);
