@@ -46,11 +46,11 @@ export const getEtiquetas = async (req: Request, res: Response): Promise<any> =>
     }
 };
 
-export const deleteEtiqueta = async (req: Request, res: Response): Promise<any> => {
-    const { idEtiqueta } = req.params;
-    const idEtiquetas = idEtiqueta.split(',').map(Number);
+export const deleteEtiquetas = async (req: Request, res: Response): Promise<any> => {
+    const { idGrupo } = req.params;
+    const { etiquetas } = req.body;
     try {
-        const affectedRows: number =  await service.deleteEtiqueta(idEtiquetas);
+        const affectedRows: number =  await service.deleteEtiquetas( idGrupo, etiquetas.split(',').map(String));
         return res.status(204).json({ 'affectedRows': affectedRows});
     } catch (error: any) {
         return res.status(500).json({
@@ -74,20 +74,3 @@ export const insertEtiquetas = async (req: Request, res: Response): Promise<any>
         });
     }
 };
-
-
-export const updateEtiqueta = async (req: Request, res: Response): Promise<any> => {
-
-    const { idEtiqueta } = req.params;
-    const { nombre } = req.body;
-    try {
-        const response: Etiqueta | undefined = await service.updateEtiqueta( idEtiqueta, nombre);
-        res.status(204).json(response);
-    } catch (error: any) {
-        return res.status(500).json({
-            code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor',
-        });
-    }
-};
-

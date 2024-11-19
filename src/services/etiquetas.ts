@@ -14,10 +14,8 @@ export const getEtiquetas = async (filtros?: string, orden?: string, limite?: nu
     return rows.length > 0 ? (rows as Etiqueta[]) : undefined;
 }
 
-export const deleteEtiqueta = async (idEtiqueta: number[]): Promise<number> => {
-    const [result]: any = await ssoDB.query(
-        'UPDATE Etiquetas SET estado = "Inactivo" WHERE idEtiqueta IN (?)',
-        [idEtiqueta]);
+export const deleteEtiquetas = async ( idGrupo: string, etiquetas: string[]): Promise<number> => {
+    const [result]: any = await ssoDB.query(queries.deleteEtiquetas,[ idGrupo, etiquetas]);
     return result.affectedRows;
 }
 
@@ -42,9 +40,3 @@ export const insertEtiquetas = async ( idGrupo: string, etiquetas: string[]): Pr
         connection.release();
     }
 }
-
-export const updateEtiqueta = async (idEtiqueta: string, nombre: string): Promise<Etiqueta | undefined> => {
-    const [rows] = await ssoDB.query<RowDataPacket[]>(queries.updateEtiqueta, [idEtiqueta, nombre]);
-    return  rows[0][0] as Etiqueta || undefined;
-}
-
