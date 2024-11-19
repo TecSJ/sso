@@ -37,11 +37,10 @@ export const getGrupos = async (req: Request, res: Response): Promise<any> => {
     }
 };
 
-export const deleteGrupo = async (req: Request, res: Response): Promise<any> => {
-    const { idGrupo } = req.params;
-    const idGrupos = idGrupo.split(',').map(Number);
+export const deleteGrupos = async (req: Request, res: Response): Promise<any> => {
+    const { idGrupos } = req.params;
     try {
-        const affectedRows: number = await service.deleteGrupo(idGrupos);
+        const affectedRows: number = await service.deleteGrupos(idGrupos.split(',').map(Number));
         return res.status(204).json({ 'affectedRows': affectedRows});
     } catch (error: any) {
         return res.status(500).json({

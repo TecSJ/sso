@@ -10,7 +10,7 @@ router.get('/etiquetas/:idEtiqueta', Autenticacion('Etiquetas','2') ,etiquetas.g
 router.patch('/etiquetas/:idEtiqueta', Autenticacion('Etiquetas','3') , etiquetas.updateEtiqueta );
 router.delete('/etiquetas/:idEtiqueta', Autenticacion('Etiquetas','4') ,etiquetas.deleteEtiqueta);
 router.get('/:idGrupo/etiquetas', Autenticacion('Etiquetas','2') ,etiquetas.getEtiquetas);
-router.post('/:idGrupo/etiquetas',Autenticacion('Etiquetas','1'), etiquetas.insertEtiqueta);
+router.post('/:idGrupo/etiquetas',Autenticacion('Etiquetas','1'), etiquetas.insertEtiquetas);
 router.get('/etiquetas',Autenticacion('Etiquetas','2'), etiquetas.getEtiquetas);
 
 router.get('/miembros/:idMiembro', Autenticacion('Miembros','2'), miembros.getMiembro );
@@ -23,7 +23,7 @@ router.get('/miembros', Autenticacion('Miembros','2'), miembros.getMiembros );
 // Rutas de grupos (ordenadas de más específica a más genérica)
 router.get('/:idGrupo', Autenticacion('Grupos','2'), grupos.getGrupo);
 router.patch('/:idGrupo', Autenticacion('Grupos','3'), grupos.updateGrupo);
-router.delete('/:idGrupo', Autenticacion('Grupos','4'), grupos.deleteGrupo);
+router.delete('/:idGrupos', Autenticacion('Grupos','4'), grupos.deleteGrupos );
 
 router.get('/', Autenticacion('Grupos','2'), grupos.getGrupos);
 router.post('/', Autenticacion('Grupos','1'), grupos.insertGrupo);

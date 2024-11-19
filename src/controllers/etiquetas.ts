@@ -60,12 +60,12 @@ export const deleteEtiqueta = async (req: Request, res: Response): Promise<any> 
     }
 };
 
-export const insertEtiqueta = async (req: Request, res: Response): Promise<any> => {
+export const insertEtiquetas = async (req: Request, res: Response): Promise<any> => {
 
     const { idGrupo } = req.params;
-    const { nombre } = req.body;
+    const { etiquetas } = req.body;
     try {
-        const response: Etiqueta | undefined = await service.insertEtiqueta( idGrupo, nombre );
+        const response: Etiqueta[] | undefined = await service.insertEtiquetas( idGrupo, etiquetas.split(',').map(String) );
         return res.status(201).json(response);
     } catch (error: any) {
         return res.status(500).json({
