@@ -14,8 +14,10 @@ export const getGrupos = async (filtros?: string, orden?: string, limite?: numbe
     return rows.length > 0 ? (rows as Grupo[]) : undefined;
 }
 
-export const deleteGrupo = async (idGrupo: string): Promise<number> => {
-    const [result]: any = await ssoDB.query(queries.deleteGrupo, [idGrupo]);
+export const deleteGrupo = async (idGrupos: number[]): Promise<number> => {
+    const [result]: any = await ssoDB.query(
+        'UPDATE Grupos SET estado = "Inactivo" WHERE idGrupo IN (?)',
+        [idGrupos]);
     return result.affectedRows;
 }
 

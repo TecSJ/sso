@@ -38,10 +38,10 @@ export const getGrupos = async (req: Request, res: Response): Promise<any> => {
 };
 
 export const deleteGrupo = async (req: Request, res: Response): Promise<any> => {
-
     const { idGrupo } = req.params;
+    const idGrupos = idGrupo.split(',').map(Number);
     try {
-        const affectedRows: number = await service.deleteGrupo(idGrupo);
+        const affectedRows: number = await service.deleteGrupo(idGrupos);
         return res.status(204).json({ 'affectedRows': affectedRows});
     } catch (error: any) {
         return res.status(500).json({

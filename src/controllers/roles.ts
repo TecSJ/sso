@@ -38,10 +38,10 @@ export const getRoles = async (req: Request, res: Response): Promise<any> => {
 };
 
 export const deleteRol = async (req: Request, res: Response): Promise<any> => {
-    
     const { idRol } = req.params;
+    const idRoles = idRol.split(',').map(Number);
     try {
-        const affectedRows: number =  await service.deleteRol(idRol);
+        const affectedRows: number =  await service.deleteRol(idRoles);
         return res.status(204).json({ 'affectedRows': affectedRows});
     } catch (error: any) {
         return res.status(500).json({

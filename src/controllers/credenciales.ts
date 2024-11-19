@@ -20,7 +20,7 @@ export const getCredencial = async (req: Request, res: Response): Promise<any> =
 };
 
 export const getCredenciales = async (req: Request, res: Response): Promise<any> => {
-    
+
     const { filtros, orden, limite, pagina } = req.body;
     try {
         const response: Credencial[] | undefined = await service.getCredenciales( filtros, orden, limite, pagina );
@@ -37,10 +37,10 @@ export const getCredenciales = async (req: Request, res: Response): Promise<any>
 };
 
 export const deleteCredencial = async (req: Request, res: Response): Promise<any> =>{
-    
     const { idCredencial } = req.params;
+    const idCredenciales = idCredencial.split(',').map(String);
     try {
-        const affectedRows: number =  await service.deleteCredencial(idCredencial);
+        const affectedRows: number =  await service.deleteCredencial(idCredenciales);
         return res.status(204).json({ 'affectedRows': affectedRows});
     } catch (error: any) {
         return res.status(500).json({
@@ -51,7 +51,7 @@ export const deleteCredencial = async (req: Request, res: Response): Promise<any
 };
 
 export const insertCredencial = async (req: Request, res: Response): Promise<any> => {
-    
+
     const { curp, nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, contrasena, tipo } = req.body;
     const X_API_KEY = req.headers['api_key'] as string | undefined;
     try {

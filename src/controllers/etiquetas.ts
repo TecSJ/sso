@@ -4,7 +4,7 @@ import { Exception } from '../model/Exception';
 import { Etiqueta } from '../types';
 
 export const getEtiqueta = async (req: Request, res: Response): Promise<any> => {
-    
+
     const { idEtiqueta } = req.params;
     try {
         const response: Etiqueta | undefined =  await service.getEtiqueta( idEtiqueta);
@@ -21,7 +21,7 @@ export const getEtiqueta = async (req: Request, res: Response): Promise<any> => 
 };
 
 export const getEtiquetas = async (req: Request, res: Response): Promise<any> => {
-    
+
     const { idGrupo } = req.params;
     const { filtros, orden, limite, pagina } = req.body;
     try {
@@ -47,10 +47,10 @@ export const getEtiquetas = async (req: Request, res: Response): Promise<any> =>
 };
 
 export const deleteEtiqueta = async (req: Request, res: Response): Promise<any> => {
-    
     const { idEtiqueta } = req.params;
+    const idEtiquetas = idEtiqueta.split(',').map(Number);
     try {
-        const affectedRows: number =  await service.deleteEtiqueta(idEtiqueta);
+        const affectedRows: number =  await service.deleteEtiqueta(idEtiquetas);
         return res.status(204).json({ 'affectedRows': affectedRows});
     } catch (error: any) {
         return res.status(500).json({
@@ -61,7 +61,7 @@ export const deleteEtiqueta = async (req: Request, res: Response): Promise<any> 
 };
 
 export const insertEtiqueta = async (req: Request, res: Response): Promise<any> => {
-    
+
     const { idGrupo } = req.params;
     const { nombre } = req.body;
     try {
