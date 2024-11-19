@@ -14,8 +14,10 @@ export const getRoles = async (filtros?: string, orden?: string, limite?: number
     return rows.length > 0 ? (rows as Rol[]) : undefined;
 }
 
-export const deleteRol = async (idRol: string) => {
-    const [result]: any = await ssoDB.query(queries.deleteRol, [idRol]);
+export const deleteRol = async (idRol: number[]) => {
+    const [result]: any = await ssoDB.query(
+        'UPDATE Roles SET estado = "Inactivo" WHERE idRol IN (?)',
+        [idRol]);
     return result.affectedRows;
 }
 

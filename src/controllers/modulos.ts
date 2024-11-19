@@ -4,7 +4,6 @@ import { Exception } from '../model/Exception';
 import { Modulo } from '../types';
 
 export const getModulo = async (req: Request, res: Response): Promise<any> => {
-
     const { idModulo } = req.params;
     try {
         const response: Modulo | undefined =  await service.getModulo(idModulo);
@@ -48,10 +47,10 @@ export const getModulos = async (req: Request, res: Response): Promise<any> => {
 
 
 export const deleteModulo = async (req: Request, res: Response): Promise<any> => {
-
     const { idModulo } = req.params;
+    const idModulos = idModulo.split(',').map(Number);
     try {
-        const affectedRows: number = await service.deleteModulo(idModulo);
+        const affectedRows: number = await service.deleteModulo(idModulos);
         return res.status(204).json({ 'affectedRows': affectedRows});
     } catch (error: any) {
         return res.status(500).json({

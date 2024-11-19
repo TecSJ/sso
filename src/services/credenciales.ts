@@ -24,8 +24,10 @@ export const getCredenciales = async ( filtros?: string, orden?: string, limite?
     return rows.length > 0 ? (rows as Credencial[]) : undefined;
 }
 
-export const deleteCredencial = async (idCredencial: string): Promise<number> => {
-    const [result]: any = await ssoDB.query(queries.deleteCredencial, [idCredencial]);
+export const deleteCredencial = async (idCredencial: string[]): Promise<number> => {
+    const [result]: any = await ssoDB.query(
+        'UPDATE Credenciales SET estado = "Inactivo" WHERE idCredencial IN (?)',
+        [idCredencial]);
     return result.affectedRows;
 }
 

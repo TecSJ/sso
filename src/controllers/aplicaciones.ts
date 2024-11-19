@@ -37,9 +37,8 @@ export const getAplicaciones = async (req: Request, res: Response): Promise<any>
 };
 
 export const deleteAplicacion = async (req: Request, res: Response): Promise<any> => {
-    const idAplicacionesParam = req.params.idAplicacion;
-    const idAplicaciones = idAplicacionesParam.split(',').map(Number);
-
+    const { idAplicacion } = req.params;
+    const idAplicaciones = idAplicacion.split(',').map(Number);
     try {
         const affectedRows: number = await service.deleteAplicaciones(idAplicaciones);
         return res.status(204).json({ 'affectedRows': affectedRows });

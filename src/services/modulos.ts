@@ -14,8 +14,10 @@ export const getModulos = async ( filtros?: string, orden?: string, limite?: num
     return rows.length > 0 ? (rows as Modulo[]) : undefined;
 }
 
-export const deleteModulo = async (idModulo: string): Promise<number> => {
-    const [result]: any = await ssoDB.query(queries.deleteModulo, [idModulo]);
+export const deleteModulo = async (idModulo: number[]): Promise<number> => {
+    const [result]: any = await ssoDB.query(
+        'UPDATE Modulos SET estado = "Inactivo" WHERE idModulo IN (?)',
+        [idModulo]);
     return result.affectedRows;
 }
 
