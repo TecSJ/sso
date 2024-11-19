@@ -7,9 +7,8 @@ import Autenticacion from '../middleware/Autenticacion';
 const router = Router();
 
 router.get('/etiquetas/:idEtiqueta', Autenticacion('Etiquetas','2') ,etiquetas.getEtiqueta );
-router.patch('/:idGrupo/etiquetas', Autenticacion('Etiquetas','4') ,etiquetas.deleteEtiquetas);
+router.patch('/:idGrupo/etiquetas', Autenticacion('Etiquetas','4') ,etiquetas.addEtiquetas);
 router.get('/:idGrupo/etiquetas', Autenticacion('Etiquetas','2') ,etiquetas.getEtiquetas);
-router.post('/:idGrupo/etiquetas',Autenticacion('Etiquetas','1'), etiquetas.insertEtiquetas);
 router.get('/etiquetas',Autenticacion('Etiquetas','2'), etiquetas.getEtiquetas);
 
 router.get('/miembros/:idMiembro', Autenticacion('Miembros','2'), miembros.getMiembro );
