@@ -6,11 +6,8 @@ import Autenticacion from '../middleware/Autenticacion';
 const router = Router();
 
 // Rutas de accesos (más específicas primero)
-router.get('/:idRol/accesos', Autenticacion('Accesos','2'), accesos.getAcceso);
-router.patch('/:idRol/accesos', Autenticacion('Accesos','3'), accesos.updateAcceso);
-router.delete('/:idRol/accesos', Autenticacion('Accesos','4'), accesos.deleteAcceso);
-router.post('/:idRol/accesos', Autenticacion('Accesos','1'), accesos.insertAcceso);
-router.get('/accesos', Autenticacion('Accesos','2'), accesos.getAccesos);
+router.get('/:idRol/accesos', Autenticacion('Accesos','2'), accesos.getAccesos);
+router.patch('/:idRol/accesos', Autenticacion('Accesos','3'), accesos.addAccesos);
 
 // Rutas de perfiles (más específicas primero)
 router.get('/:idRol/perfiles', Autenticacion('Perfiles','2'), perfiles.getPerfil);
