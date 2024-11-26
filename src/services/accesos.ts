@@ -13,19 +13,27 @@ export const addAccesos = async (idRol: string, idModulo: string, accion1: strin
     const connection = await ssoDB.getConnection();
     try {
         await connection.beginTransaction();
-        const [existingRows] = await connection.query<RowDataPacket[]>('SELECT * FROM Accesos WHERE idRol = ? and idModulo = ? ',[idRol, idModulo]);
-        if (existingRows.length > 0){
-            await connection.query(queries.updateAcceso, [idRol,idModulo,accion1,accion2,accion3,accion4,accion5]);
-        }else {
-            await connection.query(queries.insertAcceso, [idRol,idModulo,accion1,accion2,accion3,accion4,accion5]);
+        const [existingRows] = await connection.query<RowDataPacket[]>( 'SELECT * FROM Accesos WHERE idRol = ? and idModulo = ?', [idRol, idModulo]);
+        if (existingRows.length > 0) {
+            const existingData = existingRows[0];
+            if ( existingData.accion1 === accion1 && existingData.accion2 === accion2 &&
+                existingData.accion3 === accion3 && existingData.accion4 === accion4 &&
+                existingData.accion5 === accion5
+            ) {
+                await connection.commit();
+                return existingData as Acceso;
+            }
+            await connection.query(queries.updateAcceso, [ idRol, idModulo, accion1, accion2, accion3, accion4, accion5, ]);
+        } else {
+            await connection.query(queries.insertAcceso, [ idRol, idModulo, accion1, accion2, accion3, accion4, accion5, ]);
         }
         await connection.commit();
-        const [rows] = await ssoDB.query<RowDataPacket[]>('SELECT * FROM Accesos WHERE idRol = ? and idModulo = ? ',[idRol, idModulo]);
+        const [rows] = await ssoDB.query<RowDataPacket[]>( 'SELECT * FROM Accesos WHERE idRol = ? and idModulo = ?', [idRol, idModulo]);
         return rows.length > 0 ? (rows[0] as Acceso) : undefined;
     } catch (error) {
+        await connection.rollback();
         throw error;
     } finally {
         connection.release();
     }
-}
-
+};
