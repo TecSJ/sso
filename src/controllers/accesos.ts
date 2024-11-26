@@ -23,9 +23,9 @@ export const getAccesos = async (req: Request, res: Response): Promise<any> => {
 export const addAccesos = async (req: Request, res: Response): Promise<any> => {
 
     const { idRol } = req.params;
-    const { idModulo, accion1, accion2, accion3, accion4, accion5 } = req.body;
+    const { idModulo, Crear, Consultar, Actualizar, Eliminar, Subir } = req.body;
     try {
-        const response: Acceso | undefined =  await service.addAccesos( idRol, idModulo, accion1, accion2, accion3, accion4, accion5);
+        const response: Acceso | undefined =  await service.addAccesos( idRol, idModulo, Crear, Consultar, Actualizar, Eliminar, Subir);
         res.status(201).json(response);
     } catch (error: any) {
         return res.status(500).json({
