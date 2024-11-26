@@ -35,6 +35,6 @@ export const addAccesos = async (req: Request, res: Response): Promise<any> => {
         return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
             message: error.message || "Error interno del servidor",
-        });
-    }
+        });
+    }
 };
