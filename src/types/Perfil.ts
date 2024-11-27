@@ -3,5 +3,6 @@ export default interface Perfil {
     idCredencial: string;
     idRol: number;
     estado: 'Activo' | 'Inactivo';
+    nombre: string;
   }
   
