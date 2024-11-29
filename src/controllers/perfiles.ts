@@ -52,17 +52,23 @@ export const deletePerfil = async (req: Request, res: Response): Promise<any> =>
     }
 };
 
-export const insertPerfil = async (req: Request, res: Response): Promise<any> => {
+export const upsertPerfil = async (req: Request, res: Response): Promise<void> => {
+    const { idCredencial } = req.params;
+    const perfiles = req.body;
 
-    const { idRol } = req.params;
-    const { idCredencial } = req.body;
     try {
-        const response: Perfil | undefined =  await service.insertPerfil(idRol, idCredencial);
-        return res.status(201).json(response);
+        const responses = [];
+        for (const perfil of perfiles) {
+            const { estatus, idRol } = perfil;
+            const result = await service.upsertPerfil(estatus, idRol, idCredencial);
+            responses.push(result);
+        }
+        res.status(200).json(responses);
     } catch (error: any) {
-        return res.status(500).json({
+        console.error("Error en upsertPerfil:", error);
+        res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor',
+            message: error.message || "Error interno del servidor",
         });
     }
 };

@@ -12,7 +12,7 @@ router.patch('/:idRol/accesos', Autenticacion('Accesos','3'), accesos.addAccesos
 // Rutas de perfiles (más específicas primero)
 router.get('/:idRol/perfiles', Autenticacion('Perfiles','2'), perfiles.getPerfil);
 router.delete('/:idRol/perfiles', Autenticacion('Perfiles','4'), perfiles.deletePerfil);
-router.post('/:idRol/perfiles', Autenticacion('Perfiles','1'), perfiles.insertPerfil);
+router.patch('/:idCredencial/perfiles', Autenticacion('Perfiles','1'), perfiles.upsertPerfil);
 router.get('/perfiles', Autenticacion('Perfiles','2'), perfiles.getPerfiles);
 
 // Rutas de roles (más específicas primero)
