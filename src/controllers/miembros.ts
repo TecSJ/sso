@@ -48,9 +48,11 @@ export const getMiembros = async (req: Request, res: Response): Promise<any> => 
 
 export const deleteMiembro = async (req: Request, res: Response): Promise<any> => {
 
-    const { idMiembro } = req.params;
+    const { idCredencial } = req.params;
+    const { idGrupo } = req.body;
+
     try {
-        const affectedRows: number = await service.deleteMiembro(idMiembro);
+        const affectedRows: number = await service.deleteMiembro(idGrupo, idCredencial);
         return res.status(204).json({ 'affectedRows': affectedRows});
     } catch (error: any) {
         return res.status(500).json({
@@ -74,20 +76,3 @@ export const insertMiembro = async (req: Request, res: Response): Promise<any> =
         });
     }
 };
-
-
-export const updateMiembro = async (req: Request, res: Response): Promise<any> => {
-
-    const { idMiembro } = req.params;
-    const { idGrupo } = req.body;
-    try {
-        const response: Miembro | undefined =  await service.updateMiembro( idMiembro, idGrupo );
-        res.status(204).json(response);
-    } catch (error: any) {
-        return res.status(500).json({
-            code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor',
-        });
-    }
-};
-
