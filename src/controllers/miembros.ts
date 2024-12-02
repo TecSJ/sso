@@ -64,15 +64,22 @@ export const deleteMiembro = async (req: Request, res: Response): Promise<any> =
 
 export const insertMiembro = async (req: Request, res: Response): Promise<any> => {
 
-    const { idGrupo } = req.params;
-    const { idCredencial } = req.body;
+    const { idCredencial } = req.params;
+    const miembros = req.body;
+
     try {
-        const response: Miembro | undefined = await service.insertMiembro( idGrupo, idCredencial );
-        res.status(201).json(response);
+        const responses = [];
+        for (const perfil of miembros) {
+            const { estatus, idGrupo } = perfil;
+            const result = await service.insertMiembro(idCredencial, idGrupo, estatus);
+            responses.push(result);
+        }
+        res.status(200).json(responses);
     } catch (error: any) {
-        return res.status(500).json({
+        console.error("Error en insertMiembro:", error);
+        res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor',
+            message: error.message || "Error interno del servidor",
         });
     }
 };
