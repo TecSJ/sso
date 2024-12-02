@@ -36,4 +36,4 @@ export const addAccesos = async (idRol: string, idModulo: string, accion1: strin
     } finally {
         connection.release();
     }
-};
+
