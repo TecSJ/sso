@@ -14,17 +14,17 @@ export const getEtiquetas = async (filtros?: string, orden?: string, limite?: nu
     return rows.length > 0 ? (rows as Etiqueta[]) : undefined;
 }
 
-export const addEtiquetas = async ( idGrupo: string, etiquetas: string[]): Promise<Etiqueta[] | undefined> => {
+export const addEtiquetas = async ( idCredencial: string, etiquetas: string[]): Promise<Etiqueta[] | undefined> => {
     const connection = await ssoDB.getConnection();
     const insertedEtiquetas: Etiqueta[] = [];
     try {
         await connection.beginTransaction();
-        const [existingRows] = await connection.query<RowDataPacket[]>('SELECT * FROM Etiquetas WHERE idGrupo = ? and estado = "Activo" ',[idGrupo]);
+        const [existingRows] = await connection.query<RowDataPacket[]>('SELECT * FROM Etiquetas WHERE idCredencial = ? and estado = "Activo" ',[idCredencial]);
         const existingEtiquetas = existingRows.map((row: any) => row.nombre);
         const etiquetasToInsert = etiquetas.filter((etiqueta) => !existingEtiquetas.includes(etiqueta));
         const etiquetasToDelete = existingEtiquetas.filter((etiqueta: string) => !etiquetas.includes(etiqueta));
         for (const etiqueta of etiquetasToInsert) {
-            const [rows] = await connection.query<RowDataPacket[]>(queries.insertEtiquetas,[idGrupo, etiqueta]);
+            const [rows] = await connection.query<RowDataPacket[]>(queries.insertEtiquetas,[idCredencial, etiqueta]);
             if (!rows || rows.length === 0) {
                 throw new Error(`Error al insertar la etiqueta: ${etiqueta}`);
             }
@@ -32,10 +32,10 @@ export const addEtiquetas = async ( idGrupo: string, etiquetas: string[]): Promi
             insertedEtiquetas.push(insertedEtiqueta);
         }
         for (const etiqueta of etiquetasToDelete) {
-            await connection.query(queries.deleteEtiquetas, [idGrupo, etiqueta ]);
+            await connection.query(queries.deleteEtiquetas, [idCredencial, etiqueta ]);
         }
         await connection.commit();
-        const [rows] = await ssoDB.query<RowDataPacket[]>('SELECT * FROM Etiquetas WHERE idGrupo = ? AND estado = "Activo" ', [idGrupo]);
+        const [rows] = await ssoDB.query<RowDataPacket[]>('SELECT * FROM Etiquetas WHERE idCredencial = ? AND estado = "Activo" ', [idCredencial]);
         return rows.length > 0 ? (rows as Etiqueta[]) : undefined;
     } catch (error) {
         throw error;

@@ -37,4 +37,3 @@ export const addAccesos = async (req: Request, res: Response): Promise<any> => {
             message: error.message || "Error interno del servidor",
         });
     }
-};

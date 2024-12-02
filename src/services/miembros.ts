@@ -14,8 +14,8 @@ export const getMiembros = async (filtros?: string, orden?: string, limite?: num
     return rows.length > 0 ? (rows as Miembro[]) : undefined;
 }
 
-export const deleteMiembro = async (idMiembro: string): Promise<number> => {
-    const [result]: any = await ssoDB.query(queries.deleteMiembro, [idMiembro]);
+export const deleteMiembro = async (idGrupo: string, idCredencial: string): Promise<number> => {
+    const [result]: any = await ssoDB.query(queries.deleteMiembro, [idGrupo, idCredencial]);
     return result.affectedRows;
 }
 
@@ -23,9 +23,3 @@ export const insertMiembro = async (idGrupo: string, idCredencial: string) => {
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.insertMiembro, [idGrupo, idCredencial]);
     return  rows[0][0] as Miembro || undefined;
 }
-
-export const updateMiembro = async (idMiembro: string, idGrupo: string): Promise<Miembro | undefined> => {
-    const [rows] = await ssoDB.query<RowDataPacket[]>(queries.updateMiembro, [idMiembro, idGrupo]);
-    return  rows[0][0] as Miembro || undefined;
-}
-
