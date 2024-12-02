@@ -19,7 +19,33 @@ export const deleteMiembro = async (idGrupo: string, idCredencial: string): Prom
     return result.affectedRows;
 }
 
-export const insertMiembro = async (idGrupo: string, idCredencial: string) => {
-    const [rows] = await ssoDB.query<RowDataPacket[]>(queries.insertMiembro, [idGrupo, idCredencial]);
-    return  rows[0][0] as Miembro || undefined;
-}
+export const insertMiembro = async (idCredencial: string, idGrupo: string, estatus: string) => {
+    const connection = await ssoDB.getConnection();
+    try {
+        const [existingRows] = await connection.query<RowDataPacket[]>(
+            'SELECT estado FROM Miembros WHERE idCredencial = ? AND idGrupo = ?',
+            [idCredencial, idGrupo]
+        );
+        const currentStatusDB = existingRows.length > 0 ? existingRows[0].estado : null;
+        if (currentStatusDB === estatus) {
+            return undefined;
+        }
+        if (currentStatusDB === "Activo" && estatus === "Inactivo") {
+            const [result]: any = await connection.query(queries.deleteMiembro, [ idGrupo, idCredencial]);
+            return result.affectedRows;
+        }
+        if (currentStatusDB === null && estatus === "Activo") {
+            await connection.query(queries.insertMiembro, [ idGrupo, idCredencial]);
+        }
+        const [updatedRows] = await connection.query<RowDataPacket[]>(
+            'SELECT * FROM Miembros WHERE idCredencial = ? AND  idGrupo = ?',
+            [idCredencial,  idGrupo]
+        );
+        return updatedRows.length > 0 ? (updatedRows[0] as Miembro) : undefined;
+    } catch (error) {
+        console.error("Error en upsertMiembro:", error);
+        throw error;
+    } finally {
+        connection.release();
+    }
+};

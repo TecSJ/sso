@@ -14,7 +14,7 @@ router.get('/etiquetas',Autenticacion('Etiquetas','2'), etiquetas.getEtiquetas);
 router.get('/miembros/:idMiembro', Autenticacion('Miembros','2'), miembros.getMiembro );
 router.delete('/miembros/:idMiembro', Autenticacion('Miembros','4'), miembros.deleteMiembro );
 router.get('/:idGrupo/miembros', Autenticacion('Miembros','2'), miembros.getMiembros );
-router.post('/:idGrupo/miembros', Autenticacion('Miembros','1'), miembros.insertMiembro );
+router.patch('/:idCredencial/miembros', Autenticacion('Miembros','1'), miembros.insertMiembro );
 router.get('/miembros', Autenticacion('Miembros','2'), miembros.getMiembros );
 
 // Rutas de grupos (ordenadas de más específica a más genérica)
