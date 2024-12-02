@@ -22,15 +22,15 @@ export const getEtiqueta = async (req: Request, res: Response): Promise<any> => 
 
 export const getEtiquetas = async (req: Request, res: Response): Promise<any> => {
 
-    const { idGrupo } = req.params;
+    const { idCredencial } = req.params;
     const { filtros, orden, limite, pagina } = req.body;
     try {
         let _filtros = filtros || '';
-        if (idGrupo) {
+        if (idCredencial) {
             if (_filtros) {
-                _filtros += `,idGrupo:eq:${idGrupo}`;
+                _filtros += `,idCredencial:eq:${idCredencial}`;
             } else {
-                _filtros = `idGrupo:eq:${idGrupo}`;
+                _filtros = `idCredencial:eq:${idCredencial}`;
             }
         }
         const response: Etiqueta[] | undefined = await service.getEtiquetas( _filtros, orden, limite, pagina );
@@ -48,10 +48,10 @@ export const getEtiquetas = async (req: Request, res: Response): Promise<any> =>
 
 export const addEtiquetas = async (req: Request, res: Response): Promise<any> => {
 
-    const { idGrupo } = req.params;
+    const { idCredencial } = req.params;
     const { etiquetas } = req.body;
     try {
-        const response: Etiqueta[] | undefined = await service.addEtiquetas( idGrupo, etiquetas.split(',').map(String) );
+        const response: Etiqueta[] | undefined = await service.addEtiquetas( idCredencial, etiquetas.split(',').map(String) );
         return res.status(201).json(response);
     } catch (error: any) {
         return res.status(500).json({

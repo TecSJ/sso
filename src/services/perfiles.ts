@@ -19,10 +19,33 @@ export const deletePerfil = async (idRol: string, idCredencial: string): Promise
     return result.affectedRows;
 }
 
-
-export const insertPerfil = async (clave: string, nombre: string): Promise<Perfil | undefined> => {
-    const [rows] = await ssoDB.query<RowDataPacket[]>(queries.insertPerfil, [clave, nombre]);
-    return rows[0][0] as Perfil || undefined;
-}
-
-
+export const upsertPerfil = async (estatus: string, idRol: string, idCredencial: string): Promise<Perfil | undefined> => {
+    const connection = await ssoDB.getConnection();
+    try {
+        const [existingRows] = await connection.query<RowDataPacket[]>(
+            'SELECT estado FROM Perfiles WHERE idCredencial = ? AND idRol = ?',
+            [idCredencial, idRol]
+        );
+        const currentStatusDB = existingRows.length > 0 ? existingRows[0].estado : null;
+        if (currentStatusDB === estatus) {
+            return undefined;
+        }
+        if (currentStatusDB === "Activo" && estatus === "Inactivo") {
+            const [result]: any = await connection.query(queries.deletePerfil, [idRol, idCredencial]);
+            return result.affectedRows;
+        }
+        if (currentStatusDB === null && estatus === "Activo") {
+            await connection.query(queries.insertPerfil, [idRol, idCredencial]);
+        }
+        const [updatedRows] = await connection.query<RowDataPacket[]>(
+            'SELECT * FROM Perfiles WHERE idCredencial = ? AND idRol = ?',
+            [idCredencial, idRol]
+        );
+        return updatedRows.length > 0 ? (updatedRows[0] as Perfil) : undefined;
+    } catch (error) {
+        console.error("Error en upsertPerfil:", error);
+        throw error;
+    } finally {
+        connection.release();
+    }
+};
