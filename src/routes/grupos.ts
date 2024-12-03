@@ -1,15 +1,9 @@
 import e, { Router } from "express";
 import * as grupos from '../controllers/grupos';
-import * as etiquetas from '../controllers/etiquetas';
 import * as miembros from '../controllers/miembros';
 import Autenticacion from '../middleware/Autenticacion';
 
 const router = Router();
-
-router.get('/etiquetas/:idEtiqueta', Autenticacion('Etiquetas','2') ,etiquetas.getEtiqueta );
-router.patch('/:idCredencial/etiquetas', Autenticacion('Etiquetas','4') ,etiquetas.addEtiquetas);
-router.get('/:idCredencial/etiquetas', Autenticacion('Etiquetas','2') ,etiquetas.getEtiquetas);
-router.get('/etiquetas',Autenticacion('Etiquetas','2'), etiquetas.getEtiquetas);
 
 router.get('/miembros/:idMiembro', Autenticacion('Miembros','2'), miembros.getMiembro );
 router.delete('/miembros/:idMiembro', Autenticacion('Miembros','4'), miembros.deleteMiembro );
