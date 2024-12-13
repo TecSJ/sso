@@ -16,7 +16,7 @@ export const getGrupos = async (filtros?: string, orden?: string, limite?: numbe
 
 export const deleteGrupos = async (idGrupo: number[]): Promise<number> => {
     const [result]: any = await ssoDB.query(
-        'UPDATE Modulos SET estado = "Inactivo" WHERE idModulo IN (?)',
+        'UPDATE Grupos SET estado = "Inactivo" WHERE idGrupo IN (?)',
         [idGrupo]);
     return result.affectedRows;
 }
