@@ -22,6 +22,7 @@ router.get('/:idCredencial/historial', Autenticacion('Historial','2'), historial
 router.get('/bitacora', Autenticacion('Historial','2'), historial.getBitacora );
 router.post('/:idCredencial/historial', Autenticacion('Historial','1'), historial.insertHistorial );
 
+router.get('/descargar', Autenticacion('Grupos', '2'), credenciales.getDescarga);
 router.get('/:idCredencial', Autenticacion('Credenciales','2'), credenciales.getCredencial );
 router.patch('/:idCredencial', Autenticacion('Credenciales','3'), credenciales.updateCredencial );
 router.delete('/:idCredencial', Autenticacion('Credenciales','4'), credenciales.deleteCredencial );

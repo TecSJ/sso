@@ -6,7 +6,7 @@ import { Aplicacion } from '../types/'
 
 export const getAplicacion = async (idAplicacion: string): Promise<Aplicacion | undefined> => {
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.getAplicacion, [idAplicacion]);
-    return rows[0][0] as Aplicacion || undefined;
+    return rows[0] as Aplicacion || undefined;
 };
 
 export const getAplicaciones = async ( filtros?: string, orden?: string, limite?: number, pagina?: number ): Promise<Aplicacion[] | undefined> => {
@@ -32,3 +32,16 @@ export const updateAplicacion = async (idAplicacion: string, clave: string, nomb
     return  rows[0][0] as Aplicacion || undefined;
 }
 
+export const generarCSV = async (): Promise<string> => {
+    try {
+        const [rows] = await ssoDB.query<RowDataPacket[]>(queries.getAplicaciones);
+        const encabezados = ['Clave', 'Nombre', 'Redireccion', 'Estado'];
+        const filas = rows.map((aplicacion) => {
+            return [ aplicacion.clave, aplicacion.nombre, aplicacion.redireccion, aplicacion.estado].join(',');
+        });
+        return [encabezados.join(','), ...filas].join('\n');
+    } catch (error) {
+        console.error('Error en generarcsv:', error);
+        throw new Error('Error al generar el archivo CSV');
+    }
+};

@@ -5,9 +5,9 @@ import { Perfil } from '../types';
 
 export const getPerfil = async (req: Request, res: Response): Promise<any> => {
 
-    const { idRol } = req.params;
+    const { idCredencial } = req.params;
     try {
-        const response: Perfil | undefined = await service.getPerfil( idRol );
+        const response: Perfil | undefined = await service.getPerfil( idCredencial );
         if (response) {
             return res.status(200).json(response);
         }
@@ -59,8 +59,8 @@ export const upsertPerfil = async (req: Request, res: Response): Promise<void> =
     try {
         const responses = [];
         for (const perfil of perfiles) {
-            const { estatus, idRol } = perfil;
-            const result = await service.upsertPerfil(estatus, idRol, idCredencial);
+            const { seleccionado, idRol } = perfil;
+            const result = await service.upsertPerfil(seleccionado, idRol, idCredencial);
             responses.push(result);
         }
         res.status(200).json(responses);

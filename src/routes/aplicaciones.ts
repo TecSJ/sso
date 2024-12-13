@@ -6,6 +6,7 @@ import Autenticacion from '../middleware/Autenticacion';
 const router = Router();
 
 // Rutas relacionadas con módulos (más específicas)
+router.get('/modulos/descargar', Autenticacion('Grupos', '2'), modulos.getDescarga);
 router.get('/modulos/:idModulo', Autenticacion('Modulos','2'), modulos.getModulo);
 router.put('/modulos/:idModulo', Autenticacion('Modulos','3'), modulos.updateModulo);
 router.delete('/modulos/:idModulo', Autenticacion('Modulos','4'), modulos.deleteModulo);
@@ -14,6 +15,7 @@ router.post('/:idAplicacion/modulos', Autenticacion('Modulos','1'), modulos.inse
 router.get('/modulos',Autenticacion('Modulos','2'), modulos.getModulos);
 
 // Rutas relacionadas con aplicaciones (más generales)
+router.get('/descargar', Autenticacion('Grupos', '2'), aplicaciones.getDescarga);
 router.get('/:idAplicacion',Autenticacion('Aplicaciones','2'), aplicaciones.getAplicacion);
 router.patch('/:idAplicacion',Autenticacion('Aplicaciones','3'), aplicaciones.updateAplicacion);
 router.delete('/:idAplicacion',Autenticacion('Aplicaciones','4'), aplicaciones.deleteAplicacion);

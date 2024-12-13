@@ -70,8 +70,8 @@ export const insertMiembro = async (req: Request, res: Response): Promise<any> =
     try {
         const responses = [];
         for (const perfil of miembros) {
-            const { estatus, idGrupo } = perfil;
-            const result = await service.insertMiembro(idCredencial, idGrupo, estatus);
+            const { seleccionado, idGrupo } = perfil;
+            const result = await service.insertMiembro(seleccionado, idCredencial, idGrupo);
             responses.push(result);
         }
         res.status(200).json(responses);

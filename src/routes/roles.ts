@@ -10,15 +10,17 @@ router.get('/:idRol/accesos', Autenticacion('Accesos','2'), accesos.getAccesos);
 router.patch('/:idRol/accesos', Autenticacion('Accesos','3'), accesos.addAccesos);
 
 // Rutas de perfiles (más específicas primero)
-router.get('/:idRol/perfiles', Autenticacion('Perfiles','2'), perfiles.getPerfil);
+router.get('/:idCredencial/perfiles', Autenticacion('Perfiles','2'), perfiles.getPerfil);
 router.delete('/:idRol/perfiles', Autenticacion('Perfiles','4'), perfiles.deletePerfil);
 router.patch('/:idCredencial/perfiles', Autenticacion('Perfiles','1'), perfiles.upsertPerfil);
 router.get('/perfiles', Autenticacion('Perfiles','2'), perfiles.getPerfiles);
 
 // Rutas de roles (más específicas primero)
+router.get('/descargar', Autenticacion('Grupos', '2'), roles.getDescarga);
 router.get('/:idRol', Autenticacion('Roles','2'), roles.getRol);
 router.patch('/:idRol', Autenticacion('Roles','3'),  roles.updateRol);
 router.delete('/:idRol', Autenticacion('Roles','4'),  roles.deleteRol);
+router.get('/:idCredencial/select', Autenticacion('Roles','2'), roles.getRolselec);
 router.get('/', Autenticacion('Roles','2'), roles.getRoles);
 router.post('/', Autenticacion('Roles','2'), roles.insertRol);
 
