@@ -19,27 +19,28 @@ export const deleteMiembro = async (idGrupo: string, idCredencial: string): Prom
     return result.affectedRows;
 }
 
-export const insertMiembro = async (idCredencial: string, idGrupo: string, estatus: string) => {
+export const insertMiembro = async (seleccionado: number, idCredencial: string, idGrupo: string) => {
     const connection = await ssoDB.getConnection();
     try {
-        const [existingRows] = await connection.query<RowDataPacket[]>(
+        const estatusDb = seleccionado === 1 ? "Activo" : "Inactivo";
+        const [existingRows] = await connection.query<RowDataPacket[]>( 
             'SELECT estado FROM Miembros WHERE idCredencial = ? AND idGrupo = ?',
             [idCredencial, idGrupo]
         );
         const currentStatusDB = existingRows.length > 0 ? existingRows[0].estado : null;
-        if (currentStatusDB === estatus) {
+        if (currentStatusDB === estatusDb) {
             return undefined;
         }
-        if (currentStatusDB === "Activo" && estatus === "Inactivo") {
-            const [result]: any = await connection.query(queries.deleteMiembro, [ idGrupo, idCredencial]);
+        if (currentStatusDB === "Activo" && estatusDb === "Inactivo") {
+            const [result]: any = await connection.query(queries.deleteMiembro, [idGrupo, idCredencial]);
             return result.affectedRows;
         }
-        if (currentStatusDB === null && estatus === "Activo") {
-            await connection.query(queries.insertMiembro, [ idGrupo, idCredencial]);
+        if (currentStatusDB === null && estatusDb === "Activo") {
+            await connection.query(queries.insertMiembro, [idGrupo, idCredencial]);
         }
         const [updatedRows] = await connection.query<RowDataPacket[]>(
-            'SELECT * FROM Miembros WHERE idCredencial = ? AND  idGrupo = ?',
-            [idCredencial,  idGrupo]
+            'SELECT * FROM Miembros WHERE idCredencial = ? AND idGrupo = ?',
+            [idCredencial, idGrupo]
         );
         return updatedRows.length > 0 ? (updatedRows[0] as Miembro) : undefined;
     } catch (error) {

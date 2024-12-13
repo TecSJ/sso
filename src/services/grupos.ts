@@ -14,8 +14,10 @@ export const getGrupos = async (filtros?: string, orden?: string, limite?: numbe
     return rows.length > 0 ? (rows as Grupo[]) : undefined;
 }
 
-export const deleteGrupos = async (idGrupos: number[]): Promise<number> => {
-    const [result]: any = await ssoDB.query(queries.deleteGrupos,[idGrupos]);
+export const deleteGrupos = async (idGrupo: number[]): Promise<number> => {
+    const [result]: any = await ssoDB.query(
+        'UPDATE Modulos SET estado = "Inactivo" WHERE idModulo IN (?)',
+        [idGrupo]);
     return result.affectedRows;
 }
 
@@ -26,5 +28,28 @@ export const insertGrupo = async (clave: string, nombre: string): Promise<Grupo 
 
 export const updateGrupo = async (idGrupo: string, clave: string, nombre: string): Promise<Grupo | undefined> => {
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.updateGrupo, [idGrupo, clave, nombre]);
-    return  rows[0][0] as Grupo || undefined;
+    return  rows[0] as Grupo || undefined;
 }
+
+export const generarCSV = async (): Promise<string> => {
+    try {
+        const [rows] = await ssoDB.query<RowDataPacket[]>(queries.getGrupos);
+        const encabezados = ['Clave', 'Nombre', 'Estado'];
+        const filas = rows.map((grupo) => {
+            return [ grupo.clave, grupo.nombre, grupo.estado].join(',');
+        });
+        return [encabezados.join(','), ...filas].join('\n');
+    } catch (error) {
+        console.error('Error en generarcsv:', error);
+        throw new Error('Error al generar el archivo CSV');
+    }
+};
+
+export const getGrupselec = async (idCredencial: string): Promise<Grupo[] | undefined> => {
+    try {
+        const [rows] = await ssoDB.query<RowDataPacket[]>(queries.getGrupsel, [idCredencial]);
+        return rows.length > 0 ? rows as Grupo[] : undefined;
+    } catch (error) {
+        throw new Error('Error al obtener el grupo de la base de datos: ');
+    }
+};

@@ -77,3 +77,38 @@ export const uptateCredencial = async (idCredencial: string, curp: string, corre
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.updateCredencial, [idCredencial, curp, correo, celular, contrasena, tipo]);
     return  rows[0][0] as Credencial || undefined;
 }
+
+export const generarCSV = async (): Promise<string> => {
+    try {
+        const [rows] = await ssoDB.query<RowDataPacket[]>(queries.getCredenciales);
+        const encabezados = [
+            'CURP', 'Nombre', 'Primer Apellido', 'Segundo Apellido', 
+            'Fecha de Nacimiento', 'Estado de Nacimiento', 'Correo', 'Celular', 
+            'Tipo', 'Estado', 'Etiquetas', 'Roles', 'Grupos'
+        ];
+        const handleNull = (value: any): string => {
+            return value === null || value === undefined ? '' : value;
+        };
+        const filas = rows.map((credencial) => {
+            return [
+                `"${handleNull(credencial.curp)}"`,
+                `"${handleNull(credencial.nombre)}"`,
+                `"${handleNull(credencial.primerApellido)}"`,
+                `"${handleNull(credencial.segundoApellido)}"`,
+                `"${handleNull(credencial.fechaNacimiento)}"`,
+                `"${handleNull(credencial.estadoNacimiento)}"`,
+                `"${handleNull(credencial.correo)}"`,
+                `"${handleNull(credencial.celular)}"`,
+                `"${handleNull(credencial.tipo)}"`,
+                `"${handleNull(credencial.estado)}"`,
+                `"${handleNull(credencial.etiquetas)}"`,
+                `"${handleNull(credencial.roles)}"`,
+                `"${handleNull(credencial.grupos)}"`
+            ].join(',');
+        });
+        return [encabezados.join(','), ...filas].join('\n');
+    } catch (error) {
+        console.error('Error en generarcsv:', error);
+        throw new Error('Error al generar el archivo CSV');
+    }
+};

@@ -79,3 +79,36 @@ export const updateRol = async (req: Request, res: Response): Promise<any> => {
         });
     }
 };
+
+export const getDescarga = async (_req: Request, res: Response): Promise<void> => {
+    try {
+        const contenidoCSV = await service.generarCSV();
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename="roles.csv"');
+        res.status(200).send(contenidoCSV);
+    } catch (error: any) {
+        console.error('Error en getDescarga:', error.message || error);
+        res.status(500).json({
+            message: error.message || 'Error interno del servidor',
+        });
+    }
+};
+
+export const getRolselec = async (req: Request, res: Response): Promise<any> => {
+    const { idCredencial } = req.params;
+    try {
+        const response: Rol[] | undefined = await service.getRolselec(idCredencial);
+        if (response && response.length > 0) {
+            return res.status(200).json(response);
+        } else {
+            return res.status(404).json({
+                message: `No se encontraron roles para la credencial con ID ${idCredencial}`,
+            });
+        }
+    } catch (error: any) {
+        return res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor',
+        });
+    }
+};

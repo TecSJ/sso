@@ -12,10 +12,12 @@ router.patch('/:idCredencial/miembros', Autenticacion('Miembros','1'), miembros.
 router.get('/miembros', Autenticacion('Miembros','2'), miembros.getMiembros );
 
 // Rutas de grupos (ordenadas de más específica a más genérica)
+router.get('/descargar', Autenticacion('Grupos', '2'), grupos.getDescarga);
 router.get('/:idGrupo', Autenticacion('Grupos','2'), grupos.getGrupo);
 router.patch('/:idGrupo', Autenticacion('Grupos','3'), grupos.updateGrupo);
-router.delete('/:idGrupos', Autenticacion('Grupos','4'), grupos.deleteGrupos );
+router.delete('/:idGrupo', Autenticacion('Grupos','4'), grupos.deleteGrupos );
 
+router.get('/:idCredencial/select', Autenticacion('Roles','2'), grupos.getGrupselec);
 router.get('/', Autenticacion('Grupos','2'), grupos.getGrupos);
 router.post('/', Autenticacion('Grupos','1'), grupos.insertGrupo);
 export default router;

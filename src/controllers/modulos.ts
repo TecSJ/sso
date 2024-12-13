@@ -89,3 +89,17 @@ export const updateModulo = async (req: Request, res: Response): Promise<any> =>
         });
     }
 };
+
+export const getDescarga = async (_req: Request, res: Response): Promise<void> => {
+    try {
+        const contenidoCSV = await service.generarCSV();
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename="roles.csv"');
+        res.status(200).send(contenidoCSV);
+    } catch (error: any) {
+        console.error('Error en getDescarga:', error.message || error);
+        res.status(500).json({
+            message: error.message || 'Error interno del servidor',
+        });
+    }
+};

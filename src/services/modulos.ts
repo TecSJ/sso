@@ -31,4 +31,16 @@ export const uptateModulo = async (idModulo: string, clave: string, nombre: stri
     return  rows[0][0] as Modulo || undefined;
 }
 
-
+export const generarCSV = async (): Promise<string> => {
+    try {
+        const [rows] = await ssoDB.query<RowDataPacket[]>(queries.getModulos);
+        const encabezados = ['Clave', 'Nombre', 'Redireccion', 'Estado'];
+        const filas = rows.map((modulo) => {
+            return [ modulo.clave, modulo.nombre, modulo.estado].join(',');
+        });
+        return [encabezados.join(','), ...filas].join('\n');
+    } catch (error) {
+        console.error('Error en generarcsv:', error);
+        throw new Error('Error al generar el archivo CSV');
+    }
+};
