@@ -26,8 +26,8 @@ export const insertModulo = async (idAplicacion: string, clave: string, nombre: 
     return  rows[0][0] as Modulo || undefined;
 }
 
-export const uptateModulo = async (idModulo: string, clave: string, nombre: string): Promise<Modulo | undefined> => {
-    const [rows] = await ssoDB.query<RowDataPacket[]>(queries.updateModulo, [idModulo, clave, nombre]);
+export const uptateModulo = async (idModulo: string, idAplicacion: string ,clave: string, nombre: string): Promise<Modulo | undefined> => {
+    const [rows] = await ssoDB.query<RowDataPacket[]>(queries.updateModulo, [idModulo, idAplicacion, clave, nombre]);
     return  rows[0][0] as Modulo || undefined;
 }
 

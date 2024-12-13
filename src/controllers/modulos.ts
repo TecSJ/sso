@@ -78,9 +78,9 @@ export const insertModulo = async (req: Request, res: Response): Promise<any> =>
 export const updateModulo = async (req: Request, res: Response): Promise<any> => {
 
     const { idModulo } = req.params;
-    const { clave, nombre } = req.body;
+    const { idAplicacion, clave, nombre } = req.body;
     try {
-        const response: Modulo | undefined = await service.uptateModulo( idModulo, clave, nombre);
+        const response: Modulo | undefined = await service.uptateModulo( idModulo, idAplicacion, clave, nombre);
         return res.status(204).json(response);
     } catch (error: any) {
         return res.status(500).json({
