@@ -83,9 +83,9 @@ export const getAuntenticacion = async (req: Request, res: Response): Promise<an
 
 export const deleteSesion = async (req: Request, res: Response): Promise<any> => {
 
-    const { _idCredencial } = req.params;
+    const { idCredencial } = req.params;
     try {
-        await service.deleteSession( _idCredencial );
+        await service.deleteSession( idCredencial );
         return res.status(204).json({});
     } catch (error: any) {
         return res.status(500).json({
