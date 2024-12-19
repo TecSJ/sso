@@ -16,7 +16,7 @@ const agent = new https.Agent({
 
 export const getCredencial = async (idCredencial: string): Promise<Credencial | undefined> => {
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.getCredencial, [idCredencial]);
-    return rows[0][0] as Credencial || undefined;
+    return rows[0] as Credencial || undefined;
 }
 
 export const getCredenciales = async ( filtros?: string, orden?: string, limite?: number, pagina?: number ): Promise<Credencial[] | undefined> => {
