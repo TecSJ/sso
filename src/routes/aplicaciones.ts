@@ -8,7 +8,7 @@ const router = Router();
 // Rutas relacionadas con módulos (más específicas)
 router.get('/modulos/descargar', Autenticacion('Grupos', '2'), modulos.getDescarga);
 router.get('/modulos/:idModulo', Autenticacion('Modulos','2'), modulos.getModulo);
-router.put('/modulos/:idModulo', Autenticacion('Modulos','3'), modulos.updateModulo);
+router.patch('/modulos/:idModulo', Autenticacion('Modulos','3'), modulos.updateModulo);
 router.delete('/modulos/:idModulo', Autenticacion('Modulos','4'), modulos.deleteModulo);
 router.get('/:idAplicacion/modulos', Autenticacion('Modulos','2'), modulos.getModulos);
 router.post('/:idAplicacion/modulos', Autenticacion('Modulos','1'), modulos.insertModulo);
