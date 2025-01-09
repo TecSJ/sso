@@ -4,6 +4,7 @@ import * as codigos from '../controllers/codigos';
 import * as preferencias from '../controllers/preferencias';
 import * as historial from '../controllers/historial';
 import * as etiquetas from '../controllers/etiquetas';
+import * as asociacion from '../controllers/asociacion';
 import Autenticacion from '../middleware/Autenticacion';
 
 const router = Router();
@@ -23,6 +24,7 @@ router.get('/bitacora', Autenticacion('Historial','2'), historial.getBitacora );
 router.post('/:idCredencial/historial', Autenticacion('Historial','1'), historial.insertHistorial );
 
 router.get('/descargar', Autenticacion('Grupos', '2'), credenciales.getDescarga);
+router.get('/etiquetas',Autenticacion('Etiquetas','2'), etiquetas.getEtiquetas);
 router.get('/:idCredencial', Autenticacion('Credenciales','2'), credenciales.getCredencial );
 router.patch('/:idCredencial', Autenticacion('Credenciales','3'), credenciales.updateCredencial );
 router.delete('/:idCredencial', Autenticacion('Credenciales','4'), credenciales.deleteCredencial );
@@ -30,8 +32,7 @@ router.get('/', Autenticacion('Credenciales','2'), credenciales.getCredenciales 
 router.post('/', credenciales.insertCredencial );
 
 router.get('/etiquetas/:idEtiqueta', Autenticacion('Etiquetas','2') ,etiquetas.getEtiqueta );
-router.patch('/:idCredencial/etiquetas', Autenticacion('Etiquetas','4') ,etiquetas.addEtiquetas);
-router.get('/:idCredencial/etiquetas', Autenticacion('Etiquetas','2') ,etiquetas.getEtiquetas);
-router.get('/etiquetas',Autenticacion('Etiquetas','2'), etiquetas.getEtiquetas);
+router.patch('/:idCredencial/etiquetas', Autenticacion('Etiquetas','4') ,asociacion.upsertAsociacion);
+router.get('/:idCredencial/etiquetas', Autenticacion('Etiquetas','2') ,asociacion.getAsociaciones);
 
 export default router;
