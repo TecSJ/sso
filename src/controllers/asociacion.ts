@@ -4,18 +4,17 @@ import { Exception } from '../model/Exception';
 import { Asociacion } from '../types';
 
 export const getAsociacion = async (req: Request, res: Response): Promise<any> => {
-
     const { idCredencial } = req.params;
     try {
-        const response: Asociacion | undefined = await service.getAsociacion( idCredencial );
-        if (response) {
+        const response: Asociacion[] | undefined = await service.getAsociacion(idCredencial);
+        if (response && response.length > 0) {
             return res.status(200).json(response);
         }
-        return res.status(204).json({});
+        return res.status(204).json([]); // Devuelve un arreglo vacío si no hay resultados
     } catch (error: any) {
         return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor',
+            message: error.message || "Error interno del servidor",
         });
     }
 };
