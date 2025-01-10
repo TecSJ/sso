@@ -33,6 +33,6 @@ router.post('/', credenciales.insertCredencial );
 
 router.get('/etiquetas/:idEtiqueta', Autenticacion('Etiquetas','2') ,etiquetas.getEtiqueta );
 router.patch('/:idCredencial/etiquetas', Autenticacion('Etiquetas','4') ,asociacion.upsertAsociacion);
-router.get('/:idCredencial/etiquetas', Autenticacion('Etiquetas','2') ,asociacion.getAsociaciones);
+router.get('/:idCredencial/etiquetas', Autenticacion('Etiquetas','2') ,asociacion.getAsociacion);
 
 export default router;

@@ -4,10 +4,10 @@ import { queries } from '../queries/asociacion';
 import { QueryBuilder } from '../model/QueryBuilder';
 import { Asociacion } from '../types';
 
-export const getAsociacion = async (idCredencial: string) => {
-    const [rows] = await ssoDB.query<RowDataPacket[]>( queries.getAsociacion, [idCredencial]);
-    return rows[0][0] as Asociacion || undefined;
-}
+export const getAsociacion = async (idCredencial: string): Promise<Asociacion[] | undefined> => {
+  const [rows] = await ssoDB.query<RowDataPacket[]>(queries.getAsociacion, [idCredencial]);
+  return rows.length > 0 ? (rows as Asociacion[]) : undefined;
+};
 
 export const getAsociaciones = async (filtros: string | undefined, orden: string | undefined, limite: number | undefined, pagina: number | undefined) => {
     const [rows] = await ssoDB.query<RowDataPacket[]>(QueryBuilder.getQuery(queries.getAsociaciones, filtros, orden, limite, pagina));
