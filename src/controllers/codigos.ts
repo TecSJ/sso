@@ -88,6 +88,7 @@ export const validarCodigo = async (req: Request, res: Response): Promise<any> =
         }
         const response: Codigo | undefined =  await service.validarCodigo( idCredencial, codigo, medio, tipo );
         if (response) {
+            await service.deleteCodigos(idCredencial);
             return res.status(200).json({ estatus: 'OK'});
         }
         return res.status(204).json({});
