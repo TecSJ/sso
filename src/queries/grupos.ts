@@ -1,5 +1,5 @@
 export const queries = {
-    getGrupos: `SELECT * FROM Grupos `,
+    getGrupos: `SELECT * FROM Grupos WHERE estado = 'Activo' `,
     getGrupo: `SELECT * FROM Grupos WHERE idGrupo = ?;`,
     getGrupsel: `SELECT g.idGrupo, g.clave, g.nombre, g.estado,IF(m.idGrupo IS NOT NULL, 1, 0) AS seleccionado FROM Grupos g
                 LEFT JOIN Miembros m ON g.idGrupo = m.idGrupo AND m.idCredencial = ?

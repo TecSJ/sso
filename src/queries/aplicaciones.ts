@@ -1,5 +1,5 @@
 export const queries = {
-    getAplicaciones: `SELECT * FROM Aplicaciones `,
+    getAplicaciones: `SELECT * FROM Aplicaciones WHERE estado = 'Activo'`,
     getAplicacion: `SELECT * FROM Aplicaciones WHERE idAplicacion = ?;`,
     deleteAplicacion: `CALL proc_delete_aplicaciones(?);`,
     insertAplicacion: `CALL proc_insert_aplicaciones(?, ?, ? );`,

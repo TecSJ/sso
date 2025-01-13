@@ -9,7 +9,8 @@ import Miembro from './Miembro'
 import Modulo from './Modulo'
 import Parametro from './Parametro'
 import Perfil from './Perfil'
+import Asociacion from './Asociacion'
 import Preferencia from './Preferencia'
 import Rol from './Rol'
 
-export { Acceso, Actividad,Aplicacion, Codigo, Credencial, Etiqueta, Grupo, Miembro, Modulo, Parametro, Perfil, Preferencia, Rol }  
+export { Acceso, Actividad,Aplicacion, Codigo, Credencial, Etiqueta, Grupo, Miembro, Modulo, Parametro, Perfil, Asociacion ,Preferencia, Rol }  

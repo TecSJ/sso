@@ -21,19 +21,9 @@ export const getEtiqueta = async (req: Request, res: Response): Promise<any> => 
 };
 
 export const getEtiquetas = async (req: Request, res: Response): Promise<any> => {
-
-    const { idCredencial } = req.params;
     const { filtros, orden, limite, pagina } = req.body;
     try {
-        let _filtros = filtros || '';
-        if (idCredencial) {
-            if (_filtros) {
-                _filtros += `,idCredencial:eq:${idCredencial}`;
-            } else {
-                _filtros = `idCredencial:eq:${idCredencial}`;
-            }
-        }
-        const response: Etiqueta[] | undefined = await service.getEtiquetas( _filtros, orden, limite, pagina );
+        const response: Etiqueta[] | undefined = await service.getEtiquetas(filtros, orden, limite, pagina);
         if (response && response.length > 0) {
             return res.status(200).json(response);
         }
