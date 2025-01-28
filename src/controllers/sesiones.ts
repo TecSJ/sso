@@ -38,6 +38,28 @@ export const getSesion = async (req: Request, res: Response): Promise<any> => {
     }
 };
 
+export const getGoogle = async (req: Request, res: Response): Promise<any> => {
+
+    const { correo } = req.body;
+    const X_API_KEY = req.headers['api_key'] as string | undefined;
+    try {
+        if (X_API_KEY !== process.env.X_API_KEY) {
+            throw new Exception('401', 'Falta api-key');
+        }
+        const response = await service.getGoogle(correo);
+        if (response) {
+            return res.status(200).json(response);
+        }
+        return res.status(204).json({});
+    }
+    catch (error: any) {
+        return res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor',
+        });
+    }
+};
+
 
 export const getValidacion = async (req: Request, res: Response): Promise<any> => {
 

@@ -4,6 +4,7 @@ import * as sesiones from '../controllers/sesiones';
 const router = Router();
 
 router.post('/', sesiones.getSesion );
+router.post('/google', sesiones.getGoogle );
 router.delete('/:idCredencial', sesiones.deleteSesion );
 router.post('/is-valid', sesiones.getValidacion );
 router.post('/is-auth', sesiones.getAuntenticacion );

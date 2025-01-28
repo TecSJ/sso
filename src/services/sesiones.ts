@@ -35,7 +35,7 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
                         credencial: credencial.idCredencial
                     };
                 } {
-                    const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular);
+                    const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular, credencial.grupos, credencial.aplicaciones);
                     return {
                         statusCode: 200,
                         token,
@@ -61,7 +61,7 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
                     };
                 }
                 await codigos.deleteCodigos(credencial.idCredencial);
-                const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular);
+                const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular, credencial.grupos, credencial.aplicaciones);
                 return {
                     statusCode: 200,
                     token,
@@ -75,6 +75,31 @@ export const getSesion = async (curp: string | undefined, correo: string | undef
     }
 };
 
+export const getGoogle = async (correo: string) => {
+    const [result]: any = await ssoDB.query(queries.getCredencial, [undefined, correo, undefined]);
+    if (result.length > 0) {
+        const credencial = result[0];
+        if (credencial.estado === 'Inactivo') {
+            throw new Exception('403', 'La cuenta está bloqueada!');
+        }
+        if (credencial.estado === 'Validado') {
+            const token = JWT.getToken(
+                credencial.idCredencial, 
+                credencial.curp, 
+                credencial.correo, 
+                credencial.celular, 
+                credencial.grupos, 
+                credencial.aplicaciones
+            );
+            return { token: token };
+        } else {
+            throw new Exception('401', 'Cuenta no validada!');
+        }
+    } else {
+        throw new Exception('401', 'Cuenta no válida!');
+    }
+};
+
 
 export const getValidacion = async (curp: string | undefined, correo: string | undefined, celular: string | undefined) => {
     const [result]: any = await ssoDB.query(queries.getCredencial, [curp, correo, celular]);
@@ -84,7 +109,7 @@ export const getValidacion = async (curp: string | undefined, correo: string | u
             throw new Exception('403', 'La cuenta está bloqueada!');
         }
         if (credencial.estado === 'Validado') {
-            const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular);
+            const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular, credencial.grupos, credencial.aplicaciones);
             return { token: token };
         } else {
             throw new Exception('401', 'Cuenta no esta validada!');
@@ -109,7 +134,7 @@ export const getAutenticacion = async (curp: string | undefined, correo: string 
             if (!correo_auth || (response?.dobleFactor === 'S' && !celular_auth)) {
                 throw new Exception('401', 'Cuenta no esta auntenticada!');
             }
-            const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular);
+            const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular, credencial.grupos, credencial.aplicaciones);
             return { token: token };
         } else {
             throw new Exception('401', 'Cuenta no esta validada!');
@@ -160,7 +185,7 @@ export const setPassword = async (curp: string, correo: string, celular: string,
     await codigos.deleteCodigos(credencial.idCredencial);
     const criptContrasena = await bcrypt.hash(contrasena, salt);
     await ssoDB.query(queries.updateContrasena, [credencial.idCredencial, criptContrasena]);
-    const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular);
+    const token = JWT.getToken(credencial.idCredencial, credencial.curp, credencial.correo, credencial.celular, credencial.grupos, credencial.aplicaciones);
     return {
         statusCode: 200,
         token,
