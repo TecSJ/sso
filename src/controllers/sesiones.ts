@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import * as service from '../services/sesiones';
 import { Exception } from '../model/Exception';
+import { Aplicacion } from '../types';
+
 
 export const getSesion = async (req: Request, res: Response): Promise<any> => {
     const { curp, correo, celular, contrasena } = req.body;
@@ -144,5 +146,22 @@ export const setPassword = async (req: Request, res: Response): Promise<any> => 
             return res.status(parseInt(error.code)).json({ code: error.code, message: error.message });
         }
         return res.status(500).json({ message: 'Error interno del servidor', error: error.message });
+    }
+};
+
+export const getData = async (req: Request, res: Response): Promise<any> => {
+    const { idCredencial } = req.params;
+    const { filtros, orden, limite, pagina } = req.body;
+    try {
+        const response: Aplicacion[] | undefined = await service.getData( idCredencial, filtros, orden, limite, pagina);
+        if (response && response.length > 0) {
+            return res.status(200).json(response);
+        }
+        return res.status(204).json({});
+    } catch (error: any) {
+        return res.status(500).json({
+            code: error instanceof Exception ? error.code : 500,
+            message: error.message || 'Error interno del servidor',
+        });
     }
 };
