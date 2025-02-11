@@ -4,10 +4,10 @@ import jwt, { SignOptions, Algorithm } from 'jsonwebtoken';
 
 export default class JWT {
 
-    public static getToken ( idCredencial: string, curp: string, correo: string, celular: string, 
+    public static getToken ( idCredencial: string, curp: string, nombre: string, correo: string, celular: string, 
         grupos: string[], aplicaciones: string[]): string  {
         try {
-            const payload = { idCredencial, curp, correo, celular, grupos, aplicaciones };
+            const payload = { idCredencial, curp, nombre ,correo, celular, grupos, aplicaciones };
             const llavePrivada = fs.readFileSync(`${__dirname}/admin.key`, 'utf8');
             const opcionesFirma: SignOptions = {
                 issuer: 'Tecnologico superior de Jalisco',
