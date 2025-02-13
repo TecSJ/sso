@@ -159,30 +159,12 @@ export const setPassword = async (curp: string, correo: string, celular: string,
     if (result.length === 0) {
         throw new Exception('401', 'Cuenta no valida!');
     }
-
     const credencial = result[0];
     if (credencial.estado === 'Inactivo') {
         throw new Exception('403', 'La cuenta está bloqueada!');
     }
     if (credencial.estado === 'Activo') {
         throw new Exception('403', 'La cuenta no está validada!');
-    }
-
-    const correo_auth = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Recuperación,medio:eq:Correo,estado:eq:Confirmado`, undefined, 1, 1);
-    const celular_auth = await codigos.getCodigos(`idCredencial:eq:${credencial.idCredencial},tipo:eq:Recuperación,medio:eq:Celular,estado:eq:Confirmado`, undefined, 1, 1);
-    if (!correo_auth && !celular_auth) {
-        return {
-            statusCode: 202,
-            message: 'Recuperación de correo o celular requerida.',
-            actionRequired: 'RECOVER_CONTACT_INFO',
-            authenticationNeeded: {
-                correo: !correo_auth,
-                celular: !celular_auth,
-            },
-            correo: credencial.correo,
-            celular: credencial.celular,
-            credencial: credencial.idCredencial
-        };
     }
     const salt = await bcrypt.genSalt(10);
     await codigos.deleteCodigos(credencial.idCredencial);
@@ -197,9 +179,8 @@ export const setPassword = async (curp: string, correo: string, celular: string,
 
 export const getData = async ( idCredencial: string ,filtros?: string, orden?: string, limite?: number, pagina?: number ): Promise<Aplicacion[] | undefined> => {
     const query = `
-        SELECT 
-        a.idAplicacion, a.clave AS aplicacionClave, a.redireccion, a.img, a.posicion,a.nombre AS aplicacionNombre,
-        m.idModulo, m.img AS moduloimg, m.clave AS moduloClave, m.posicion, m.nombre AS moduloNombre,
+        SELECT a.idAplicacion, a.clave AS aplicacionClave, a.redireccion, a.img, a.posicion,a.nombre AS aplicacionNombre,
+        m.idModulo, m.img AS moduloimg, m.icon AS moduloIcon,m.clave AS moduloClave, m.posicion, m.nombre AS moduloNombre,
         ac.idAcceso, ac.accion1, ac.accion2, ac.accion3, ac.accion4, ac.accion5,
         r.idRol, r.clave AS rolClave, r.nombre AS rolNombre,
         p.idPerfil,
@@ -208,7 +189,7 @@ export const getData = async ( idCredencial: string ,filtros?: string, orden?: s
         FROM Credenciales c
         INNER JOIN Perfiles p ON c.idCredencial = p.idCredencial AND p.estado = 'Activo'
         INNER JOIN Roles r ON p.idRol = r.idRol AND r.estado = 'Activo'
-        INNER JOIN Accesos ac ON r.idRol = ac.idRol
+        INNER JOIN Accesos ac ON r.idRol = ac.idRol AND (ac.accion1 = '1' OR ac.accion2 = '1' OR ac.accion3 = '1' OR ac.accion4 = '1' OR ac.accion5 = '1')
         INNER JOIN Modulos m ON ac.idModulo = m.idModulo
         INNER JOIN Aplicaciones a ON m.idAplicacion = a.idAplicacion
         LEFT JOIN Asociacion asoc ON c.idCredencial = asoc.idCredencial
@@ -241,6 +222,7 @@ export const getData = async ( idCredencial: string ,filtros?: string, orden?: s
                 idModulo: row.idModulo,
                 moduloClave: row.moduloClave,
                 moduloNombre: row.moduloNombre,
+                moduloIcon: row.moduloIcon,
                 moduloImagen: process.env.IMG_DRIVE_URL + row.moduloimg,
                 accesos: []
             };
