@@ -26,8 +26,8 @@ export const addAccesos = async (req: Request, res: Response): Promise<any> => {
     try {
         const responses = [];
         for (const acceso of accesos) {
-            const { idModulo, Crear, Consultar, Actualizar, Eliminar, Subir } = acceso;
-            const response = await service.addAccesos(idRol, idModulo, Crear, Consultar, Actualizar, Eliminar, Subir);
+            const { idModulo, Agregar, Consultar, Editar, Cancelar, Subir } = acceso;
+            const response = await service.addAccesos(idRol, idModulo, Agregar, Consultar, Editar, Cancelar, Subir);
             responses.push(response);
         }
         res.status(201).json(responses);
