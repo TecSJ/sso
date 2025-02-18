@@ -8,7 +8,7 @@ import axios from 'axios';
 import https from 'https';
 import crypto from 'crypto';
 import { Credencial } from '../types';
-import { verificarUsuarioEnWorkspace } from '../model/Google-Workspace';
+import { validarUsuario, estadoSuspension } from '../model/Google-Workspace';
 
 const agent = new https.Agent({
     rejectUnauthorized: false
@@ -118,10 +118,10 @@ export const getWorkspace = async (idCredencial: string): Promise<any> => {
       throw new Error('Credencial no encontrada');
     }
     const { correo, tipo } = result[0];
-    const isUserWorkspace = await verificarUsuarioEnWorkspace(correo);
+    const isUserWorkspace = await validarUsuario(correo);
     if (isUserWorkspace && tipo === 'JWT') {
       await ssoDB.query('UPDATE Credenciales SET tipo = "OAuth 2.0" WHERE idCredencial = ?', [idCredencial]);
-    } else {
+    } else if (tipo === 'OAuth 2.0') {
         await ssoDB.query('UPDATE Credenciales SET tipo = "JWT" WHERE idCredencial = ?', [idCredencial]);
     }
     return {
@@ -129,3 +129,29 @@ export const getWorkspace = async (idCredencial: string): Promise<any> => {
       isUserWorkspace,
     };
 };
+
+export const statusWorkspace = async (idCredencial: string): Promise<any> => {
+    const [result]: any[] = await ssoDB.query('SELECT correo, tipo, estado FROM Credenciales WHERE idCredencial = ?', [idCredencial]);
+    if (result.length === 0) {
+      throw new Error('Credencial no encontrada');
+    }
+    const { correo, tipo, estado } = result[0];
+    if (tipo !== 'OAuth 2.0') {
+      throw new Error('Credencial no es de tipo OAuth 2.0');
+    }
+    try {
+      let suspender: boolean;
+      if (estado !== 'Inactivo') {
+        suspender = false; 
+      }
+      else {
+        suspender = true;
+      }
+      const googleResponse = await estadoSuspension(correo, suspender);
+      return googleResponse;
+    } catch (error) {
+      throw new Error('No se pudo actualizar el estado en Google Workspace');
+    }
+  };
+  
+  

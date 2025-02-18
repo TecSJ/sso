@@ -32,6 +32,7 @@ router.get('/', Autenticacion('Credenciales','2'), credenciales.getCredenciales 
 router.post('/', credenciales.insertCredencial );
 
 router.get('/workspace/:idCredencial', Autenticacion('Credenciales','2'), credenciales.getWorkspace );
+router.get('/workspace/:idCredencial/status', Autenticacion('Credenciales','2'), credenciales.statusWorkspace );
 
 router.get('/etiquetas/:idEtiqueta', Autenticacion('Etiquetas','2') ,etiquetas.getEtiqueta );
 router.patch('/:idCredencial/etiquetas', Autenticacion('Etiquetas','4') ,asociacion.upsertAsociacion);
