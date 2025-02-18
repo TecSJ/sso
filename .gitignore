@@ -79,6 +79,7 @@ web_modules/
 .env.production.local
 .env.local
 
+service-account-key.json
 # ecosystem environment variable files
 ecosystem.config.js
 deploy.sh

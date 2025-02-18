@@ -8,6 +8,7 @@ import axios from 'axios';
 import https from 'https';
 import crypto from 'crypto';
 import { Credencial } from '../types';
+import { verificarUsuarioEnWorkspace } from '../model/Google-Workspace';
 
 const agent = new https.Agent({
     rejectUnauthorized: false
@@ -109,4 +110,22 @@ export const generarCSV = async (): Promise<string> => {
         console.error('Error en generarcsv:', error);
         throw new Error('Error al generar el archivo CSV');
     }
+};
+
+export const getWorkspace = async (idCredencial: string): Promise<any> => {
+    const [result]: any[] = await ssoDB.query('SELECT correo, tipo FROM Credenciales WHERE idCredencial = ?', [idCredencial]);
+    if (result.length === 0) {
+      throw new Error('Credencial no encontrada');
+    }
+    const { correo, tipo } = result[0];
+    const isUserWorkspace = await verificarUsuarioEnWorkspace(correo);
+    if (isUserWorkspace && tipo === 'JWT') {
+      await ssoDB.query('UPDATE Credenciales SET tipo = "OAuth 2.0" WHERE idCredencial = ?', [idCredencial]);
+    } else {
+        await ssoDB.query('UPDATE Credenciales SET tipo = "JWT" WHERE idCredencial = ?', [idCredencial]);
+    }
+    return {
+      correo,
+      isUserWorkspace,
+    };
 };
