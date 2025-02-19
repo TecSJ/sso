@@ -99,6 +99,18 @@ export const getDescarga = async (_req: Request, res: Response): Promise<void> =
     }
 };
 
+export const getDominios = async (_req: Request, res: Response): Promise<any> => {
+    try {
+        const dominios = await service.getDominios();
+        return res.status(200).json(dominios);
+      } catch (error: any) {
+        console.error('Error en obtenerDominios:', error);
+        return res.status(500).json({
+          message: error.message || 'Error interno del servidor',
+        });
+    }
+};
+
 export const getWorkspace = async (req: Request, res: Response): Promise<any> => {
     try {
         const { idCredencial } = req.params;

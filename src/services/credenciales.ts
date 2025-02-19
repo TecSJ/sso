@@ -8,7 +8,7 @@ import axios from 'axios';
 import https from 'https';
 import crypto from 'crypto';
 import { Credencial } from '../types';
-import { validarUsuario, estadoSuspension } from '../model/Google-Workspace';
+import { validarUsuario, estadoSuspension, obtenerDominios } from '../model/Google-Workspace';
 
 const agent = new https.Agent({
     rejectUnauthorized: false
@@ -111,6 +111,21 @@ export const generarCSV = async (): Promise<string> => {
         throw new Error('Error al generar el archivo CSV');
     }
 };
+
+export const getDominios = async (): Promise<string[]> => {
+    try {
+      const result = await obtenerDominios();
+      if (!result || result.length === 0) {
+        throw new Error('No se encontraron dominios en Google Workspace');
+      }
+      const domainNames = result.map((domain: any) => domain.domainName);
+      return domainNames;
+    } catch (error) {
+      console.error('Error en getDominios:', error);
+      throw new Error('No se encontraron dominios en Google Workspace');
+    }
+};
+  
 
 export const getWorkspace = async (idCredencial: string): Promise<any> => {
     const [result]: any[] = await ssoDB.query('SELECT correo, tipo FROM Credenciales WHERE idCredencial = ?', [idCredencial]);

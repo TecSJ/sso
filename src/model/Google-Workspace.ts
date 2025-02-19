@@ -9,11 +9,26 @@ const credentials = JSON.parse(fs.readFileSync(serviceAccountKeyPath, 'utf-8'));
 const auth = new JWT({
   email: credentials.client_email,
   key: credentials.private_key,
-  scopes: ['https://www.googleapis.com/auth/admin.directory.user'],
+  scopes: ['https://www.googleapis.com/auth/admin.directory.user',
+           'https://www.googleapis.com/auth/admin.directory.domain'
+  ],
   subject: 'sistemas@tecmm.edu.mx',
 });
 
 const directory = google.admin({ version: 'directory_v1', auth });
+
+
+export const obtenerDominios = async () => {
+  try {
+    const response = await directory.domains.list({
+      customer: 'my_customer',
+    });
+    return response.data.domains;
+  } catch (error) {
+    console.error('Error al obtener dominios:', error);
+    throw error;
+  }
+};
 
 export const validarUsuario = async (correo: string): Promise<boolean> => {
   try {
@@ -33,7 +48,7 @@ export const validarUsuario = async (correo: string): Promise<boolean> => {
 
 export const estadoSuspension = async (correo: string, suspender: boolean): Promise<boolean> => {
   try {
-    const response = await directory.users.update({
+    await directory.users.update({
       userKey: correo,
       requestBody: {
         suspended: suspender,
