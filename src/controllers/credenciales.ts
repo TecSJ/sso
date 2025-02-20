@@ -111,21 +111,6 @@ export const getDominios = async (_req: Request, res: Response): Promise<any> =>
     }
 };
 
-export const getWorkspace = async (req: Request, res: Response): Promise<any> => {
-    try {
-        const { idCredencial } = req.params;
-        const response = await service.getWorkspace(idCredencial);
-        if (response) {
-            return res.status(200).json(response);
-        }
-        return res.status(204).json({});
-    } catch (error: any) {
-        return res.status(500).json({
-            code: error instanceof Exception ? error.code : 500,
-            message: error.message || 'Error interno del servidor',
-        });
-    }
-}
 
 export const statusWorkspace = async (req: Request, res: Response): Promise<any> => {
     try {

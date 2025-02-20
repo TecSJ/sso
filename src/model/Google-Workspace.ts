@@ -10,13 +10,12 @@ const auth = new JWT({
   email: credentials.client_email,
   key: credentials.private_key,
   scopes: ['https://www.googleapis.com/auth/admin.directory.user',
-           'https://www.googleapis.com/auth/admin.directory.domain'
+           'https://www.googleapis.com/auth/admin.directory.domain.readonly'
   ],
-  subject: 'sistemas@tecmm.edu.mx',
+  subject: process.env.ADMIN_EMAIL,
 });
 
 const directory = google.admin({ version: 'directory_v1', auth });
-
 
 export const obtenerDominios = async () => {
   try {
@@ -26,6 +25,43 @@ export const obtenerDominios = async () => {
     return response.data.domains;
   } catch (error) {
     console.error('Error al obtener dominios:', error);
+    throw error;
+  }
+};
+
+export const dominioRegistrado = async (dominio: string): Promise<boolean>=> {
+  try {
+    const response = await directory.domains.list({
+      customer: 'my_customer',
+    });
+    const dominioEncontrado = response.data.domains?.some(d => d.domainName === dominio);
+    return dominioEncontrado || false;
+  } catch (error) {
+    console.error('Error al obtener dominios:', error);
+    throw error;
+  }
+};
+
+export const crearUsuario = async (correo: string, nombre: string, apellido: string,): Promise<boolean> => {
+  try {
+    console.log(`Creando usuario ${correo}...`);
+    await directory.users.insert({
+      requestBody: {
+        primaryEmail: correo,
+        name: {
+          givenName: nombre,
+          familyName: apellido,
+        },
+        password: process.env.DEFAULT_PASSWORD,
+      },
+    });
+    return true;
+  } catch (error: any) {
+    if (error.response && error.response.status === 409) {
+      console.error(`Usuario ${correo} ya existe.`);
+      return false;
+    }
+    console.error(`Error al crear usuario ${correo}:`, error);
     throw error;
   }
 };
@@ -54,7 +90,6 @@ export const estadoSuspension = async (correo: string, suspender: boolean): Prom
         suspended: suspender,
       },
     });
-
     return true;
   } catch (error: any) {
     if (error.response && error.response.status === 404) {
