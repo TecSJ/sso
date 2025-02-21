@@ -229,10 +229,10 @@ export const getData = async ( idCredencial: string ,filtros?: string, orden?: s
             aplicacion.modulos.push(modulo);
         }
         const acciones = {
-            crear: row.accion1 ? 1 : 0,
+            agregar: row.accion1 ? 1 : 0,
             consultar: row.accion2 ? 1 : 0,
-            actualizar: row.accion3 ? 1 : 0,
-            eliminar: row.accion4 ? 1 : 0,
+            editar: row.accion3 ? 1 : 0,
+            cancelar: row.accion4 ? 1 : 0,
             subir: row.accion5 ? 1 : 0
         };
         if (row.idAcceso) {
