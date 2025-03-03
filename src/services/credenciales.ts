@@ -11,7 +11,6 @@ import { Credencial } from '../types';
 import { validarUsuario, estadoSuspension, obtenerDominios,
         dominioRegistrado, crearUsuario
 } from '../model/Google-Workspace';
-import e from 'express';
 
 const agent = new https.Agent({
     rejectUnauthorized: false
@@ -34,11 +33,14 @@ export const deleteCredencial = async (idCredencial: string[]): Promise<number> 
     return result.affectedRows;
 }
 
-export const insertCredencial = async (curp: string, nombre: string, primerApellido: string, segundoApellido: string, fechaNacimiento: string, estadoNacimiento: string, correo: string, celular: string, contrasena: string, tipo: string): Promise<Credencial | undefined > => {
+export const insertCredencial = async (curp: string, nombre: string, primerApellido: string, segundoApellido: string, fechaNacimiento: string, estadoNacimiento: string, correo: string, celular: string, contrasena: string, tipo: string, perfil?: string ): Promise<Credencial | undefined > => {
     const idCredencial = uuidv4();
     const salt = await bcrypt.genSalt(10);
     const criptContrasena = await bcrypt.hash(contrasena, salt);
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.insertCredencial, [idCredencial, curp, nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, criptContrasena, tipo]);
+    if (perfil) {
+        await ssoDB.query('UPDATE Perfiles SET idRol = (?) WHERE idCredencial IN (?);', [perfil, idCredencial]);
+    }
     return  rows[0][0] as Credencial  || undefined;
 }
 
