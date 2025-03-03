@@ -52,13 +52,13 @@ export const deleteCredencial = async (req: Request, res: Response): Promise<any
 
 export const insertCredencial = async (req: Request, res: Response): Promise<any> => {
 
-    const { curp, nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, contrasena, tipo } = req.body;
+    const { curp, nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, contrasena, tipo, perfil } = req.body;
     const X_API_KEY = req.headers['api_key'] as string | undefined;
     try {
         if( X_API_KEY != process.env.X_API_KEY ){
             throw new Error('Falta api-key!')
         }
-        const response: Credencial | undefined =  await service.insertCredencial( curp, nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, contrasena, tipo );
+        const response: Credencial | undefined =  await service.insertCredencial( curp, nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, contrasena, tipo , perfil);
         await service.insertMoodle(curp, contrasena, nombre, primerApellido, segundoApellido, correo, "General", "General");
         return res.status(201).json({ idCredencial: response?.idCredencial, curp: curp, nombre: nombre, primerApellido: primerApellido, segundoApellido: segundoApellido, correo: correo, celular: celular, tipo: tipo  });
     } catch (error: any) {
