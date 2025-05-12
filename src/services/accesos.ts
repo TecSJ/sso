@@ -9,7 +9,7 @@ export const getAccesos = async ( idRol: string): Promise<any> => {
     return rows;
 }
 
-export const addAccesos = async (idRol: string, idModulo: string, accion1: string, accion2: string, accion3: string, accion4: string, accion5: string): Promise<Acceso| undefined> => {
+export const addAccesos = async (idRol: string, idModulo: string, accion1: string, accion2: string, accion3: string, accion4: string, accion5: string, accion6: string, accion7: string, accion8: string): Promise<Acceso| undefined> => {
     const connection = await ssoDB.getConnection();
     try {
         await connection.beginTransaction();
@@ -18,14 +18,15 @@ export const addAccesos = async (idRol: string, idModulo: string, accion1: strin
             const existingData = existingRows[0];
             if ( existingData.accion1 === accion1 && existingData.accion2 === accion2 &&
                 existingData.accion3 === accion3 && existingData.accion4 === accion4 &&
-                existingData.accion5 === accion5
+                existingData.accion5 === accion5 && existingData.accion6 === accion6 &&
+                existingData.accion7 === accion7 && existingData.accion8 === accion8
             ) {
                 await connection.commit();
                 return existingData as Acceso;
             }
-            await connection.query(queries.updateAcceso, [ idRol, idModulo, accion1, accion2, accion3, accion4, accion5, ]);
+            await connection.query(queries.updateAcceso, [ idRol, idModulo, accion1, accion2, accion3, accion4, accion5, accion6, accion7, accion8, ]);
         } else {
-            await connection.query(queries.insertAcceso, [ idRol, idModulo, accion1, accion2, accion3, accion4, accion5, ]);
+            await connection.query(queries.insertAcceso, [ idRol, idModulo, accion1, accion2, accion3, accion4, accion5, accion6, accion7, accion8, ]);
         }
         await connection.commit();
         const [rows] = await ssoDB.query<RowDataPacket[]>( 'SELECT * FROM Accesos WHERE idRol = ? and idModulo = ?', [idRol, idModulo]);
