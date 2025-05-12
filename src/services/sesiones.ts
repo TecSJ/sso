@@ -181,7 +181,7 @@ export const getData = async ( idCredencial: string ,filtros?: string, orden?: s
     const query = `
         SELECT a.idAplicacion, a.clave AS aplicacionClave, a.redireccion, a.img, a.posicion,a.nombre AS aplicacionNombre,
         m.idModulo, m.img AS moduloimg, m.icon AS moduloIcon,m.clave AS moduloClave, m.posicion, m.nombre AS moduloNombre,
-        ac.idAcceso, ac.accion1, ac.accion2, ac.accion3, ac.accion4, ac.accion5,
+        ac.idAcceso, ac.accion1, ac.accion2, ac.accion3, ac.accion4, ac.accion5, ac.accion6, ac.accion7, ac.accion8,
         r.idRol, r.clave AS rolClave, r.nombre AS rolNombre,
         p.idPerfil,
         e.idEtiqueta, e.nombre AS etiquetaNombre, e.estado AS etiquetaEstado,
@@ -189,7 +189,8 @@ export const getData = async ( idCredencial: string ,filtros?: string, orden?: s
         FROM Credenciales c
         INNER JOIN Perfiles p ON c.idCredencial = p.idCredencial AND p.estado = 'Activo'
         INNER JOIN Roles r ON p.idRol = r.idRol AND r.estado = 'Activo'
-        INNER JOIN Accesos ac ON r.idRol = ac.idRol AND (ac.accion1 = '1' OR ac.accion2 = '1' OR ac.accion3 = '1' OR ac.accion4 = '1' OR ac.accion5 = '1')
+        INNER JOIN Accesos ac ON r.idRol = ac.idRol AND (ac.accion1 = '1' OR ac.accion2 = '1' OR ac.accion3 = '1' OR ac.accion4 = '1' OR ac.accion5 = '1' OR ac.accion6 = '1'
+         OR ac.accion7 = '1' OR ac.accion8 = '1')
         INNER JOIN Modulos m ON ac.idModulo = m.idModulo
         INNER JOIN Aplicaciones a ON m.idAplicacion = a.idAplicacion
         LEFT JOIN Asociacion asoc ON c.idCredencial = asoc.idCredencial
@@ -233,7 +234,10 @@ export const getData = async ( idCredencial: string ,filtros?: string, orden?: s
             consultar: row.accion2 ? 1 : 0,
             editar: row.accion3 ? 1 : 0,
             cancelar: row.accion4 ? 1 : 0,
-            subir: row.accion5 ? 1 : 0
+            subir: row.accion5 ? 1 : 0,
+            validar: row.accion6 ? 1 : 0,
+            autorizar: row.accion7 ? 1 : 0,
+            publicar: row.accion8 ? 1 : 0,
         };
         if (row.idAcceso) {
             if (!modulo.accesos.find((a: { idAcceso: number }) => a.idAcceso === row.idAcceso)) {

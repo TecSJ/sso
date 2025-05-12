@@ -7,5 +7,8 @@ export default interface Acceso {
     accion3: boolean; // Actualizar
     accion4: boolean; // Eliminar
     accion5: boolean; // Subir
+    accion6: boolean; // Validare
+    accion7: boolean; // Autorizar
+    accion8: boolean; // Publicar
   }
   
