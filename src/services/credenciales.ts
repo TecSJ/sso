@@ -30,6 +30,9 @@ export const deleteCredencial = async (idCredencial: string[]): Promise<number> 
     const [result]: any = await ssoDB.query(
         'UPDATE Credenciales SET estado = "Inactivo" WHERE idCredencial IN (?)',
         [idCredencial]);
+    if (process.env.NODE_ENV === 'production') {
+        statusWorkspace(idCredencial[0]);
+    }
     return result.affectedRows;
 }
 
