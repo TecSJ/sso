@@ -11,7 +11,6 @@ export const queries = {
     LEFT JOIN Roles r ON p.idRol = r.idRol AND r.estado != 'Inactivo'
     LEFT JOIN Miembros m ON c.idCredencial = m.idCredencial AND m.estado != 'Inactivo'
     LEFT JOIN Grupos g ON m.idGrupo = g.idGrupo AND g.estado != 'Inactivo'
-    WHERE c.estado != 'Inactivo'
     GROUP BY c.idCredencial;`,
     getCredencial: `SELECT * 
                     FROM Credenciales
