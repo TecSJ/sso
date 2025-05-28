@@ -16,7 +16,7 @@ router.patch('/:idCredencial/perfiles', Autenticacion('Credenciales','1'), perfi
 router.get('/perfiles', Autenticacion('Credenciales','2'), perfiles.getPerfiles);
 
 // Rutas de roles (más específicas primero)
-router.get('/descargar', Autenticacion('Grupos', '2'), roles.getDescarga);
+router.get('/descargar', roles.getDescarga);
 router.get('/:idRol', Autenticacion('Roles','2'), roles.getRol);
 router.patch('/:idRol', Autenticacion('Roles','3'),  roles.updateRol);
 router.delete('/:idRol', Autenticacion('Roles','4'),  roles.deleteRol);

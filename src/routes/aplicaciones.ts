@@ -15,7 +15,7 @@ router.post('/:idAplicacion/modulos', Autenticacion('Modulos','1'), modulos.inse
 router.get('/modulos',Autenticacion('Modulos','2'), modulos.getModulos);
 
 // Rutas relacionadas con aplicaciones (más generales)
-router.get('/descargar', Autenticacion('Grupos', '2'), aplicaciones.getDescarga);
+router.get('/descargar', aplicaciones.getDescarga);
 router.get('/:idAplicacion',Autenticacion('Aplicaciones','2'), aplicaciones.getAplicacion);
 router.patch('/:idAplicacion',Autenticacion('Aplicaciones','3'), aplicaciones.updateAplicacion);
 router.delete('/:idAplicacion',Autenticacion('Aplicaciones','4'), aplicaciones.deleteAplicacion);
