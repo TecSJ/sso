@@ -156,3 +156,26 @@ export const getData = async (req: Request, res: Response): Promise<any> => {
         });
     }
 };
+
+
+export const mail = async (req: Request, res: Response): Promise<any> => {
+    const { correo, password  } = req.body;
+    const X_API_KEY = req.headers['api_key'] as string | undefined;
+    try {
+        if (X_API_KEY !== process.env.X_API_KEY) {
+            throw new Exception('401', 'Falta api-key');
+        }
+        const response = await service.mail(correo, password);
+        switch (response?.statusCode) {
+            case 200:
+                return res.status(200).json({  });
+            default:
+                return res.status(400).json({ message: "Unexpected status code" });
+        }
+    } catch (error: any) {
+        if (error instanceof Exception) {
+            return res.status(parseInt(error.code)).json({ code: error.code, message: error.message });
+        }
+        return res.status(500).json({ message: 'Error interno del servidor', error: error.message });
+    }
+};

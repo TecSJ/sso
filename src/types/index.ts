@@ -12,5 +12,6 @@ import Perfil from './Perfil'
 import Asociacion from './Asociacion'
 import Preferencia from './Preferencia'
 import Rol from './Rol'
+import Llaves from './Llaves'
 
-export { Acceso, Actividad,Aplicacion, Codigo, Credencial, Etiqueta, Grupo, Miembro, Modulo, Parametro, Perfil, Asociacion ,Preferencia, Rol }  
+export { Acceso, Actividad,Aplicacion, Codigo, Credencial, Etiqueta, Grupo, Miembro, Modulo, Parametro, Perfil, Asociacion ,Preferencia, Rol, Llaves }  
