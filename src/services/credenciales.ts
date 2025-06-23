@@ -27,11 +27,34 @@ export const getCredenciales = async ( filtros?: string, orden?: string, limite?
 }
 
 export const deleteCredencial = async (idCredencial: string[]): Promise<number> => {
+    const [curp]: any = await ssoDB.query('SELECT curp FROM Credenciales WHERE idCredencial IN (?)', [idCredencial]);
+
     const [result]: any = await ssoDB.query(
         'UPDATE Credenciales SET estado = "Inactivo" WHERE idCredencial IN (?)',
         [idCredencial]);
     if (process.env.NODE_ENV === 'production') {
         statusWorkspace(idCredencial[0]);
+
+        const userValidateUrl = process.env.MOODLE_URL +
+        '&wsfunction=core_user_get_users_by_field'+
+        '&field=idnumber'+
+        '&values[0]='+curp[0].curp.toLowerCase()+
+        '&moodlewsrestformat=json';
+
+        const userValidate = await axios.get(userValidateUrl, { httpsAgent: agent });
+
+    
+        if (typeof (userValidate.data[0]) !== 'undefined') {
+            const idMoodle = userValidate.data[0].id;
+        
+            const userSuspendUrl = process.env.MOODLE_URL +
+            '&wsfunction=core_user_update_users'+
+            '&users[0][id]='+idMoodle+
+            '&users[0][suspended]=1'+
+            '&moodlewsrestformat=json';
+        
+            await axios.get(userSuspendUrl, { httpsAgent: agent });
+        }
     }
     return result.affectedRows;
 }
