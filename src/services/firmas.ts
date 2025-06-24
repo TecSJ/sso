@@ -1,5 +1,13 @@
 import { generateKeyPairSync } from 'crypto';
 import fs from 'fs';
+import { ssoDB } from '../model/Connection';
+import { RowDataPacket } from 'mysql2';
+import { queries } from '../queries/llaves';
+import { Llaves } from '../types';
+
+interface validacion{
+    val: number
+}
 
 export const generarLlave = async (passphrase: string, name: string, uid:string): Promise<string> => {
 
@@ -28,4 +36,19 @@ export const generarLlave = async (passphrase: string, name: string, uid:string)
 
     return process.env.LLAVES_DIR+uid+"/"+name+'.pem';
 
+}
+
+export const registrarLlave = async (idCredencial: string, curp: string, ubicacion: string) => {
+    await ssoDB.query<RowDataPacket[]>(queries.insertLlave, [idCredencial, curp, ubicacion]);
+    //return  rows[0][0] as Llaves  || undefined;
+}
+
+export const validarLlave = async (curp:string) => {
+    const [rows] = await ssoDB.query<RowDataPacket[]>(queries.validarLlave, [curp]);
+    const validacion = rows as validacion[];
+    if(validacion[0].val > 0){
+        return false;
+    }else{
+        return true;
+    }
 }
