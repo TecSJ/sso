@@ -6,4 +6,3 @@ export default interface Llaves {
     fechaCreacion: Date;
     estado: boolean;
   }
-  
