@@ -10,7 +10,7 @@ const upload = multer({
 
 const router = Router();
 
-router.get('/crear/', firmas.crearFirma)
+router.post('/crear/', firmas.crearFirma)
 router.post(
   '/firmar',
   upload.single('privateKey'),
