@@ -7,6 +7,8 @@ import * as preferencias from '../services/preferencias';
 import * as codigos from '../services/codigos';
 import { Aplicacion } from '../types/'
 import { RowDataPacket } from 'mysql2';
+import Mail from '../model/Mail'
+
 
 export const getSesion = async (curp: string | undefined, correo: string | undefined, celular: string | undefined, contrasena: string) => {
     const [result]: any = await ssoDB.query(queries.getCredencial, [curp, correo, `__-${celular}`]);
@@ -285,4 +287,20 @@ export const getData = async ( idCredencial: string ,filtros?: string, orden?: s
     });
 
     return aplicaciones;
+};
+
+export const mail = async (correo: string | undefined, clave: string | undefined) => {
+    if (!correo) {
+        throw new Exception('400', 'Correo es requerido para enviar el email.');
+    }
+    const mail = new Mail();
+    let asunto = '';
+    let contenido = '';
+        asunto = 'Recuperación de contraseña';
+        contenido = `Tu nueva contraseña es: ${clave}`
+        mail.enviarCorreo(correo, asunto, contenido);
+    return {
+        statusCode: 200,
+        message: 'Correo enviado exitosamente',
+    };
 };
