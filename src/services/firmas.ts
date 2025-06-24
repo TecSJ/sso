@@ -4,6 +4,7 @@ import { ssoDB } from '../model/Connection';
 import { RowDataPacket } from 'mysql2';
 import { queries } from '../queries/llaves';
 import { Llaves } from '../types';
+import crypto from 'crypto';
 
 interface validacion{
     val: number
@@ -52,3 +53,16 @@ export const validarLlave = async (curp:string) => {
         return true;
     }
 }
+
+export const firmarServicio = (
+  data: string,
+  privateKeyPem: string,
+  passphrase: string
+): string => {
+  const signer = crypto.createSign('SHA256');
+  signer.update(data);
+  signer.end();
+
+  const keyObject = { key: privateKeyPem, passphrase };
+  return signer.sign(keyObject, 'base64');
+};
