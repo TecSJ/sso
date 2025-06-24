@@ -12,7 +12,7 @@ export const crearFirma = async (req: Request, res: Response): Promise<any> => {
 
             const rutaArchivo = await service.generarLlave(passphrase, "llave", data);
 
-            res.download(rutaArchivo, "llave.pem", (err) => {
+            res.download(rutaArchivo, "key.pem", (err) => {
                 if (err) {
                     console.log("no se pudo descargar")
                 }
@@ -20,7 +20,7 @@ export const crearFirma = async (req: Request, res: Response): Promise<any> => {
                 //fs.unlinkSync(rutaArchivo);
             });
         }else{
-            res.send("ERROR: Llave previamente generada");
+            res.status(400).send("ERROR: Llave previamente generada");
         }
     }catch(error: any){
         return res.status(500).json({
