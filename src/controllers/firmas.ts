@@ -61,3 +61,26 @@ export const firmarArchivoController = async (req: Request, res: Response): Prom
     });
   }
 };
+
+export const veriFirma = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { data, firma, curp } = req.body;
+
+    if (!data || !firma || !curp) {
+      res.status(400).json({ message: 'Faltan datos requeridos: data, firma o curp' });
+      return;
+    }
+
+    const esValida = service.verificarFirma(data, firma, curp);
+
+    res.status(200).json({ valid: esValida });
+  } catch (error: any) {
+    res.status(500).json({
+      code: error instanceof Exception ? error.code : 500,
+      message: error.message || 'Error interno del servidor',
+    });
+  }
+};
