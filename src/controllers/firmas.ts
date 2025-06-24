@@ -4,7 +4,7 @@ import * as service from '../services/firmas';
 import fs from 'fs';
 
 export const crearFirma = async (req: Request, res: Response): Promise<any> => {
-    const {data, passphrase} = req.params;
+    const {data, passphrase} = req.body;
 
     try{
         const validar = await service.validarLlave(data);
