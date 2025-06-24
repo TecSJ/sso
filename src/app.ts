@@ -32,6 +32,7 @@ app.use('/credenciales', routes.credenciales);
 app.use('/aplicaciones', routes.aplicaciones );
 app.use('/parametros', routes.parametros );
 app.use('/sesiones', routes.sesiones );
+app.use('/firmas', routes.firmas);
 
 app.get('/', (req, res) => {
     res.send(`SSO en producción esta ejecutandose en https:${ PORT }`);
