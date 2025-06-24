@@ -75,7 +75,7 @@ export const verificarFirma = (
   if (!esValida) {
     throw new Error('Llave no válida');
   }
-  const rutaLlave = path.join(process.env.LLAVES_DIR || '', curp, 'key.pem');
+  const rutaLlave = path.join(process.env.LLAVES_DIR || '', curp, 'llave_pub.pem');
   if (!fs.existsSync(rutaLlave)) {
     throw new Error(`No se encontró la llave pública para el CURP: ${curp}`);
   }

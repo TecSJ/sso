@@ -11,11 +11,12 @@ const upload = multer({
 const router = Router();
 
 router.post('/crear/', firmas.crearFirma)
+router.post('/Validar/', firmas.veriFirma)
 router.post(
   '/firmar',
   upload.single('privateKey'),
   (req, res, next) => {
-    Promise.resolve(firmas.firmarArchivoController(req, res))
+    Promise.resolve(firmas.firmarArchivo(req, res))
       .catch(next);
   }
 );
