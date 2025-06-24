@@ -17,7 +17,7 @@ export const crearFirma = async (req: Request, res: Response): Promise<any> => {
                     console.log("no se pudo descargar")
                 }
                 service.registrarLlave("", data, process.env.LLAVES_DIR+data+"/llave_pub.pem")
-                fs.unlinkSync(rutaArchivo);
+                //fs.unlinkSync(rutaArchivo);
             });
         }else{
             res.status(400).send("ERROR: Llave previamente generada");
@@ -30,7 +30,7 @@ export const crearFirma = async (req: Request, res: Response): Promise<any> => {
     }
 }
 
-export const firmarArchivoController = async (req: Request, res: Response): Promise<void> => {
+export const firmarArchivo = async (req: Request, res: Response): Promise<void> => {
   const file = req.file;
   const { data, passphrase } = req.body;
 
@@ -38,13 +38,10 @@ export const firmarArchivoController = async (req: Request, res: Response): Prom
     res.status(400).json({ message: 'Faltan campos requeridos' });
     return;
   }
-
   try {
     const privateKeyPem = fs.readFileSync(file.path, 'utf-8');
     const firma = service.firmarServicio(data, privateKeyPem, passphrase);
-
     fs.unlinkSync(file.path);
-
     res.status(200).json({ firma });
   } catch (error: any) {
     if (file && fs.existsSync(file.path)) {
@@ -54,7 +51,28 @@ export const firmarArchivoController = async (req: Request, res: Response): Prom
         console.warn('No se pudo eliminar el archivo temporal:', err);
       }
     }
+    res.status(500).json({
+      code: error instanceof Exception ? error.code : 500,
+      message: error.message || 'Error interno del servidor',
+    });
+  }
+};
 
+export const veriFirma = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { data, firma, curp } = req.body;
+    if (!data || !firma || !curp) {
+      res.status(400).json({ message: 'Faltan datos requeridos: data, firma o curp' });
+      return;
+    }
+
+    const esValida = service.verificarFirma(data, firma, curp);
+
+    res.status(200).json({ valid: esValida });
+  } catch (error: any) {
     res.status(500).json({
       code: error instanceof Exception ? error.code : 500,
       message: error.message || 'Error interno del servidor',

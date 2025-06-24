@@ -3,8 +3,8 @@ import fs from 'fs';
 import { ssoDB } from '../model/Connection';
 import { RowDataPacket } from 'mysql2';
 import { queries } from '../queries/llaves';
-import { Llaves } from '../types';
 import crypto from 'crypto';
+import path from 'path';
 
 interface validacion{
     val: number
@@ -65,4 +65,23 @@ export const firmarServicio = (
 
   const keyObject = { key: privateKeyPem, passphrase };
   return signer.sign(keyObject, 'base64');
+};
+export const verificarFirma = (
+  data: string,
+  firma: string,
+  curp: string
+): boolean => {
+  const esValida = validarLlave(curp);
+  if (!esValida) {
+    throw new Error('Llave no válida');
+  }
+  const rutaLlave = path.join(process.env.LLAVES_DIR || '', curp, 'llave_pub.pem');
+  if (!fs.existsSync(rutaLlave)) {
+    throw new Error(`No se encontró la llave pública para el CURP: ${curp}`);
+  }
+  const publicKeyPem = fs.readFileSync(rutaLlave, 'utf-8');
+  const verifier = crypto.createVerify('SHA256');
+  verifier.update(data);
+  verifier.end();
+  return verifier.verify(publicKeyPem, firma, 'base64');
 };
