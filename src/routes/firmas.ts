@@ -3,6 +3,6 @@ import * as firmas from "../controllers/firmas"
 
 const router = Router();
 
-router.get('/crear/:data/:passphrase', firmas.crearFirma)
+router.post('/crear/', firmas.crearFirma)
 
 export default router;
