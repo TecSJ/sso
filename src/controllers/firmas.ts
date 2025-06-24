@@ -17,7 +17,7 @@ export const crearFirma = async (req: Request, res: Response): Promise<any> => {
                     console.log("no se pudo descargar")
                 }
                 service.registrarLlave("", data, process.env.LLAVES_DIR+data+"/llave_pub.pem")
-                //fs.unlinkSync(rutaArchivo);
+                fs.unlinkSync(rutaArchivo);
             });
         }else{
             res.status(400).send("ERROR: Llave previamente generada");

@@ -11,7 +11,7 @@ const upload = multer({
 const router = Router();
 
 router.post('/crear/', firmas.crearFirma)
-router.post('/Validar/', firmas.veriFirma)
+router.post('/validar/', firmas.veriFirma)
 router.post(
   '/firmar',
   upload.single('privateKey'),
