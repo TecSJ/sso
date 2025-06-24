@@ -1,22 +1,22 @@
 import { Request, Response } from 'express';
 import { Exception } from '../model/Exception';
-import { generarLlave, registrarLlave, validarLlave, firmarServicio } from '../services/firmas';
+import * as service from '../services/firmas';
 import fs from 'fs';
 
 export const crearFirma = async (req: Request, res: Response): Promise<any> => {
     const {data, passphrase} = req.params;
 
     try{
-        const validar = await validarLlave(data);
+        const validar = await service.validarLlave(data);
         if(validar){
 
-            const rutaArchivo = await generarLlave(passphrase, "llave", data);
+            const rutaArchivo = await service.generarLlave(passphrase, "llave", data);
 
             res.download(rutaArchivo, "llave.pem", (err) => {
                 if (err) {
                     console.log("no se pudo descargar")
                 }
-                registrarLlave("", data, process.env.LLAVES_DIR+data+"/llave_pub.pem")
+                service.registrarLlave("", data, process.env.LLAVES_DIR+data+"/llave_pub.pem")
                 fs.unlinkSync(rutaArchivo);
             });
         }else{
@@ -29,24 +29,33 @@ export const crearFirma = async (req: Request, res: Response): Promise<any> => {
         });
     }
 }
-export const firmarArchivoController = async (req: Request, res: Response) => {
+
+export const firmarArchivoController = async (req: Request, res: Response): Promise<void> => {
+  const file = req.file;
+  const { data, passphrase } = req.body;
+
+  if (!file || !data || !passphrase) {
+    res.status(400).json({ message: 'Faltan campos requeridos' });
+    return;
+  }
+
   try {
-    const file = req.file; 
-    const { data, passphrase } = req.body;
-
-    if (!file || !data || !passphrase) {
-      return res.status(400).json({ message: 'Faltan campos requeridos' });
-    }
-
     const privateKeyPem = fs.readFileSync(file.path, 'utf-8');
-    const firma = firmarServicio(data, privateKeyPem, passphrase);
-
+    const firma = service.firmarServicio(data, privateKeyPem, passphrase);
 
     fs.unlinkSync(file.path);
 
-    return res.status(200).json({ firma });
+    res.status(200).json({ firma });
   } catch (error: any) {
-    return res.status(500).json({
+    if (file && fs.existsSync(file.path)) {
+      try {
+        fs.unlinkSync(file.path);
+      } catch (err) {
+        console.warn('No se pudo eliminar el archivo temporal:', err);
+      }
+    }
+
+    res.status(500).json({
       code: error instanceof Exception ? error.code : 500,
       message: error.message || 'Error interno del servidor',
     });
