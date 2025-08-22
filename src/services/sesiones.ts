@@ -188,17 +188,17 @@ export const getData = async ( idCredencial: string ,filtros?: string, orden?: s
         p.idPerfil,
         e.idEtiqueta, e.nombre AS etiquetaNombre, e.estado AS etiquetaEstado,
         g.idGrupo, g.clave AS grupoClave, g.nombre AS grupoNombre, g.estado AS grupoEstado
-        FROM Credenciales c
-        INNER JOIN Perfiles p ON c.idCredencial = p.idCredencial AND p.estado = 'Activo'
-        INNER JOIN Roles r ON p.idRol = r.idRol AND r.estado = 'Activo'
-        INNER JOIN Accesos ac ON r.idRol = ac.idRol AND (ac.accion1 = '1' OR ac.accion2 = '1' OR ac.accion3 = '1' OR ac.accion4 = '1' OR ac.accion5 = '1' OR ac.accion6 = '1'
+        FROM seg_Credenciales c
+        INNER JOIN seg_Perfiles p ON c.idCredencial = p.idCredencial AND p.estado = 'Activo'
+        INNER JOIN seg_Roles r ON p.idRol = r.idRol AND r.estado = 'Activo'
+        INNER JOIN seg_Accesos ac ON r.idRol = ac.idRol AND (ac.accion1 = '1' OR ac.accion2 = '1' OR ac.accion3 = '1' OR ac.accion4 = '1' OR ac.accion5 = '1' OR ac.accion6 = '1'
          OR ac.accion7 = '1' OR ac.accion8 = '1')
-        INNER JOIN Modulos m ON ac.idModulo = m.idModulo
-        INNER JOIN Aplicaciones a ON m.idAplicacion = a.idAplicacion
-        LEFT JOIN Asociacion asoc ON c.idCredencial = asoc.idCredencial
-        LEFT JOIN Etiquetas e ON asoc.idEtiqueta = e.idEtiqueta AND e.estado = 'Activo'
-        LEFT JOIN Miembros mbr ON c.idCredencial = mbr.idCredencial
-        LEFT JOIN Grupos g ON mbr.idGrupo = g.idGrupo AND g.estado = 'Activo'
+        INNER JOIN seg_Modulos m ON ac.idModulo = m.idModulo
+        INNER JOIN seg_Aplicaciones a ON m.idAplicacion = a.idAplicacion
+        LEFT JOIN seg_Asociacion asoc ON c.idCredencial = asoc.idCredencial
+        LEFT JOIN seg_Etiquetas e ON asoc.idEtiqueta = e.idEtiqueta AND e.estado = 'Activo'
+        LEFT JOIN seg_Miembros mbr ON c.idCredencial = mbr.idCredencial
+        LEFT JOIN seg_Grupos g ON mbr.idGrupo = g.idGrupo AND g.estado = 'Activo'
         WHERE a.estado = 'Activo' AND m.estado = 'Activo' AND c.idCredencial = ?
         ORDER BY a.posicion ASC, m.posicion ASC;`;
         const [rows] = await ssoDB.query<RowDataPacket[]>(query, [idCredencial]);

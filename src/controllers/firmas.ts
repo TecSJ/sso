@@ -38,11 +38,19 @@ export const firmarArchivo = async (req: Request, res: Response): Promise<void> 
     res.status(400).json({ message: 'Faltan campos requeridos' });
     return;
   }
+
   try {
+    const parsedData = Array.isArray(data) ? data : JSON.parse(data);
     const privateKeyPem = fs.readFileSync(file.path, 'utf-8');
-    const firma = service.firmarServicio(data, privateKeyPem, passphrase);
+
+    const firmas = parsedData.map((item: string) => ({
+      data: item,
+      firma: service.firmarServicio(item, privateKeyPem, passphrase),
+    }));
+
     fs.unlinkSync(file.path);
-    res.status(200).json({ firma });
+
+    res.status(200).json({ firmas });
   } catch (error: any) {
     if (file && fs.existsSync(file.path)) {
       try {
@@ -51,6 +59,7 @@ export const firmarArchivo = async (req: Request, res: Response): Promise<void> 
         console.warn('No se pudo eliminar el archivo temporal:', err);
       }
     }
+
     res.status(500).json({
       code: error instanceof Exception ? error.code : 500,
       message: error.message || 'Error interno del servidor',

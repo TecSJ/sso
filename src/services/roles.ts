@@ -16,7 +16,7 @@ export const getRoles = async (filtros?: string, orden?: string, limite?: number
 
 export const deleteRol = async (idRol: number[]) => {
     const [result]: any = await ssoDB.query(
-        'UPDATE Roles SET estado = "Inactivo" WHERE idRol IN (?)',
+        'UPDATE seg_Roles SET estado = "Inactivo" WHERE idRol IN (?)',
         [idRol]);
     return result.affectedRows;
 }

@@ -27,10 +27,10 @@ export const getCredenciales = async ( filtros?: string, orden?: string, limite?
 }
 
 export const deleteCredencial = async (idCredencial: string[]): Promise<number> => {
-    const [curp]: any = await ssoDB.query('SELECT curp FROM Credenciales WHERE idCredencial IN (?)', [idCredencial]);
+    const [curp]: any = await ssoDB.query('SELECT curp FROM seg_Credenciales WHERE idCredencial IN (?)', [idCredencial]);
 
     const [result]: any = await ssoDB.query(
-        'UPDATE Credenciales SET estado = "Inactivo" WHERE idCredencial IN (?)',
+        'UPDATE seg_Credenciales SET estado = "Inactivo" WHERE idCredencial IN (?)',
         [idCredencial]);
     if (process.env.NODE_ENV === 'production') {
         statusWorkspace(idCredencial[0]);
@@ -65,7 +65,7 @@ export const insertCredencial = async (curp: string, nombre: string, primerApell
     const criptContrasena = await bcrypt.hash(contrasena, salt);
     const [rows] = await ssoDB.query<RowDataPacket[]>(queries.insertCredencial, [idCredencial, curp, nombre, primerApellido, segundoApellido, fechaNacimiento, estadoNacimiento, correo, celular, criptContrasena, tipo]);
     if (perfil) {
-        await ssoDB.query('UPDATE Perfiles SET idRol = (?) WHERE idCredencial IN (?);', [perfil, idCredencial]);
+        await ssoDB.query('UPDATE seg_Perfiles SET idRol = (?) WHERE idCredencial IN (?);', [perfil, idCredencial]);
     }
     return  rows[0][0] as Credencial  || undefined;
 }
@@ -105,7 +105,7 @@ export const uptateCredencial = async (idCredencial: string, curp: string, corre
         if (contrasena !== 'N1nguna') {
             contrasena = await bcrypt.hash(contrasena, salt);
         }
-        const [result]: any[] = await ssoDB.query('SELECT nombre, primerApellido, segundoApellido, tipo FROM Credenciales WHERE idCredencial = ?', [idCredencial]);
+        const [result]: any[] = await ssoDB.query('SELECT nombre, primerApellido, segundoApellido, tipo FROM seg_Credenciales WHERE idCredencial = ?', [idCredencial]);
         if (tipo === 'OAuth 2.0' && result[0].tipo !== 'OAuth 2.0') {
             const dominioCorreo = correo.split('@')[1];
             if (!await dominioRegistrado(dominioCorreo)) {
@@ -189,7 +189,7 @@ export const getDominios = async (): Promise<string[]> => {
 };
 
 export const statusWorkspace = async (idCredencial: string): Promise<any> => {
-    const [result]: any[] = await ssoDB.query('SELECT correo, tipo, estado FROM Credenciales WHERE idCredencial = ?', [idCredencial]);
+    const [result]: any[] = await ssoDB.query('SELECT correo, tipo, estado FROM seg_Credenciales WHERE idCredencial = ?', [idCredencial]);
     if (result.length === 0) {
       throw new Error('Credencial no encontrada');
     }

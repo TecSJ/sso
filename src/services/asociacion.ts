@@ -32,7 +32,7 @@ export const upsertAsociacion = async (
       }
   
       const [existingRows] = await connection.query<RowDataPacket[]>(
-        'SELECT * FROM Asociacion WHERE idCredencial = ? AND idEtiqueta = ?',
+        'SELECT * FROM seg_Asociacion WHERE idCredencial = ? AND idEtiqueta = ?',
         [idCredencial, idEtiqueta]
       );
   
@@ -41,7 +41,7 @@ export const upsertAsociacion = async (
       }
   
       const [updatedRows] = await connection.query<RowDataPacket[]>(
-        'SELECT * FROM Asociacion WHERE idCredencial = ? AND idEtiqueta = ?',
+        'SELECT * FROM seg_Asociacion WHERE idCredencial = ? AND idEtiqueta = ?',
         [idCredencial, idEtiqueta]
       );
   

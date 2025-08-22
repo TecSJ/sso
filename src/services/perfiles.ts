@@ -24,7 +24,7 @@ export const upsertPerfil = async (seleccionado:  number, idRol: string, idCrede
     try {
         const estatusDb = seleccionado === 1 ? "Activo" : "Inactivo";
         const [existingRows] = await connection.query<RowDataPacket[]>(
-            'SELECT estado FROM Perfiles WHERE idCredencial = ? AND idRol = ?',
+            'SELECT seg_estado FROM Perfiles WHERE idCredencial = ? AND idRol = ?',
             [idCredencial, idRol]
         );
         const currentStatusDB = existingRows.length > 0 ? existingRows[0].estado : null;
@@ -39,7 +39,7 @@ export const upsertPerfil = async (seleccionado:  number, idRol: string, idCrede
             await connection.query(queries.insertPerfil, [idRol, idCredencial]);
         }
         const [updatedRows] = await connection.query<RowDataPacket[]>(
-            'SELECT * FROM Perfiles WHERE idCredencial = ? AND idRol = ?',
+            'SELECT * FROM seg_Perfiles WHERE idCredencial = ? AND idRol = ?',
             [idCredencial, idRol]
         );
         return updatedRows.length > 0 ? (updatedRows[0] as Perfil) : undefined;
