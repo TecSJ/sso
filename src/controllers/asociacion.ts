@@ -10,7 +10,7 @@ export const getAsociacion = async (req: Request, res: Response): Promise<any> =
         if (response && response.length > 0) {
             return res.status(200).json(response);
         }
-        return res.status(204).json([]); // Devuelve un arreglo vacío si no hay resultados
+        return res.status(204).json([]);
     } catch (error: any) {
         return res.status(500).json({
             code: error instanceof Exception ? error.code : 500,

@@ -1,6 +1,6 @@
 export const queries = {
-    getBitacora: `SELECT * FROM Historial  `,
-    getHistorial: `SELECT * FROM Historial WHERE idCredencial = ?; `,
+    getBitacora: `SELECT * FROM SEG_Historial  `,
+    getHistorial: `SELECT * FROM SEG_Historial WHERE idCredencial = ?; `,
     insertHistorial: `CALL proc_insert_historial( ?, ?, ?, ?, ?, ? );`,
 }
 

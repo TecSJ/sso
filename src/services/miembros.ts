@@ -24,7 +24,7 @@ export const insertMiembro = async (seleccionado: number, idCredencial: string, 
     try {
         const estatusDb = seleccionado === 1 ? "Activo" : "Inactivo";
         const [existingRows] = await connection.query<RowDataPacket[]>( 
-            'SELECT estado FROM Miembros WHERE idCredencial = ? AND idGrupo = ?',
+            'SELECT seg_estado FROM Miembros WHERE idCredencial = ? AND idGrupo = ?',
             [idCredencial, idGrupo]
         );
         const currentStatusDB = existingRows.length > 0 ? existingRows[0].estado : null;
@@ -39,7 +39,7 @@ export const insertMiembro = async (seleccionado: number, idCredencial: string, 
             await connection.query(queries.insertMiembro, [idGrupo, idCredencial]);
         }
         const [updatedRows] = await connection.query<RowDataPacket[]>(
-            'SELECT * FROM Miembros WHERE idCredencial = ? AND idGrupo = ?',
+            'SELECT * FROM seg_Miembros WHERE idCredencial = ? AND idGrupo = ?',
             [idCredencial, idGrupo]
         );
         return updatedRows.length > 0 ? (updatedRows[0] as Miembro) : undefined;

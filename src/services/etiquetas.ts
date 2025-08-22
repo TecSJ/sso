@@ -19,7 +19,7 @@ export const addEtiquetas = async ( idCredencial: string, etiquetas: string[]): 
     const insertedEtiquetas: Etiqueta[] = [];
     try {
         await connection.beginTransaction();
-        const [existingRows] = await connection.query<RowDataPacket[]>('SELECT * FROM Etiquetas WHERE idCredencial = ? and estado = "Activo" ',[idCredencial]);
+        const [existingRows] = await connection.query<RowDataPacket[]>('SELECT * FROM seg_Etiquetas WHERE idCredencial = ? and estado = "Activo" ',[idCredencial]);
         const existingEtiquetas = existingRows.map((row: any) => row.nombre);
         const etiquetasToInsert = etiquetas.filter((etiqueta) => !existingEtiquetas.includes(etiqueta));
         const etiquetasToDelete = existingEtiquetas.filter((etiqueta: string) => !etiquetas.includes(etiqueta));
@@ -35,7 +35,7 @@ export const addEtiquetas = async ( idCredencial: string, etiquetas: string[]): 
             await connection.query(queries.deleteEtiquetas, [idCredencial, etiqueta ]);
         }
         await connection.commit();
-        const [rows] = await ssoDB.query<RowDataPacket[]>('SELECT * FROM Etiquetas WHERE idCredencial = ? AND estado = "Activo" ', [idCredencial]);
+        const [rows] = await ssoDB.query<RowDataPacket[]>('SELECT * FROM seg_Etiquetas WHERE idCredencial = ? AND estado = "Activo" ', [idCredencial]);
         return rows.length > 0 ? (rows as Etiqueta[]) : undefined;
     } catch (error) {
         throw error;

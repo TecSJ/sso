@@ -16,7 +16,7 @@ export const getAplicaciones = async ( filtros?: string, orden?: string, limite?
 
 export const deleteAplicaciones = async ( idAplicaciones: number[]): Promise<number> => {
     const [result]: any = await ssoDB.query(
-        'UPDATE Aplicaciones SET estado = "Inactivo" WHERE idAplicacion IN (?)',
+        'UPDATE seg_Aplicaciones SET estado = "Inactivo" WHERE idAplicacion IN (?)',
         [idAplicaciones]
     );
     return result.affectedRows;
